@@ -1,3 +1,4 @@
+import { ScrollReveal } from "@/components/scroll-reveal";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 
 export default function SiteLayout({ children }: LayoutProps<"/">) {
@@ -6,6 +7,7 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
       <SiteHeader />
       <div className="flex-1">{children}</div>
       <SiteFooter />
+      <ScrollReveal />
     </>
   );
 }

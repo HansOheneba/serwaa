@@ -62,8 +62,8 @@ export function AudiencePage({
       <section className="relative overflow-hidden border-t border-ink-100 bg-ink-50">
         <Weave fade="b" className="inset-x-0 top-0 h-16" />
         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-8">
-          <h2 className="text-2xl font-bold tracking-tight text-aubergine-800">What you get</h2>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <h2 data-reveal className="text-2xl font-bold tracking-tight text-aubergine-800">What you get</h2>
+          <div data-reveal-stagger className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((f) => (
               <div key={f.title} className="rounded-2xl bg-white p-6 ring-1 ring-ink-200">
                 <h3 className="font-bold text-aubergine-800">{f.title}</h3>
@@ -76,8 +76,8 @@ export function AudiencePage({
 
       <section className="bg-white">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-8">
-          <h2 className="text-2xl font-bold tracking-tight text-aubergine-800">Getting started</h2>
-          <ol className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <h2 data-reveal className="text-2xl font-bold tracking-tight text-aubergine-800">Getting started</h2>
+          <ol data-reveal-stagger className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s, i) => (
               <li key={s} className="flex gap-4">
                 <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-aubergine-800 font-mono text-sm text-white">{i + 1}</span>

@@ -38,7 +38,7 @@ export default function HowItWorksPage() {
           </div>
           <BridgeIllustration className="h-auto w-full" />
         </div>
-        <div className="mt-14 grid gap-6 md:grid-cols-5">
+        <div data-reveal-stagger className="mt-14 grid gap-6 md:grid-cols-5">
           {lifecycle.map((l, i) => (
             <div key={l.phase} className="rounded-2xl bg-ink-50 p-5 ring-1 ring-ink-100">
               <p className="font-mono text-xs text-saffron-700">{String(i + 1).padStart(2, "0")}</p>
@@ -59,7 +59,7 @@ export default function HowItWorksPage() {
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-8">
           <h2 className="text-2xl font-bold tracking-tight text-aubergine-800">Every amount has a label</h2>
           <p className="mt-2 max-w-2xl text-ink-600">Serwaa never adds expected returns to money received. You will see one of these six labels next to every figure.</p>
-          <dl className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <dl data-reveal-stagger className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {states.map((s) => (
               <div key={s.state} className="rounded-2xl bg-white p-5 ring-1 ring-ink-200">
                 <dt>
