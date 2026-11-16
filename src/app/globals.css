@@ -287,7 +287,8 @@ body {
   opacity: 1;
   clip-path: inset(12% 8% 12% 8% round 1.5rem);
 }
-[data-reveal] {
+/* Transition only on the way in, so hiding below-the-fold content is instant. */
+[data-reveal][data-revealed] {
   transition-property: opacity, transform, clip-path;
   transition-duration: 0.7s, 0.8s, 1.1s;
   transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
@@ -315,7 +316,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-reveal] {
+  [data-reveal][data-revealed] {
     transition: none;
   }
   .scroll-settle {
