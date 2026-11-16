@@ -59,6 +59,29 @@ const principles = [
   { title: "Every match explained", body: "Each opportunity shows why it appears for you. Matching is factual, never advice." },
 ];
 
+const gaps = [
+  {
+    who: "Businesses",
+    problem: "Retyping the same details at every stage, and products built for conventional loans, not invoices, orders and contracts.",
+    answer: "One verified profile reused everywhere, and twelve structures built around how SMEs actually earn.",
+  },
+  {
+    who: "Investors",
+    problem: "The same list for everyone, and expected returns easily mistaken for money received.",
+    answer: "Opportunities matched to your profile with the reason shown, and every amount labelled exactly as it stands.",
+  },
+  {
+    who: "Institutions",
+    problem: "No structured, verified pipeline and no consolidated view of exposure.",
+    answer: "A pipeline matched to your mandate, with data rooms, allocation tracking and portfolio reporting.",
+  },
+  {
+    who: "Everyone",
+    problem: "A registration form and a certificate don't prove who a business really is.",
+    answer: "Five-stage verification with ownership mapping, director checks and document authenticity checks.",
+  },
+];
+
 const products = ["Invoice financing", "Purchase orders", "Contracts", "Working capital", "Inventory", "Equipment", "Supply chain"];
 
 const states: MoneyState[] = ["expected", "pending", "cleared", "received", "overdue"];
@@ -116,6 +139,29 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="bg-white">
+        <div className="mx-auto max-w-7xl px-4 pt-8 pb-20 sm:px-8">
+          <div data-reveal className="max-w-3xl">
+            <Label>The gap we close</Label>
+            <h2 className="mt-3 text-4xl leading-[1.05] font-extrabold tracking-[-0.03em] text-aubergine-800 text-balance">
+              Good businesses can&apos;t get funded. Good money can&apos;t find them.
+            </h2>
+          </div>
+          <div data-reveal-stagger className="mt-12 divide-y divide-ink-200 border-y border-ink-200">
+            {gaps.map((g) => (
+              <div key={g.who} className="grid gap-3 py-7 md:grid-cols-[10rem_1fr_1fr] md:gap-10">
+                <p className="font-mono text-xs tracking-[0.1em] text-aubergine-500 uppercase">{g.who}</p>
+                <p className="leading-7 text-ink-500">{g.problem}</p>
+                <p className="leading-7 font-semibold text-ink-900">
+                  <span className="mr-2 text-saffron-600" aria-hidden="true">→</span>
+                  {g.answer}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Half and half: full-bleed photo, copy on the content column. */}
       <SplitSection photo={photos.tailor} side="left">
         <Label>Why Serwaa</Label>
@@ -133,8 +179,8 @@ export default function HomePage() {
             </li>
           ))}
         </ul>
-        <ButtonLink href="/businesses" variant="secondary" className="mt-8">
-          Financing for businesses
+        <ButtonLink href="/products" variant="secondary" className="mt-8">
+          All twelve financing products
         </ButtonLink>
       </SplitSection>
 
@@ -189,6 +235,9 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+          <ButtonLink href="/protection" variant="accent" className="mt-12">
+            How we protect you
+          </ButtonLink>
         </div>
       </section>
 

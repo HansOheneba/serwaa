@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BridgeIllustration } from "@/components/illustrations";
+import { ContentSection, InfoCard } from "@/components/content";
 import { ButtonLink, Label, MoneyBadge } from "@/components/ui";
 import type { MoneyState } from "@/lib/data";
 
@@ -54,6 +55,19 @@ export default function HowItWorksPage() {
           ))}
         </div>
       </section>
+
+      <ContentSection
+        tone="dark"
+        eyebrow="Credit intelligence"
+        title="Software prepares the analysis. People make the decision."
+        lead="Serwaa reads and checks every document, analyses financial and bank statements, and drafts a credit memorandum covering performance, cash flow, strengths, risks and a proposed structure. Analysts edit and approve it; nothing is decided by software alone."
+      >
+        <div data-reveal-stagger className="grid gap-4 sm:grid-cols-3">
+          <InfoCard tone="dark" title="Business risk" body="The quality of the business: corporate, financial, commercial, operational and compliance factors, each rated." />
+          <InfoCard tone="dark" title="Transaction risk" body="The specific deal: purpose, repayment source, tenor, security and counterparty. Two requests from one business can differ." />
+          <InfoCard tone="dark" title="Investor risk" body="Your capacity, objectives and tolerance, kept completely separate from business credit risk." />
+        </div>
+      </ContentSection>
 
       <section className="border-t border-ink-100 bg-ink-50">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-8">

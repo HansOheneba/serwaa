@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { AudiencePage } from "@/components/audience-page";
+import { ContentSection, InfoCard } from "@/components/content";
+import { ButtonLink } from "@/components/ui";
 import { photos } from "@/lib/photos";
 
 export const metadata: Metadata = { title: "For businesses" };
@@ -27,6 +29,33 @@ export default function BusinessesPage() {
         "Apply, attaching invoices, purchase orders or contracts",
         "Review the term sheet and receive funds once the campaign closes",
       ]}
-    />
+    >
+      <ContentSection
+        tone="tint"
+        eyebrow="Verification"
+        title="Five stages, done once"
+        lead="Verification proves who your business is and who owns it. You can save and come back at any point, and you only do it once: every later application reuses it."
+      >
+        <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <InfoCard title="Business identity" body="Registered name and number, addresses, industry and tax details." meta="Stage 1" />
+          <InfoCard title="Ownership" body="Directors, shareholders and beneficial owners, each verified individually." meta="Stage 2" />
+          <InfoCard title="Corporate documents" body="Incorporation certificate, constitution, registry extract, IDs and licences." meta="Stage 3" />
+          <InfoCard title="Financial documents" body="Accounts, bank statements, tax returns, loans, receivables and forecasts." meta="Stage 4" />
+          <InfoCard title="Commercial evidence" body="The contracts, purchase orders and invoices behind your request." meta="Stage 5" />
+        </div>
+      </ContentSection>
+      <ContentSection
+        eyebrow="After you apply"
+        title="Twelve stages, each with a named officer"
+        lead="Screening, document and ownership checks, compliance, financial and commercial analysis, credit assessment, risk review, committee where needed, structuring and final approval. You see the current stage and anything we need from you, with a due date, the whole way through."
+      >
+        <div className="flex flex-wrap gap-3">
+          <ButtonLink href="/products">See all twelve financing products</ButtonLink>
+          <ButtonLink href="/protection#verification" variant="outlined">
+            How verification works
+          </ButtonLink>
+        </div>
+      </ContentSection>
+    </AudiencePage>
   );
 }

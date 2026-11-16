@@ -4,10 +4,12 @@ import { ButtonLink } from "./ui";
 import { Weave } from "./weave";
 
 const links = [
-  { href: "/businesses", label: "For businesses" },
-  { href: "/investors", label: "For investors" },
-  { href: "/institutions", label: "For institutions" },
+  { href: "/businesses", label: "Businesses" },
+  { href: "/investors", label: "Investors" },
+  { href: "/institutions", label: "Institutions" },
+  { href: "/products", label: "Products" },
   { href: "/how-it-works", label: "How it works" },
+  { href: "/protection", label: "Protection" },
 ];
 
 export function SiteHeader() {
@@ -71,7 +73,15 @@ export function SiteFooter() {
             { href: "/onboarding?as=investor", label: "Become an investor" },
           ]}
         />
-        <FooterCol title="Company" links={[{ href: "/brand", label: "Brand" }, { href: "/institutions", label: "Partnerships" }]} />
+        <FooterCol
+          title="Company"
+          links={[
+            { href: "/faq", label: "Questions" },
+            { href: "/protection#risks", label: "Risks of investing" },
+            { href: "/institutions", label: "Partnerships" },
+            { href: "/brand", label: "Brand" },
+          ]}
+        />
       </div>
       <div className="relative border-t border-aubergine-800">
         <p className="mx-auto max-w-7xl px-4 py-5 text-xs text-aubergine-300 sm:px-8">

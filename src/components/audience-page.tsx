@@ -16,6 +16,7 @@ export function AudiencePage({
   note,
   aside,
   photo,
+  children,
 }: {
   eyebrow: string;
   title: string;
@@ -27,6 +28,8 @@ export function AudiencePage({
   note?: string;
   aside?: ReactNode;
   photo?: Photo;
+  /** Extra sections rendered after "Getting started". */
+  children?: ReactNode;
 }) {
   return (
     <>
@@ -88,6 +91,7 @@ export function AudiencePage({
           {note && <p className="mt-12 max-w-3xl rounded-xl bg-aubergine-50 p-4 text-sm leading-6 text-aubergine-800">{note}</p>}
         </div>
       </section>
+      {children}
     </>
   );
 }

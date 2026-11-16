@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AudiencePage } from "@/components/audience-page";
+import { ContentSection, InfoCard } from "@/components/content";
 import { photos } from "@/lib/photos";
 
 export const metadata: Metadata = { title: "For institutions" };
@@ -22,6 +23,20 @@ export default function InstitutionsPage() {
         { title: "Deep verification", body: "Every borrower passes ownership mapping, director and UBO checks and document verification." },
       ]}
       steps={["Register your institution", "Complete institutional verification", "Set your mandate", "Review pipeline and agree allocations"]}
-    />
+    >
+      <ContentSection
+        tone="tint"
+        eyebrow="Your mandate"
+        title="A pipeline that follows your rules"
+        lead="Institutions verify their registration, authorised signatories, beneficial ownership and authority to invest, then record a mandate. Opportunities are matched to it, and every data room view is logged."
+      >
+        <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <InfoCard title="Sectors" body="The industries you want exposure to, and those you don't." />
+          <InfoCard title="Ticket sizes" body="Minimum and maximum amounts per transaction." />
+          <InfoCard title="Structures and tenors" body="Which financing structures and terms fit your fund." />
+          <InfoCard title="Return parameters" body="The return profile your mandate requires." />
+        </div>
+      </ContentSection>
+    </AudiencePage>
   );
 }
