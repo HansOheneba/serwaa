@@ -29,8 +29,8 @@ export const opportunities: Opportunity[] = [
   {
     id: "invoice-food-processor",
     ref: "SRW-CMP-0042",
-    business: "Abrewa Agro Processing Ltd",
-    sector: "Agro-processing",
+    business: "Abrewa Trading Ltd",
+    sector: "Trade and distribution",
     product: "Invoice financing",
     purpose: "Advance against a verified invoice to a national supermarket chain.",
     target: 400_000,
@@ -45,7 +45,7 @@ export const opportunities: Opportunity[] = [
     closesInDays: 9,
     investors: 212,
     match: 92,
-    matched: ["Short tenor (under 6 months)", "Secured exposure", "Agriculture sector"],
+    matched: ["Short tenor (under 6 months)", "Secured exposure", "Trade and distribution sector"],
     unmatched: [],
   },
   {
@@ -126,7 +126,7 @@ export const portfolio = {
       status: "Repaying",
     },
     {
-      business: "Abrewa Agro Processing Ltd",
+      business: "Abrewa Trading Ltd",
       product: "Invoice financing",
       amount: 5_000,
       outstanding: 5_000,
@@ -171,7 +171,7 @@ export const businessApplication = {
 };
 
 export const opsQueue = [
-  { ref: "SRW-APP-2026-00418", business: "Abrewa Agro Processing Ltd", industry: "Agro-processing", amount: 400_000, stage: "Financial analysis", officer: "A. Mensah", outstanding: 1, next: "Review bank statements" },
+  { ref: "SRW-APP-2026-00418", business: "Abrewa Trading Ltd", industry: "Trade and distribution", amount: 400_000, stage: "Financial analysis", officer: "A. Mensah", outstanding: 1, next: "Review bank statements" },
   { ref: "SRW-APP-2026-00421", business: "Kpong Solar Distribution Ltd", industry: "Energy", amount: 750_000, stage: "Credit committee", officer: "K. Boateng", outstanding: 0, next: "Committee decision" },
   { ref: "SRW-APP-2026-00430", business: "Nsuo Building Supplies Ltd", industry: "Construction", amount: 260_000, stage: "Document verification", officer: "E. Owusu", outstanding: 3, next: "Request director IDs" },
   { ref: "SRW-APP-2026-00433", business: "Awia Cold Chain Ltd", industry: "Logistics", amount: 540_000, stage: "Initial screening", officer: "Unassigned", outstanding: 5, next: "Assign officer" },
@@ -191,7 +191,7 @@ export const campaignStages = [
 ];
 
 export const opsCampaigns = [
-  { ref: "SRW-CMP-0042", business: "Abrewa Agro Processing Ltd", target: 400_000, stageIndex: 8, cleared: 248_000, pending: 56_000 },
+  { ref: "SRW-CMP-0042", business: "Abrewa Trading Ltd", target: 400_000, stageIndex: 8, cleared: 248_000, pending: 56_000 },
   { ref: "SRW-CMP-0045", business: "Kpong Solar Distribution Ltd", target: 750_000, stageIndex: 8, cleared: 180_000, pending: 42_500 },
   { ref: "SRW-CMP-0049", business: "Nsuo Building Supplies Ltd", target: 260_000, stageIndex: 4, cleared: 0, pending: 0 },
 ];

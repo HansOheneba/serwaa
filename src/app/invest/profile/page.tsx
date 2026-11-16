@@ -11,7 +11,7 @@ const profile: [string, string][] = [
   ["Preferred structures", "Invoice and purchase order financing"],
   ["Preferred tenor", "Up to 6 months"],
   ["Liquidity needs", "Can lock funds for 6 months"],
-  ["Preferred sectors", "Agriculture, manufacturing, logistics"],
+  ["Preferred sectors", "Trade, manufacturing, logistics"],
   ["Concentration", "No more than 30% in one sector"],
   ["Outstanding checks", "Source of wealth (requested)"],
 ];

@@ -56,7 +56,7 @@ export default function PortfolioPage() {
 
       <Card className="mt-4">
         <Label>Sector exposure</Label>
-        <div className="mt-3 flex h-3 overflow-hidden rounded-full" role="img" aria-label="Manufacturing 44%, logistics 33%, agro-processing 23%">
+        <div className="mt-3 flex h-3 overflow-hidden rounded-full" role="img" aria-label="Manufacturing 44%, logistics 33%, trade and distribution 23%">
           <span className="bg-aubergine-800" style={{ width: "44%" }} />
           <span className="bg-aubergine-400" style={{ width: "33%" }} />
           <span className="bg-saffron-500" style={{ width: "23%" }} />
@@ -64,7 +64,7 @@ export default function PortfolioPage() {
         <div className="mt-3 flex flex-wrap gap-4 text-sm text-ink-700">
           <span><span className="mr-1.5 inline-block size-2.5 rounded-sm bg-aubergine-800" />Manufacturing 44%</span>
           <span><span className="mr-1.5 inline-block size-2.5 rounded-sm bg-aubergine-400" />Logistics 33%</span>
-          <span><span className="mr-1.5 inline-block size-2.5 rounded-sm bg-saffron-500" />Agro-processing 23%</span>
+          <span><span className="mr-1.5 inline-block size-2.5 rounded-sm bg-saffron-500" />Trade and distribution 23%</span>
         </div>
       </Card>
     </>

@@ -122,14 +122,14 @@ export const copy = {
 export const options = {
   businessTypes: ["Limited liability company", "Sole proprietorship", "Partnership", "Other"],
   industries: [
-    "Agriculture and agro-processing",
-    "Manufacturing",
     "Trade and distribution",
+    "Manufacturing",
     "Construction",
+    "Services",
     "Healthcare",
     "Logistics",
     "Energy",
-    "Services",
+    "Agriculture and agro-processing",
   ],
   roles: ["Director", "Shareholder", "Director and shareholder", "Authorised representative"],
   products: [

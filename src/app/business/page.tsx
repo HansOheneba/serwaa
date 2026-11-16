@@ -8,7 +8,7 @@ export default function BusinessOverview() {
   const app = businessApplication;
   return (
     <>
-      <PageHeader eyebrow="Overview" title="Good morning, Abrewa Agro">
+      <PageHeader eyebrow="Overview" title="Good morning, Abrewa Trading">
         <ButtonLink href="/business/applications/new">New application</ButtonLink>
       </PageHeader>
 
