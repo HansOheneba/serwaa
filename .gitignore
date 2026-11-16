@@ -22,3 +22,12 @@ coverage/
 .vscode/*
 !.vscode/extensions.json
 *.log
+
+# Next.js / Vercel / TypeScript
+.vercel
+*.pem
+*.tsbuildinfo
+next-env.d.ts
+.pnp
+.pnp.*
+npm-debug.log*
