@@ -47,6 +47,8 @@ const downloads = [
   ["serwaa-mark.svg", "Mark only"],
   ["serwaa-wordmark.svg", "Wordmark only"],
   ["serwaa-app-icon.svg", "App icon"],
+  ["serwaa-pattern-light.svg", "Pattern tile, light"],
+  ["serwaa-pattern-dark.svg", "Pattern tile, dark"],
   ["serwaa-logo.png", "Logo, PNG 1200px"],
 ];
 
@@ -119,6 +121,35 @@ export default function BrandPage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="mt-16">
+        <h2 className="text-2xl font-bold text-aubergine-800">Pattern</h2>
+        <p className="mt-2 max-w-2xl text-ink-600">
+          A quiet basket weave: blocks of three bars in two close shades of aubergine, turning at right angles, with a small saffron
+          knot where they meet. Use it in bands and fading edges, never as a full background behind text.
+        </p>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          <div className="weave-dark h-48 rounded-2xl bg-aubergine-800" />
+          <div className="weave h-48 rounded-2xl bg-white ring-1 ring-ink-200" />
+        </div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          <div className="relative overflow-hidden rounded-2xl bg-white p-5 pt-20 ring-1 ring-ink-200">
+            <div className="weave fade-to-b absolute inset-x-0 top-0 h-20" />
+            <p className="font-semibold text-aubergine-800">Card header</p>
+            <p className="mt-1 text-sm text-ink-600">A band across the top of a card, fading into the content.</p>
+          </div>
+          <div className="relative overflow-hidden rounded-2xl bg-aubergine-800 p-5 text-white">
+            <div className="weave-dark fade-to-l absolute inset-y-0 right-0 w-2/3" />
+            <p className="relative font-semibold">Section edge</p>
+            <p className="relative mt-1 text-sm text-aubergine-100">Dissolving in from one side of a dark section or footer.</p>
+          </div>
+          <div className="relative overflow-hidden rounded-2xl bg-ink-50 p-5 pb-16 ring-1 ring-ink-200">
+            <div className="weave fade-to-t absolute inset-x-0 bottom-0 h-16" />
+            <p className="font-semibold text-aubergine-800">Divider</p>
+            <p className="mt-1 text-sm text-ink-600">A strip at a section&apos;s edge that leads into the next one.</p>
+          </div>
         </div>
       </section>
 

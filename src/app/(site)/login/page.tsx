@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Mark } from "@/components/brand";
 import { SignInForm } from "@/components/forms";
+import { Weave } from "@/components/weave";
 
 export const metadata: Metadata = { title: "Sign in" };
 
 export default function LoginPage() {
   return (
-    <section className="bg-ink-50">
-      <div className="mx-auto grid max-w-5xl items-center gap-12 px-4 py-16 sm:px-8 lg:grid-cols-2 lg:py-24">
+    <section className="relative overflow-hidden bg-ink-50">
+      <Weave fade="r" className="inset-y-0 left-0 w-1/2" />
+      <div className="relative mx-auto grid max-w-5xl items-center gap-12 px-4 py-16 sm:px-8 lg:grid-cols-2 lg:py-24">
         <div className="hidden lg:block">
           <Mark className="size-14" />
           <h1 className="mt-6 text-4xl font-extrabold tracking-[-0.025em] text-aubergine-800 text-balance">Welcome back to Serwaa</h1>

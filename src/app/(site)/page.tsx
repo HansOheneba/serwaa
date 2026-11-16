@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { OpportunityCard } from "@/components/opportunity-card";
 import { ButtonLink, Label } from "@/components/ui";
+import { Weave } from "@/components/weave";
 import { opportunities } from "@/lib/data";
 
 const audiences = [
@@ -100,9 +101,10 @@ export default function HomePage() {
             <Link
               key={a.href}
               href={a.href}
-              className="group flex flex-col rounded-2xl bg-white p-6 ring-1 ring-ink-200 transition-shadow hover:shadow-md focus-visible:outline-2 focus-visible:outline-aubergine-500"
+              className="group relative flex flex-col overflow-hidden rounded-2xl bg-white p-6 pt-24 ring-1 ring-ink-200 transition-shadow hover:shadow-md focus-visible:outline-2 focus-visible:outline-aubergine-500"
             >
-              <h2 className="text-xl font-bold text-aubergine-800">{a.title}</h2>
+              <Weave fade="b" className="inset-x-0 top-0 h-24 transition-opacity duration-300 group-hover:opacity-70" />
+              <h2 className="relative text-xl font-bold text-aubergine-800">{a.title}</h2>
               <p className="mt-2 flex-1 leading-7 text-ink-600">{a.body}</p>
               <span className="mt-6 text-sm font-semibold text-aubergine-500 group-hover:underline">{a.cta} →</span>
             </Link>
@@ -110,8 +112,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-8">
+      <section className="relative overflow-hidden bg-white">
+        <Weave fade="t" className="inset-x-0 bottom-0 h-20" />
+        <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-8">
           <div className="max-w-2xl">
             <Label>How a deal moves</Label>
             <h2 className="mt-3 text-3xl font-bold tracking-tight text-aubergine-800 text-balance">From application to repayment, in one system</h2>
@@ -128,8 +131,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-aubergine-800 text-white">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-8">
+      <section className="relative overflow-hidden bg-aubergine-800 text-white">
+        <Weave tone="dark" fade="l" className="inset-y-0 right-0 w-2/3 lg:w-1/2" />
+        <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-8">
           <h2 className="max-w-2xl text-3xl font-bold tracking-tight text-balance">Built on controls, not promises</h2>
           <div className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2">
             {principles.map((p) => (

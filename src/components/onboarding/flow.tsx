@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Fragment, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Mark } from "@/components/brand";
+import { Weave } from "@/components/weave";
 import { flows, initialState, investorProfile, stages, type Mode, type OnboardingState, type StepId } from "@/lib/onboarding";
 import {
   AccountStep,
@@ -109,8 +110,9 @@ function Complete({ s }: { s: OnboardingState }) {
   };
   const c = content[s.mode];
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-aubergine-800 px-4 py-14 text-center">
-      <div className="animate-step-in max-w-lg">
+    <div className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden bg-aubergine-800 px-4 py-14 text-center">
+      <Weave tone="dark" fade="b" className="inset-x-0 top-0 h-2/3" />
+      <div className="animate-step-in relative max-w-lg">
         <Mark reversed className="mx-auto size-14" />
         <h1 className="mt-8 text-3xl leading-tight font-extrabold tracking-[-0.025em] text-white sm:text-4xl">
           You&apos;re all set, <span className="text-saffron-400">{name}</span>
@@ -187,8 +189,9 @@ function Flow({ start }: { start: OnboardingState }) {
   const Step = STEP_COMPONENTS[s.step];
 
   return (
-    <div className="flex min-h-svh flex-col bg-ink-50">
-      <header className="px-4 pt-8 pb-6 sm:px-6">
+    <div className="relative flex min-h-svh flex-col overflow-hidden bg-ink-50">
+      <Weave fade="b" className="inset-x-0 top-0 h-72" />
+      <header className="relative px-4 pt-8 pb-6 sm:px-6">
         <div className="mx-auto flex max-w-3xl flex-col items-center gap-7">
           <Link href="/" className="rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-aubergine-500">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -197,14 +200,14 @@ function Flow({ start }: { start: OnboardingState }) {
           <StageIndicator mode={s.mode} step={s.step} />
         </div>
       </header>
-      <main className="flex flex-1 justify-center px-4 pb-12 sm:px-6">
+      <main className="relative flex flex-1 justify-center px-4 pb-12 sm:px-6">
         <div ref={cardRef} className="w-full max-w-2xl rounded-3xl bg-white/80 p-5 shadow-[0_20px_60px_rgba(58,24,70,0.08)] ring-1 ring-ink-100 sm:p-8">
           <div key={s.step} className="animate-step-in">
             {s.step === "review" ? <ReviewStep {...props} goTo={goTo} /> : Step ? <Step {...props} /> : null}
           </div>
         </div>
       </main>
-      <footer className="pb-8 text-center text-xs text-ink-500">
+      <footer className="relative pb-8 text-center text-xs text-ink-500">
         Already have an account?{" "}
         <Link href="/login" className="font-semibold text-aubergine-500 hover:underline">
           Sign in

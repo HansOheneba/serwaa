@@ -99,3 +99,35 @@ body {
     animation: none;
   }
 }
+
+/*
+ * Brand pattern: "basket weave, quiet" (H1). A 48px tile of alternating
+ * three-bar blocks in two close aubergine shades with a small saffron knot.
+ * Use it in bands and fading edges, never as a full background behind body text.
+ *   .weave        light tile, for white, lilac and ink-50 surfaces
+ *   .weave-dark   dark tile, for aubergine surfaces
+ *   .fade-to-b/t/l/r  mask the pattern so it dissolves toward that edge
+ */
+.weave {
+  background-image: url("/brand/serwaa-pattern-light.svg");
+  background-size: 48px 48px;
+}
+.weave-dark {
+  background-image: url("/brand/serwaa-pattern-dark.svg");
+  background-size: 48px 48px;
+}
+.fade-to-b {
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+}
+.fade-to-t {
+  mask-image: linear-gradient(to top, #000 0%, transparent 100%);
+}
+.fade-to-l {
+  mask-image: linear-gradient(to left, #000 0%, transparent 100%);
+}
+.fade-to-r {
+  mask-image: linear-gradient(to right, #000 0%, transparent 100%);
+}
+.fade-x {
+  mask-image: linear-gradient(to right, transparent 0%, #000 25%, #000 75%, transparent 100%);
+}

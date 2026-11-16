@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
+import { Mark } from "./brand";
 import { ButtonLink, Label } from "./ui";
+import { Weave } from "./weave";
 
 export function AudiencePage({
   eyebrow,
@@ -39,12 +41,21 @@ export function AudiencePage({
               )}
             </div>
           </div>
-          {aside && <div>{aside}</div>}
+          {aside ? (
+            <div>{aside}</div>
+          ) : (
+            <div className="relative hidden min-h-72 items-center justify-center overflow-hidden rounded-3xl bg-aubergine-50 lg:flex" aria-hidden="true">
+              <Weave className="inset-0" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-aubergine-50)_0%,var(--color-aubergine-50)_22%,transparent_60%)]" />
+              <Mark className="relative size-24" />
+            </div>
+          )}
         </div>
       </section>
 
-      <section className="border-t border-ink-100 bg-ink-50">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-8">
+      <section className="relative overflow-hidden border-t border-ink-100 bg-ink-50">
+        <Weave fade="b" className="inset-x-0 top-0 h-16" />
+        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-8">
           <h2 className="text-2xl font-bold tracking-tight text-aubergine-800">What you get</h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((f) => (
