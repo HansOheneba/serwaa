@@ -1,11 +1,11 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import type { Photo } from "@/lib/photos";
-import { Weave } from "@/components/weave";
 
 /**
  * Half-and-half section: the photo bleeds to the edge of the screen on one side,
  * while the copy stays aligned to the page's content column on the other.
+ * The only pattern is the woven edge on the photo; the text side stays plain.
  */
 export function SplitSection({
   photo,
@@ -26,7 +26,6 @@ export function SplitSection({
         <div className={`absolute inset-y-0 ${side === "left" ? "right-0" : "left-0"} hidden w-3 lg:block ${dark ? "weave-dark" : "weave"}`} aria-hidden="true" />
       </div>
       <div className="relative flex items-center">
-        <Weave tone={dark ? "dark" : "light"} fade={side === "left" ? "l" : "r"} className={`inset-y-0 ${side === "left" ? "right-0" : "left-0"} w-1/3 opacity-70`} />
         <div
           className={`relative w-full px-4 py-16 sm:px-8 lg:py-24 ${
             side === "left" ? "lg:pr-8 lg:pl-16" : "lg:pr-16 lg:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]"
