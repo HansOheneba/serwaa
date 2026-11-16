@@ -7,20 +7,28 @@ import type { MoneyState } from "@/lib/data";
 export const metadata: Metadata = { title: "How it works" };
 
 const lifecycle = [
-  { phase: "Originate", items: ["Business registers and completes verification", "Application with supporting evidence", "Validation checklist and document checks", "Credit analysis and memorandum", "Risk review and approval by authorised staff"] },
-  { phase: "Structure", items: ["Pricing, tenor, fees and security set", "Repayment schedule generated before funding", "Term sheet issued to the business"] },
-  { phase: "Raise", items: ["Campaign drafted from the approved terms", "Independent compliance and committee approvals", "Published to eligible, matched investors", "Investors subscribe and pay the custodian"] },
-  { phase: "Close", items: ["Final reconciliation of cleared funds", "Closing checklist and disbursement approval", "Custodian releases funds to the business", "Refunds if a campaign does not fund"] },
-  { phase: "Service", items: ["Repayments tracked against the schedule", "Distributions to investors by the agreed waterfall", "Arrears, collections and restructuring when needed"] },
+  {
+    phase: "Apply",
+    items: [
+      "Register and verify your business",
+      "Apply with the invoice, order or contract behind the deal",
+      "Our team reviews your documents and finances",
+      "Our credit team decides whether to back it",
+    ],
+  },
+  { phase: "Agree terms", items: ["We set the price, fees and repayment dates with you", "You see every repayment date before anything goes live"] },
+  { phase: "Get funded", items: ["Your deal opens to investors", "Investors fund it from their phone or by bank transfer", "Their money waits with a licensed custodian"] },
+  { phase: "Receive the money", items: ["When enough has come in, the money is released to you", "If not enough comes in, every investor is refunded"] },
+  { phase: "Repay", items: ["You repay on the agreed dates", "Investors receive their share of each repayment", "If a payment slips, we work with you to get back on track"] },
 ];
 
 const states: { state: MoneyState; body: string }[] = [
-  { state: "expected", body: "Due later under the agreed schedule. Not money you have." },
-  { state: "pending", body: "A payment has started but the provider hasn't confirmed it." },
-  { state: "confirmed", body: "The provider confirmed it; the custodian hasn't cleared it yet." },
-  { state: "cleared", body: "Held by the custodian and reconciled. Only this counts toward funding." },
+  { state: "expected", body: "Still to come, on the agreed date." },
+  { state: "pending", body: "You've paid, and we're waiting for it to arrive." },
+  { state: "confirmed", body: "Your payment went through and is on its way." },
+  { state: "cleared", body: "Safely with the custodian. Only this counts towards a deal." },
   { state: "received", body: "Paid out to you." },
-  { state: "overdue", body: "Contractually due and not yet paid." },
+  { state: "overdue", body: "Late, and we're following it up." },
 ];
 
 export default function HowItWorksPage() {
@@ -31,10 +39,11 @@ export default function HowItWorksPage() {
           <div>
             <Label>How it works</Label>
             <h1 className="mt-4 max-w-3xl text-4xl leading-tight font-extrabold tracking-[-0.025em] text-aubergine-800 text-balance sm:text-5xl">
-              One connected record, from first application to final repayment
+              From application to repayment, here&apos;s what happens
             </h1>
             <p className="mt-5 max-w-xl text-lg leading-8 text-ink-600">
-              Businesses get the funding they need to deliver. Investors get verified opportunities and honest numbers. Serwaa runs everything in between.
+              Businesses get the money to deliver the work they&apos;ve won. Investors earn from backing them. We handle the checks, the terms and the
+              payments in between.
             </p>
           </div>
           <BridgeIllustration className="h-auto w-full" />
@@ -58,21 +67,25 @@ export default function HowItWorksPage() {
 
       <ContentSection
         tone="dark"
-        eyebrow="Credit intelligence"
-        title="Software prepares the analysis. People make the decision."
-        lead="Serwaa reads and checks every document, analyses financial and bank statements, and drafts a credit memorandum covering performance, cash flow, strengths, risks and a proposed structure. Analysts edit and approve it; nothing is decided by software alone."
+        eyebrow="How deals are chosen"
+        title="Every deal is judged by people who understand credit"
+        lead="A deal is only offered to investors once our credit team is satisfied with three things."
       >
         <div data-reveal-stagger className="grid gap-4 sm:grid-cols-3">
-          <InfoCard tone="dark" title="Business risk" body="The quality of the business: corporate, financial, commercial, operational and compliance factors, each rated." />
-          <InfoCard tone="dark" title="Transaction risk" body="The specific deal: purpose, repayment source, tenor, security and counterparty. Two requests from one business can differ." />
-          <InfoCard tone="dark" title="Investor risk" body="Your capacity, objectives and tolerance, kept completely separate from business credit risk." />
+          <InfoCard tone="dark" title="The business" body="Is it well run, honestly owned and making money? We look at its accounts, bank statements and the people behind it." />
+          <InfoCard tone="dark" title="The deal" body="Is the customer good for the money, and is the repayment date realistic? Two requests from the same business can get different answers." />
+          <InfoCard tone="dark" title="The investor" body="Does it suit what you've told us you can afford to put at risk? Your appetite for risk is judged on its own, apart from the business." />
         </div>
       </ContentSection>
 
       <section className="border-t border-ink-100 bg-ink-50">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-8">
-          <h2 className="text-2xl font-bold tracking-tight text-aubergine-800">Every amount has a label</h2>
-          <p className="mt-2 max-w-2xl text-ink-600">Serwaa never adds expected returns to money received. You will see one of these six labels next to every figure.</p>
+          <h2 data-reveal className="text-2xl font-bold tracking-tight text-aubergine-800">
+            Always know where your money is
+          </h2>
+          <p className="mt-2 max-w-2xl text-ink-600">
+            Money you&apos;re owed and money you&apos;ve been paid are never added together. Every amount carries one of these labels.
+          </p>
           <dl data-reveal-stagger className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {states.map((s) => (
               <div key={s.state} className="rounded-2xl bg-white p-5 ring-1 ring-ink-200">

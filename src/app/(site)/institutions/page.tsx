@@ -17,7 +17,7 @@ export default function InstitutionsPage() {
       features={[
         { title: "No origination team needed", body: "Verification, credit analysis and structuring are done before a deal reaches you, so you deploy capital without building the machinery." },
         { title: "Only deals that fit", body: "Your pipeline is filtered by sector, ticket size, structure, tenor and return, so your team reviews what it can actually fund." },
-        { title: "Diligence you can audit", body: "Credit memoranda, documents and verification results sit in data rooms, and every view is logged." },
+        { title: "Everything you need to decide", body: "Our credit analysis, the documents and the verification results for each deal, in one place." },
         { title: "Agree allocations directly", body: "Express interest with an amount and agree your allocation with our team before you commit." },
         { title: "One view of exposure", body: "See concentration, repayment performance and maturities across every deal, ready for your own reporting." },
         { title: "Control who sees what", body: "Invite colleagues and set exactly what each person can view, approve or download." },
@@ -28,7 +28,7 @@ export default function InstitutionsPage() {
         tone="tint"
         eyebrow="Your mandate"
         title="A pipeline that follows your rules"
-        lead="Institutions verify their registration, authorised signatories, beneficial ownership and authority to invest, then record a mandate. Opportunities are matched to it, and every data room view is logged."
+        lead="Tell us what you invest in and we'll only bring you deals that fit."
       >
         <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <InfoCard title="Sectors" body="The industries you want exposure to, and those you don't." />

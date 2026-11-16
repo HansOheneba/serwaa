@@ -97,7 +97,7 @@ export const copy = {
       institution: "Who should we work with?",
     },
     sub: {
-      business: "You'll manage the business account. We'll verify your email and phone before credit review.",
+      business: "You'll be the main contact for your business on Serwaa.",
       investor: "We use this to verify your identity, as the law requires for every investor.",
       institution: "The main contact for your organisation. You can invite colleagues later.",
     },
@@ -185,7 +185,7 @@ export function investorProfile(inv: OnboardingState["investor"]): Profile | nul
   const summaries: Record<string, string> = {
     Conservative: "We'll show shorter, secured opportunities first and warn you before you concentrate in one place.",
     "Income focused": "We'll favour opportunities with regular repayments and moderate risk.",
-    Balanced: "We'll show a mix of tenors and structures, with concentration warnings as you build a portfolio.",
+    Balanced: "We'll show a mix of shorter and longer deals, and tell you if too much of your money ends up in one place.",
     "Growth oriented": "We'll include higher-return opportunities, with clear risk labels on each.",
   };
   return { category, summary: summaries[category], capped: will > cap };

@@ -38,7 +38,7 @@ export default function InvestorsPage() {
         tone="tint"
         eyebrow="Your profile"
         title="Five short sections shape what you see"
-        lead="Your answers build a profile that ranks opportunities by fit. Your willingness to take risk and your capacity to absorb a loss are assessed separately, and capacity always comes first."
+        lead="Your answers decide which opportunities you see first. If you're keener on risk than your savings can comfortably absorb, we go with what you can afford."
       >
         <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <InfoCard title="Your finances" body="Income, commitments and how much you can invest." meta="Section 1" />
@@ -48,13 +48,13 @@ export default function InvestorsPage() {
           <InfoCard title="Your risk tolerance" body="How you'd handle delays, losses and needing your money back." meta="Section 5" />
         </div>
         <p className="mt-6 text-sm text-ink-600">
-          Profiles fall into five categories: Conservative, Income focused, Balanced, Growth oriented and Higher risk tolerance. They guide what you see; they aren&apos;t advice.
+          Your profile guides what we show you. It isn&apos;t financial advice, and you can change your answers any time.
         </p>
       </ContentSection>
       <ContentSection
         eyebrow="Who can invest"
         title="From GH₵100, once you're verified"
-        lead="Eligible individuals verify their identity on their phone, with ID, face match and liveness, declare their source of funds, and acknowledge the risks. Eligibility, limits and the minimum depend on regulation."
+        lead="Verify your identity from your phone, tell us where your money comes from, and you're ready to invest. The minimum may change with regulation."
       >
         <div className="flex flex-wrap gap-3">
           <ButtonLink href="/products#returns">How investors are repaid</ButtonLink>

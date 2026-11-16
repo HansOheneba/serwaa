@@ -19,7 +19,7 @@ export default function BusinessOverview() {
           { label: "Application stage", value: `${app.stageIndex + 1} of ${applicationStages.length}`, hint: applicationStages[app.stageIndex] },
           { label: "Verification", value: `${overall}%`, hint: "Across five stages" },
           { label: "Open requests", value: String(app.requests.length), hint: `Due ${app.requests[0]?.due ?? "-"}` },
-          { label: "Active facilities", value: "0", hint: "After disbursement" },
+          { label: "Repayments", value: "None yet", hint: "Start once you're funded" },
         ]}
       />
       <div className="mt-6" />
@@ -97,7 +97,7 @@ export default function BusinessOverview() {
         </Card>
         <Card>
           <Label>Facilities</Label>
-          <p className="mt-3 text-ink-600">No active facilities yet. Once a campaign funds and money is disbursed, your repayment schedule appears here.</p>
+          <p className="mt-3 text-ink-600">Nothing to repay yet. Once your deal is funded and the money reaches you, your repayment dates appear here.</p>
         </Card>
       </div>
     </>

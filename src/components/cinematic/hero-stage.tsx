@@ -33,7 +33,7 @@ const scenes: Scene[] = [
   {
     photo: photos.investorLaptop,
     sector: "Investors",
-    line: "Every repayment, labelled exactly as it stands.",
+    line: "Know what you've been paid, and what's still to come.",
     ledger: { left: "Received · GH₵ 1,284.50", right: "Next · 30 Nov · GH₵ 2,706.25 expected", solid: 36, pending: 0 },
   },
 ];

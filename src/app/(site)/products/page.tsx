@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Financing products" };
 
 const products = [
   { title: "Invoice financing", body: "An advance against invoices you've issued to creditworthy customers. Repaid when your customer settles the invoice.", meta: "Repaid from the invoice" },
-  { title: "Purchase order financing", body: "Funds the supplies or goods you need to fulfil a confirmed purchase order. We link the order, buyer, supplier and expected payment date.", meta: "Repaid when the buyer pays" },
+  { title: "Purchase order financing", body: "Funds the supplies or goods you need to fulfil a confirmed purchase order, so you never have to turn a big order away.", meta: "Repaid when the buyer pays" },
   { title: "Contract financing", body: "Working capital to deliver a signed contract, from mobilisation to completion.", meta: "Repaid from contract payments" },
   { title: "Working capital financing", body: "Cover stock, payroll or seasonal gaps when cash comes in later than costs go out.", meta: "Repaid from operating cash flow" },
   { title: "Inventory financing", body: "Buy stock ahead of demand, with the inventory itself supporting the facility.", meta: "Repaid as stock sells" },
@@ -50,7 +50,7 @@ export default function ProductsPage() {
         tone="tint"
         eyebrow="For businesses"
         title="Twelve financing structures"
-        lead="Each product has its own application fields, document requirements and repayment pattern. You choose the closest fit; our team confirms the right structure during credit review."
+        lead="Pick the closest fit and our team will help you settle on the right one. Not sure? Tell us what you need and we'll suggest it."
       >
         <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((p) => (
@@ -63,7 +63,7 @@ export default function ProductsPage() {
         id="returns"
         eyebrow="For investors"
         title="How investors are repaid"
-        lead="Returns follow the structure of each deal. The full repayment schedule is generated and approved before a campaign opens, and every amount you're owed is labelled as expected, due, received or overdue."
+        lead="How you're repaid depends on the deal. Either way, you know every payment date before you invest, and your statement shows what's been paid and what's still to come."
       >
         <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {returns.map((r) => (
@@ -79,12 +79,12 @@ export default function ProductsPage() {
         tone="dark"
         eyebrow="Before a deal goes live"
         title="Terms are fixed before anyone invests"
-        lead="Every transaction records its amount, rate, calculation method, tenor, grace period, fees, security and late-payment terms. The campaign copies those terms exactly, so what investors see is what the business agreed."
+        lead="The price, fees, security and every repayment date are agreed before a deal opens. Investors see exactly the terms the business signed."
       >
         <div data-reveal-stagger className="grid gap-4 sm:grid-cols-3">
-          <InfoCard tone="dark" title="Structured by specialists" body="Our structuring team sets pricing, tenor, repayment frequency, fees, security and conditions in one record." />
-          <InfoCard tone="dark" title="Schedule generated first" body="The repayment schedule is calculated from the agreed terms and approved before the campaign is published." />
-          <InfoCard tone="dark" title="Changes need approval" body="Any change to the terms creates a new version and must be approved again. Earlier versions are kept." />
+          <InfoCard tone="dark" title="Priced by specialists" body="Our team prices each deal on its own merits, based on the business, the customer and the security behind it." />
+          <InfoCard tone="dark" title="Every date known upfront" body="Businesses know when each repayment is due. Investors know when each payment should arrive." />
+          <InfoCard tone="dark" title="No quiet changes" body="If terms ever need to change, both sides are told and the change has to be approved first." />
         </div>
       </ContentSection>
     </>

@@ -39,8 +39,7 @@ export default function VerificationPage() {
     <>
       <PageHeader eyebrow="Verification" title="Business verification" />
       <p className="-mt-4 mb-8 max-w-2xl text-ink-600">
-        Five stages establish who your business is and who owns it. Save at any point and come back. Credit review can&apos;t start until every
-        mandatory item is complete.
+        The more complete your profile, the sooner investors can back you. Save and come back at any time. We can&apos;t review your application until every required item is in.
       </p>
       <div className="grid gap-4 lg:grid-cols-2">
         {kybStages.map((k, i) => (

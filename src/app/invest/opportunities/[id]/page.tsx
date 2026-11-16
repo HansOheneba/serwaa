@@ -30,7 +30,7 @@ async function Opportunity({ params }: { params: Promise<{ id: string }> }) {
 
   const terms: [string, string][] = [
     ["Structure", o.product],
-    ["Tenor", `${o.tenorMonths} months`],
+    ["Length", `${o.tenorMonths} months`],
     ["Expected return", `${o.expectedReturn}% a year`],
     ["Repayment", o.frequency],
     ["Security", o.security],

@@ -25,7 +25,7 @@ export default function BusinessesPage() {
       ]}
       steps={[
         "Register and verify your email and phone",
-        "Complete the five-stage business verification",
+        "Verify your business",
         "Apply, attaching invoices, purchase orders or contracts",
         "Review the term sheet and receive funds once the campaign closes",
       ]}
@@ -33,26 +33,26 @@ export default function BusinessesPage() {
       <ContentSection
         tone="tint"
         eyebrow="Verification"
-        title="Five stages of verification"
-        lead="Thorough checks are what let investors trust a business they've never met. The work you put in here is what gets your deal funded."
+        title="Why we check so carefully"
+        lead="Investors are lending to a business they've never met. Our checks are what give them the confidence to back you, so the more complete your profile, the sooner your deal can be funded."
       >
         <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          <InfoCard title="Business identity" body="Registered name and number, addresses, industry and tax details." meta="Stage 1" />
-          <InfoCard title="Ownership" body="Directors, shareholders and beneficial owners, each verified individually." meta="Stage 2" />
-          <InfoCard title="Corporate documents" body="Incorporation certificate, constitution, registry extract, IDs and licences." meta="Stage 3" />
-          <InfoCard title="Financial documents" body="Accounts, bank statements, tax returns, loans, receivables and forecasts." meta="Stage 4" />
-          <InfoCard title="Commercial evidence" body="The contracts, purchase orders and invoices behind your request." meta="Stage 5" />
+          <InfoCard title="Who you are" body="Your registration and where you operate." />
+          <InfoCard title="Who owns it" body="Your directors and owners, each with ID." />
+          <InfoCard title="Your papers" body="Certificate of incorporation, licences and permits." />
+          <InfoCard title="Your finances" body="Recent accounts and bank statements." />
+          <InfoCard title="Your deal" body="The invoice, order or contract you need funded." />
         </div>
       </ContentSection>
       <ContentSection
-        eyebrow="After you apply"
-        title="Twelve stages, each with a named officer"
-        lead="Screening, document and ownership checks, compliance, financial and commercial analysis, credit assessment, risk review, committee where needed, structuring and final approval. You see the current stage and anything we need from you, with a due date, the whole way through."
+        eyebrow="Not sure where to start?"
+        title="Tell us what you need funded"
+        lead="Most businesses come to us with an invoice, a purchase order or a contract. If yours is different, our team will suggest the right structure."
       >
         <div className="flex flex-wrap gap-3">
-          <ButtonLink href="/products">See all twelve financing products</ButtonLink>
-          <ButtonLink href="/protection#verification" variant="outlined">
-            How verification works
+          <ButtonLink href="/products">See all financing products</ButtonLink>
+          <ButtonLink href="/onboarding?as=business" variant="outlined">
+            Start an application
           </ButtonLink>
         </div>
       </ContentSection>

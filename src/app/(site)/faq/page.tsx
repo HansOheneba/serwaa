@@ -10,15 +10,15 @@ const groups: { title: string; items: { q: string; a: React.ReactNode }[] }[] = 
     items: [
       {
         q: "What is Serwaa?",
-        a: "Serwaa is a private credit platform. It connects small and medium businesses that need financing with individual and institutional investors who want access to private credit, and gives one team a single system to verify, assess, structure, fund and service every deal.",
+        a: "Serwaa connects small and medium businesses that need funding to deliver their work with investors who want to earn by backing them. We check every business, agree the terms, and handle the payments in both directions.",
       },
       {
         q: "Who runs Serwaa?",
-        a: "Serwaa is owned and operated by Bomevan Group. Bomevan's team runs verification, credit assessment, structuring, campaigns and servicing on the platform, while investor money is held by licensed custodians.",
+        a: "Serwaa is owned and operated by Bomevan Group. Bomevan's team checks every business and decides which deals to back. Investor money is held by licensed custodians, not by Bomevan or Serwaa.",
       },
       {
         q: "Who is Serwaa for?",
-        a: "Businesses seeking financing for invoices, purchase orders, contracts, working capital and more; individual investors; and institutions such as private credit funds, banks, development finance institutions, family offices and corporate investors.",
+        a: "Businesses that need funding to fulfil orders, contracts or invoices; individuals who want to invest; and institutions such as funds, banks and family offices.",
       },
       {
         q: "Which sectors do you finance?",
@@ -42,15 +42,15 @@ const groups: { title: string; items: { q: string; a: React.ReactNode }[] }[] = 
       },
       {
         q: "What documents will I need?",
-        a: "Company registration documents, IDs for directors and shareholders, recent financial statements and bank statements, and commercial evidence for the deal, such as the invoice, purchase order or contract. The exact list adapts to your company type, industry and the financing you ask for.",
+        a: "Your company registration papers, IDs for your directors and owners, recent accounts and bank statements, and the invoice, order or contract behind the request. We'll tell you exactly what applies to your business.",
       },
       {
         q: "How is my application assessed?",
-        a: "It moves through twelve stages, each with a named officer: screening, document and ownership verification, compliance review, financial and commercial analysis, credit assessment, risk review, committee where required, structuring and final approval. Software prepares the analysis; authorised people make the decision.",
+        a: "Our team checks your documents and finances and looks closely at the deal itself, then our credit team decides. You can see where your application is at any time, and exactly what we still need from you.",
       },
       {
         q: "When do I receive the money?",
-        a: "After your deal is approved, it opens to investors as a campaign. Once enough cleared money is raised and the closing checklist is complete, the custodian releases funds to you, with your repayment schedule.",
+        a: "Once your deal is approved, it opens to investors. When enough money has come in, it's released to you along with your repayment dates.",
       },
     ],
   },
@@ -63,15 +63,15 @@ const groups: { title: string; items: { q: string; a: React.ReactNode }[] }[] = 
       },
       {
         q: "Who can invest?",
-        a: "Eligible individuals and institutions who complete identity verification, screening and a source-of-funds declaration. Eligibility, classification and limits depend on regulation and your jurisdiction.",
+        a: "Anyone eligible under Ghanaian regulation who verifies their identity and tells us where their money comes from. Institutions go through their own checks.",
       },
       {
         q: "How does Serwaa decide what to show me?",
-        a: "A short questionnaire covers your finances, objectives, preferences, experience and risk tolerance. Serwaa ranks opportunities by how well they fit and explains which preferences each one meets and doesn't. It's a factual comparison, not advice.",
+        a: "A short questionnaire asks about your goals, how long you can invest for and how much risk you can take. We show the closest matches first and tell you why each one fits. It's a comparison, not advice.",
       },
       {
         q: "How do I pay?",
-        a: "By Mobile Money (MTN MoMo, Telecel Cash, AT Money) or bank transfer, directly to a licensed custodian using a unique reference. Serwaa never asks for your Mobile Money PIN.",
+        a: "By Mobile Money (MTN MoMo, Telecel Cash, AT Money) or bank transfer, straight to a licensed custodian. We will never ask for your Mobile Money PIN.",
       },
       {
         q: "What if a campaign doesn't raise enough?",
@@ -87,7 +87,7 @@ const groups: { title: string; items: { q: string; a: React.ReactNode }[] }[] = 
       },
       {
         q: "Are returns guaranteed?",
-        a: "No. Expected returns are targets based on the agreed terms. Businesses can repay late or not in full, private credit is illiquid, and you could lose some or all of your money.",
+        a: "No. Expected returns are what the business has agreed to pay, not a promise that it will. Businesses can repay late or not in full, your money is tied up until the deal ends, and you could lose some or all of it.",
       },
     ],
   },
@@ -96,15 +96,15 @@ const groups: { title: string; items: { q: string; a: React.ReactNode }[] }[] = 
     items: [
       {
         q: "Where is my money held?",
-        a: "With a licensed custodian, bank or payment partner in an escrow or trust arrangement, never in Serwaa's own accounts. Only cleared funds count toward a campaign.",
+        a: "With a licensed custodian, never in Serwaa's own accounts.",
       },
       {
         q: "Is investing available now?",
-        a: "Regulated investment features open only after approval and licensing from Ghana's Securities and Exchange Commission. Until then they stay switched off.",
+        a: "Investing opens once we receive approval from Ghana's Securities and Exchange Commission.",
       },
       {
         q: "What happens if a business misses a repayment?",
-        a: "The missed payment is flagged at once and investors are told under set rules. A collections team follows up and records every contact. Any restructuring is approved and documented, keeps the original schedule on record, and is shared with investors. Only authorised people can declare a default.",
+        a: "We contact the business straight away and work with them to get repayments back on track. You're kept informed throughout, and if the repayment dates have to change, you'll see the new ones.",
       },
     ],
   },
@@ -116,7 +116,7 @@ export default function FaqPage() {
       <ContentHero
         eyebrow="Questions"
         title="Everything you need to know about Serwaa"
-        intro="How Serwaa works for businesses and investors, where the money is held, and what happens when things don't go to plan."
+        intro="How Serwaa works, where your money is held, and what happens when things don't go to plan."
       />
       <section className="bg-white pb-24">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-8 lg:grid-cols-[14rem_1fr]">

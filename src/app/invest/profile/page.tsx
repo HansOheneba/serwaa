@@ -9,7 +9,7 @@ const profile: [string, string][] = [
   ["Capacity to bear loss", "Moderate"],
   ["Experience", "Fixed income; new to private credit"],
   ["Preferred structures", "Invoice and purchase order financing"],
-  ["Preferred tenor", "Up to 6 months"],
+  ["Preferred length", "Up to 6 months"],
   ["Liquidity needs", "Can lock funds for 6 months"],
   ["Preferred sectors", "Trade, manufacturing, logistics"],
   ["Concentration", "No more than 30% in one sector"],

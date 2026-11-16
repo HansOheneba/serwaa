@@ -36,27 +36,27 @@ const tracks = [
     art: VerifyIllustration,
     step: "01",
     title: "Verify and assess",
-    body: "Every owner and director is checked, the finances and the deal are analysed, and a named person signs off the credit decision.",
+    body: "We check the business, the people behind it and the deal itself. Only then does our credit team decide whether to back it.",
   },
   {
     art: CustodyIllustration,
     step: "02",
     title: "Raise capital",
-    body: "Approved deals open to investors, who pay by Mobile Money or bank transfer straight to a licensed custodian, never to Serwaa.",
+    body: "Approved deals open to investors, who can fund them from their phone with Mobile Money or by bank transfer.",
   },
   {
     art: TrackIllustration,
     step: "03",
     title: "Fund and service",
-    body: "Funds are released only when enough money has actually cleared. Repayments flow back to investors, split exactly as agreed.",
+    body: "The business receives the money and repays on the agreed dates. Investors get their share of every repayment.",
   },
 ];
 
 const principles = [
-  { title: "Custodians hold the money", body: "Investor funds go to a licensed escrow or trust account. Serwaa tracks and reconciles; it never runs a wallet." },
-  { title: "Only cleared money counts", body: "Pending payments and interest shown are kept apart. Funding progress counts cleared funds only." },
-  { title: "People decide", body: "Software reads documents and drafts analysis. Credit approvals, fund releases and defaults stay with authorised staff." },
-  { title: "Every match explained", body: "Each opportunity shows why it appears for you. Matching is factual, never advice." },
+  { title: "Your money isn't held by us", body: "Investor money sits with a licensed custodian. Serwaa never holds it, pools it or lends it out." },
+  { title: "A deal never looks fuller than it is", body: "Funding totals only count money that has actually arrived, not promises to pay." },
+  { title: "Experienced people decide", body: "Every financing decision is made by our credit team, and no one signs off a deal they brought in." },
+  { title: "You see why a deal suits you", body: "Each opportunity tells you which of your goals it meets and which it doesn't, so the decision stays yours." },
 ];
 
 const gaps = [
@@ -77,8 +77,8 @@ const gaps = [
   },
   {
     who: "Everyone",
-    problem: "When a deal goes wrong, nobody can show who approved it or where the money went.",
-    answer: "Every approval names the person who made it, and every cedi is reconciled against the custodian's records.",
+    problem: "Fees that only appear later, and terms that shift after you've committed.",
+    answer: "The price, fees and every repayment date are fixed and shown to both sides before anyone commits.",
   },
 ];
 
@@ -223,7 +223,7 @@ export default function HomePage() {
       <section className="relative overflow-hidden bg-aubergine-800 text-white">
         <Weave tone="dark" fade="l" className="inset-y-0 right-0 w-2/3 lg:w-1/2" />
         <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-8">
-          <h2 data-reveal className="max-w-2xl text-4xl leading-[1.05] font-extrabold tracking-[-0.03em] text-balance">Built on controls, not promises</h2>
+          <h2 data-reveal className="max-w-2xl text-4xl leading-[1.05] font-extrabold tracking-[-0.03em] text-balance">Why you can trust Serwaa</h2>
           <div data-reveal-stagger className="mt-12 grid gap-x-12 gap-y-10 sm:grid-cols-2">
             {principles.map((p) => (
               <div key={p.title} className="flex gap-4">

@@ -12,7 +12,7 @@ export default function FacilitiesPage() {
         <Weave fade="b" className="inset-x-0 top-0 h-28" />
         <h2 className="text-lg font-bold text-aubergine-800">Your first facility will appear here</h2>
         <p className="mx-auto mt-2 max-w-md text-ink-600">
-          After your campaign funds and the custodian disburses, you&apos;ll see the repayment schedule, balances and payment history.
+          Once your deal is funded and the money reaches you, your repayment dates, balance and payment history appear here.
         </p>
       </div>
     </>
