@@ -11,17 +11,17 @@ export default function BusinessesPage() {
     <AudiencePage
       eyebrow="For businesses"
       title="Finance that fits your trade"
-      intro="Turn invoices, purchase orders and contracts into working capital. Register once, and your verified profile carries into every application."
+      intro="Turn invoices, purchase orders and contracts into the working capital to deliver them, funded by investors who can see your business has been properly verified."
       primary={{ href: "/onboarding?as=business", label: "Start an application" }}
       secondary={{ href: "/how-it-works", label: "How it works" }}
       photo={photos.carpenter}
       features={[
-        { title: "Twelve financing structures", body: "Invoice, purchase order, contract, working capital, inventory, equipment, supply chain and more." },
-        { title: "Enter it once", body: "Your company details, owners and documents prefill every application. No re-typing at each stage." },
-        { title: "Know where you stand", body: "A live tracker shows the current stage, what we need from you and by when." },
-        { title: "Clear terms up front", body: "You see the full repayment schedule before the deal is offered to investors." },
-        { title: "One place to repay", body: "Track balances, upcoming repayments and payment history for every facility." },
-        { title: "Help when you need it", body: "Messages with your assigned officer sit next to the application they relate to." },
+        { title: "Borrow against the deal", body: "An invoice, purchase order or contract can be the basis for financing, so you aren't limited by the property you own." },
+        { title: "Repay when you get paid", body: "Repayment can follow your customer's payment date, a share of your revenue or a fixed schedule, chosen to fit your cash flow." },
+        { title: "Many funders, not one bank", body: "Approved deals are funded by individual and institutional investors together, so one lender's appetite doesn't decide your future." },
+        { title: "Terms that can't move", body: "You see the price, fees and full repayment schedule before investors do, and they can't change without a new approval." },
+        { title: "Financing for how you trade", body: "Twelve structures, from a single invoice to a whole supply chain, so the facility fits the deal instead of the other way round." },
+        { title: "No chasing for updates", body: "You see which of the twelve review stages you're at, who owns it, and exactly what we need from you and by when." },
       ]}
       steps={[
         "Register and verify your email and phone",
@@ -33,8 +33,8 @@ export default function BusinessesPage() {
       <ContentSection
         tone="tint"
         eyebrow="Verification"
-        title="Five stages, done once"
-        lead="Verification proves who your business is and who owns it. You can save and come back at any point, and you only do it once: every later application reuses it."
+        title="Five stages of verification"
+        lead="Thorough checks are what let investors trust a business they've never met. The work you put in here is what gets your deal funded."
       >
         <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <InfoCard title="Business identity" body="Registered name and number, addresses, industry and tax details." meta="Stage 1" />

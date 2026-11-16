@@ -14,19 +14,19 @@ const audiences = [
   {
     href: "/businesses",
     title: "For businesses",
-    body: "Finance invoices, purchase orders, contracts and working capital. Register once and track every step.",
+    body: "Turn the invoices, orders and contracts you already hold into the cash to deliver them, funded by many investors instead of one bank.",
     cta: "Apply for financing",
   },
   {
     href: "/investors",
     title: "For investors",
-    body: "Start from GH₵100. See opportunities matched to your goals, with the reason each one appears.",
+    body: "Lend to businesses verified down to their owners, from GH₵100, while a licensed custodian holds your money.",
     cta: "Explore opportunities",
   },
   {
     href: "/institutions",
     title: "For institutions",
-    body: "A verified pipeline matched to your mandate, with data rooms, allocations and consolidated reporting.",
+    body: "Put capital into verified SME credit without building your own origination and due-diligence team.",
     cta: "Partner with Serwaa",
   },
 ];
@@ -36,19 +36,19 @@ const tracks = [
     art: VerifyIllustration,
     step: "01",
     title: "Verify and assess",
-    body: "The business completes a five-stage verification. Our credit team analyses its finances and the deal, and people make the decision.",
+    body: "Every owner and director is checked, the finances and the deal are analysed, and a named person signs off the credit decision.",
   },
   {
     art: CustodyIllustration,
     step: "02",
     title: "Raise capital",
-    body: "Approved deals open as campaigns. Investors subscribe and pay by Mobile Money or bank transfer, straight to a licensed custodian.",
+    body: "Approved deals open to investors, who pay by Mobile Money or bank transfer straight to a licensed custodian, never to Serwaa.",
   },
   {
     art: TrackIllustration,
     step: "03",
     title: "Fund and service",
-    body: "Once enough money has cleared, funds go to the business. Repayments flow back to investors on the agreed schedule.",
+    body: "Funds are released only when enough money has actually cleared. Repayments flow back to investors, split exactly as agreed.",
   },
 ];
 
@@ -62,23 +62,23 @@ const principles = [
 const gaps = [
   {
     who: "Businesses",
-    problem: "Retyping the same details at every stage, and products built for conventional loans, not invoices, orders and contracts.",
-    answer: "One verified profile reused everywhere, and twelve structures built around how SMEs actually earn.",
+    problem: "Lenders want property as collateral, while the orders, invoices and contracts the business already holds count for little.",
+    answer: "Borrow against the deal in front of you, and repay when your customer pays you.",
   },
   {
     who: "Investors",
-    problem: "The same list for everyone, and expected returns easily mistaken for money received.",
-    answer: "Opportunities matched to your profile with the reason shown, and every amount labelled exactly as it stands.",
+    problem: "Lending to small businesses can pay well, but it's hard to reach them and harder to tell which ones are genuine.",
+    answer: "Lend from GH₵100 to businesses checked down to every owner, and get refunded if a deal doesn't fill.",
   },
   {
     who: "Institutions",
-    problem: "No structured, verified pipeline and no consolidated view of exposure.",
-    answer: "A pipeline matched to your mandate, with data rooms, allocation tracking and portfolio reporting.",
+    problem: "Building an SME origination and due-diligence team costs more than most mandates can carry.",
+    answer: "Deals arrive verified, analysed and structured, filtered to your mandate, with every document in a data room.",
   },
   {
     who: "Everyone",
-    problem: "A registration form and a certificate don't prove who a business really is.",
-    answer: "Five-stage verification with ownership mapping, director checks and document authenticity checks.",
+    problem: "When a deal goes wrong, nobody can show who approved it or where the money went.",
+    answer: "Every approval names the person who made it, and every cedi is reconciled against the custodian's records.",
   },
 ];
 
@@ -169,8 +169,8 @@ export default function HomePage() {
           Funding for the businesses that get things done
         </h2>
         <p className="mt-5 text-lg leading-8 text-ink-600">
-          Workshops, shops, distributors and manufacturers often have the orders, contracts and customers, but not the cash to deliver.
-          Serwaa structures the financing around how they actually earn.
+          Workshops, shops, distributors and manufacturers often have the orders and the customers but not the cash to deliver. Serwaa
+          finances the deal itself, and times repayment to when the money comes in.
         </p>
         <ul className="mt-8 flex flex-wrap gap-2">
           {products.map((p) => (
@@ -247,8 +247,8 @@ export default function HomePage() {
           Honest numbers, every time
         </h2>
         <p className="mt-5 text-lg leading-8 text-ink-600">
-          Lend to verified businesses from GH₵100. Every amount is labelled exactly as it stands, so expected returns are never mistaken for
-          money in your pocket.
+          Your statement never blends what you've been paid with what you're still owed. Every amount carries its real status, so you always
+          know what is actually in your pocket.
         </p>
         <div className="mt-8 flex flex-wrap gap-2">
           {states.map((s) => (

@@ -36,7 +36,7 @@ const groups: { title: string; items: { q: string; a: React.ReactNode }[] }[] = 
             <Link href="/onboarding?as=business" className="font-semibold text-aubergine-500 underline">
               Create a business account
             </Link>
-            , complete the five-stage verification, then apply for the structure that fits your need. Your verified details prefill every application.
+            , complete the five-stage verification, then apply for the structure that fits your deal. Most businesses apply with an invoice, purchase order or contract they already hold.
           </>
         ),
       },

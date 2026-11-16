@@ -15,12 +15,12 @@ export default function InstitutionsPage() {
       secondary={{ href: "/how-it-works", label: "How it works" }}
       photo={photos.boardroom}
       features={[
-        { title: "Mandate-based pipeline", body: "Set sectors, ticket sizes, structures, tenors and return parameters. The pipeline follows them." },
-        { title: "Data rooms", body: "Full transaction detail, credit memoranda and documents, with every access logged." },
-        { title: "Allocation control", body: "Express interest with a proposed amount and agree allocations with our team." },
-        { title: "Consolidated reporting", body: "Exposure, concentration, repayment performance and maturities across every deal." },
-        { title: "Team access", body: "Invite colleagues and set what each person can see and do." },
-        { title: "Deep verification", body: "Every borrower passes ownership mapping, director and UBO checks and document verification." },
+        { title: "No origination team needed", body: "Verification, credit analysis and structuring are done before a deal reaches you, so you deploy capital without building the machinery." },
+        { title: "Only deals that fit", body: "Your pipeline is filtered by sector, ticket size, structure, tenor and return, so your team reviews what it can actually fund." },
+        { title: "Diligence you can audit", body: "Credit memoranda, documents and verification results sit in data rooms, and every view is logged." },
+        { title: "Agree allocations directly", body: "Express interest with an amount and agree your allocation with our team before you commit." },
+        { title: "One view of exposure", body: "See concentration, repayment performance and maturities across every deal, ready for your own reporting." },
+        { title: "Control who sees what", body: "Invite colleagues and set exactly what each person can view, approve or download." },
       ]}
       steps={["Register your institution", "Complete institutional verification", "Set your mandate", "Review pipeline and agree allocations"]}
     >

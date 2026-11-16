@@ -19,12 +19,12 @@ const principles = [
   { title: "People decide, software assists", body: "Software reads documents, analyses and drafts. Credit approvals, fund releases and default decisions are made by authorised people." },
   { title: "Only cleared money counts", body: "Interest shown, pending subscriptions and pending payments are kept apart and never counted as funding." },
   { title: "Every match explained", body: "Each opportunity shows why it appears for you. Until regulators permit otherwise, matching is factual and preference-based, never advice." },
-  { title: "Enter once, reuse everywhere", body: "Profiles, documents and terms are captured once and carried through every later stage, so nothing is re-typed or lost." },
-  { title: "Configured, not hard-coded", body: "Products, document rules, workflows, fees and taxes are configuration. Regulatory limits are locked against override." },
+  { title: "What was checked is what you see", body: "The details verified at onboarding are carried untouched into credit review, the campaign and the repayment schedule, so nothing changes in transit." },
+  { title: "Regulatory limits are locked", body: "Campaign durations, issuer limits and offering restrictions are locked in the system, so no one can quietly stretch them." },
   { title: "The true state of returns", body: "Expected, accrued, due, received and overdue amounts are always labelled and never blended." },
   { title: "Every decision leaves a trace", body: "Sensitive actions record who acted, when, what changed and why. History is preserved, never overwritten." },
   { title: "Separation of duties", body: "Nobody approves an application they originated, or every stage of a campaign they prepared. The system enforces it." },
-  { title: "Built for mobile next", body: "All rules live behind secure APIs, so the mobile apps that follow use exactly the same controls." },
+  { title: "Your data is protected", body: "Identity numbers, bank details and income data are encrypted, access is limited by role, and every view of sensitive data is logged." },
 ];
 
 const outcomes = [
@@ -124,7 +124,7 @@ export default function ProtectionPage() {
         tone="dark"
         eyebrow="Our principles"
         title="Ten rules the whole platform is built on"
-        lead="These aren't policies on a page. Each one is enforced by the system itself, and the sensitive ones are tested automatically."
+        lead="Each rule is enforced by the system itself, not left to good intentions, and the sensitive ones are tested automatically."
       >
         <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {principles.map((p, i) => (

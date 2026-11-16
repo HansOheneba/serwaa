@@ -13,18 +13,18 @@ export default function InvestorsPage() {
     <AudiencePage
       eyebrow="For investors"
       title="Private credit, explained plainly"
-      intro="Lend to verified businesses from GH₵100. See opportunities that fit your goals, pay by Mobile Money or bank transfer, and track every cedi you are owed."
+      intro="Earn from lending to real Ghanaian businesses, starting at GH₵100. Every borrower is verified, your money is held by a licensed custodian, and your statement shows exactly what you’ve been paid."
       primary={{ href: "/onboarding?as=investor", label: "Start investing" }}
       secondary={{ href: "/how-it-works", label: "How it works" }}
       photo={photos.investorLaptop}
       aside={<div className="shadow-xl shadow-aubergine-900/10"><OpportunityCard o={opportunities[1]} showMatch anonymous /></div>}
       features={[
-        { title: "Matched to you", body: "A short questionnaire builds your profile. Each opportunity shows which of your preferences it meets and which it doesn't." },
-        { title: "Your money stays protected", body: "Payments go straight to a licensed custodian, never to a Serwaa wallet." },
-        { title: "Honest numbers", body: "Expected, pending, received and overdue amounts are always labelled and never added together." },
-        { title: "Pay from your phone", body: "MTN MoMo, Telecel Cash, AT Money or bank transfer with a unique reference." },
-        { title: "Concentration warnings", body: "We tell you before a new investment would tip too much of your portfolio into one sector or business." },
-        { title: "Answers on hand", body: "Ask about your schedule or an opportunity's risks and get answers drawn only from your records and approved documents." },
+        { title: "Checked down to the owners", body: "Every director, shareholder and beneficial owner is verified and screened before a business can raise a cedi." },
+        { title: "Start with GH₵100", body: "Small minimums let you spread your money across several businesses and sectors instead of betting on one." },
+        { title: "Your money never sits with us", body: "You pay a licensed custodian directly. Serwaa can't spend, pool or lend out your money." },
+        { title: "Refunded if a deal doesn't fill", body: "If a campaign misses its minimum, the custodian returns your money. Partial deals never go ahead automatically." },
+        { title: "See why it fits, and why it doesn't", body: "Each opportunity lists which of your preferences it meets and which it misses, so you decide with the full picture." },
+        { title: "Warned before you over-commit", body: "If a new investment would push too much of your money into one business or sector, you're told before you pay." },
       ]}
       steps={[
         "Create an account and verify your identity",
