@@ -40,7 +40,7 @@ export default function InvestorsPage() {
         title="Five short sections shape what you see"
         lead="Your answers decide which opportunities you see first. If you're keener on risk than your savings can comfortably absorb, we go with what you can afford."
       >
-        <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div data-reveal-stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
           <InfoCard title="Your finances" body="Income, commitments and how much you can invest." meta="Section 1" />
           <InfoCard title="Your objectives" body="Income, growth, preservation, diversification or impact." meta="Section 2" />
           <InfoCard title="Your preferences" body="Amount, tenor, sectors, structures and security." meta="Section 3" />

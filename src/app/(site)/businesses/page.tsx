@@ -36,7 +36,7 @@ export default function BusinessesPage() {
         title="Why we check so carefully"
         lead="Investors are lending to a business they've never met. Our checks are what give them the confidence to back you, so the more complete your profile, the sooner your deal can be funded."
       >
-        <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div data-reveal-stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
           <InfoCard title="Who you are" body="Your registration and where you operate." />
           <InfoCard title="Who owns it" body="Your directors and owners, each with ID." />
           <InfoCard title="Your papers" body="Certificate of incorporation, licences and permits." />

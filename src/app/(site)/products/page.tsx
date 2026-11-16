@@ -52,7 +52,7 @@ export default function ProductsPage() {
         title="Twelve financing structures"
         lead="Pick the closest fit and our team will help you settle on the right one. Not sure? Tell us what you need and we'll suggest it."
       >
-        <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div data-reveal-stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((p) => (
             <InfoCard key={p.title} {...p} />
           ))}
@@ -65,7 +65,7 @@ export default function ProductsPage() {
         title="How investors are repaid"
         lead="How you're repaid depends on the deal. Either way, you know every payment date before you invest, and your statement shows what's been paid and what's still to come."
       >
-        <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div data-reveal-stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {returns.map((r) => (
             <InfoCard key={r.title} {...r} />
           ))}
@@ -81,7 +81,7 @@ export default function ProductsPage() {
         title="Terms are fixed before anyone invests"
         lead="The price, fees, security and every repayment date are agreed before a deal opens. Investors see exactly the terms the business signed."
       >
-        <div data-reveal-stagger className="grid gap-4 sm:grid-cols-3">
+        <div data-reveal-stagger className="grid gap-6 sm:grid-cols-3">
           <InfoCard tone="dark" title="Priced by specialists" body="Our team prices each deal on its own merits, based on the business, the customer and the security behind it." />
           <InfoCard tone="dark" title="Every date known upfront" body="Businesses know when each repayment is due. Investors know when each payment should arrive." />
           <InfoCard tone="dark" title="No quiet changes" body="If terms ever need to change, both sides are told and the change has to be approved first." />

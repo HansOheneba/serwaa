@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Card, PageHeader, StatusPill } from "@/components/ui";
+import { ProfileEditor } from "@/components/investor-views";
+import { Card, Label, PageHeader, StatusPill } from "@/components/ui";
 
 export const metadata: Metadata = { title: "My profile" };
 
@@ -25,10 +26,15 @@ export default function ProfilePage() {
       <p className="-mt-4 mb-8 max-w-2xl text-ink-600">
         Built from your questionnaire answers. Edit your answers and your matches update. We&apos;ll remind you to review this every 12 months.
       </p>
-      <Card className="p-0">
+      <Label>What you want</Label>
+      <div className="mt-4 mb-12">
+        <ProfileEditor />
+      </div>
+      <Label>Your profile</Label>
+      <Card className="mt-4 p-0">
         <dl className="divide-y divide-ink-100">
           {profile.map(([k, v]) => (
-            <div key={k} className="grid gap-1 px-5 py-4 sm:grid-cols-[220px_1fr]">
+            <div key={k} className="grid gap-1 px-7 py-4 sm:grid-cols-[240px_1fr]">
               <dt className="text-sm text-ink-500">{k}</dt>
               <dd className="font-semibold text-ink-800">{v}</dd>
             </div>

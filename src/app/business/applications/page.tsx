@@ -1,62 +1,17 @@
 import type { Metadata } from "next";
-import { StageTracker } from "@/components/stage-tracker";
-import { RespondButton } from "@/components/forms";
-import { ButtonLink, Card, Label, PageHeader } from "@/components/ui";
-import { applicationStages, businessApplication } from "@/lib/data";
-import { cedis } from "@/lib/format";
+import { Suspense } from "react";
+import { BusinessApplications } from "@/components/business-views";
+import { PageHeader } from "@/components/ui";
 
 export const metadata: Metadata = { title: "Applications" };
 
 export default function ApplicationsPage() {
-  const app = businessApplication;
   return (
     <>
-      <PageHeader eyebrow="Applications" title={`${app.product} · ${cedis(app.amount)}`}>
-        <ButtonLink href="/business/applications/new" variant="secondary">
-          New application
-        </ButtonLink>
-      </PageHeader>
-      <div className="grid gap-4 lg:grid-cols-[1fr_1.4fr]">
-        <Card>
-          <Label>Progress</Label>
-          <p className="mt-1 mb-5 font-mono text-xs text-ink-500">
-            {app.ref} · submitted {app.submitted}
-          </p>
-          <StageTracker stages={applicationStages} current={app.stageIndex} />
-        </Card>
-        <div className="space-y-4">
-          <Card>
-            <Label>Information request</Label>
-            {app.requests.map((r) => (
-              <div key={r.title} className="mt-3">
-                <p className="font-semibold text-ink-800">{r.title}</p>
-                <p className="mt-1 text-sm text-ink-600">
-                  Your credit analyst needs these to complete the cash flow analysis. Due {r.due}.
-                </p>
-                <RespondButton />
-              </div>
-            ))}
-          </Card>
-          <Card>
-            <Label>Summary</Label>
-            <dl className="mt-3 grid grid-cols-2 gap-4 text-sm">
-              {[
-                ["Amount", cedis(app.amount)],
-                ["Structure", app.product],
-                ["Repayment", "Single repayment at invoice settlement"],
-                ["Expected funding", "December 2026"],
-                ["Debtor", "National supermarket chain"],
-                ["Invoice due", "28 Feb 2027"],
-              ].map(([k, v]) => (
-                <div key={k}>
-                  <dt className="text-ink-500">{k}</dt>
-                  <dd className="font-semibold text-ink-800">{v}</dd>
-                </div>
-              ))}
-            </dl>
-          </Card>
-        </div>
-      </div>
+      <PageHeader eyebrow="Applications" title="Your applications" />
+      <Suspense fallback={<div className="h-96 rounded-2xl bg-ink-50" />}>
+        <BusinessApplications />
+      </Suspense>
     </>
   );
 }

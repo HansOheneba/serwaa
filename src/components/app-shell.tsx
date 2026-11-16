@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Bell,
   ChevronsUpDown,
   Compass,
   FileText,
@@ -24,6 +23,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Mark } from "./brand";
+import { NotificationBell } from "./notifications";
+import type { Audience } from "@/lib/store";
 import { ButtonLink } from "./ui";
 
 const icons = {
@@ -55,6 +56,7 @@ export function AppShell({
   action,
   search,
   metric,
+  audience,
   children,
 }: {
   portal: string;
@@ -64,6 +66,8 @@ export function AppShell({
   search: { href: string; placeholder: string };
   /** One live figure shown in the command bar, e.g. verification progress. */
   metric?: { label: string; value: string };
+  /** Which portal this is, for notifications. */
+  audience: Audience;
   children: ReactNode;
 }) {
   const pathname = usePathname();
@@ -231,14 +235,14 @@ export function AppShell({
               <span className="font-mono text-sm font-medium text-saffron-300">{metric.value}</span>
             </div>
           )}
-          {[
-            { label: "Help", Icon: HelpCircle },
-            { label: "Notifications", Icon: Bell },
-          ].map(({ label, Icon }) => (
-            <button key={label} type="button" aria-label={label} className="state-layer hidden size-10 items-center justify-center rounded-full bg-aubergine-900 text-aubergine-100 sm:flex">
-              <Icon className="size-5" aria-hidden="true" />
-            </button>
-          ))}
+          <a
+            href="/faq"
+            aria-label="Help"
+            className="state-layer hidden size-10 items-center justify-center rounded-full bg-aubergine-900 text-aubergine-100 sm:flex"
+          >
+            <HelpCircle className="size-5" aria-hidden="true" />
+          </a>
+          <NotificationBell audience={audience} />
           <span className="ml-1 flex size-9 shrink-0 items-center justify-center rounded-xl bg-saffron-400 text-sm font-bold text-aubergine-950" aria-label={user.name} title={`${user.name} · ${user.detail}`}>
             {initials}
           </span>
@@ -265,7 +269,7 @@ export function AppShell({
 
         {/* Only the work panel scrolls; the frame, command bar and navigation stay fixed. */}
         <main className="flex min-w-0 flex-1 flex-col sm:pr-3 sm:pb-3 lg:pl-0">
-          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-white px-4 py-6 [scrollbar-gutter:stable] sm:rounded-[1.25rem] sm:px-8 sm:py-8">
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-white px-4 py-8 [scrollbar-gutter:stable] sm:rounded-[1.25rem] sm:px-10 sm:py-10">
             <div className="mx-auto max-w-7xl">{children}</div>
           </div>
         </main>

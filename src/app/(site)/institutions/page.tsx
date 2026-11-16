@@ -30,7 +30,7 @@ export default function InstitutionsPage() {
         title="A pipeline that follows your rules"
         lead="Tell us what you invest in and we'll only bring you deals that fit."
       >
-        <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div data-reveal-stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <InfoCard title="Sectors" body="The industries you want exposure to, and those you don't." />
           <InfoCard title="Ticket sizes" body="Minimum and maximum amounts per transaction." />
           <InfoCard title="Structures and tenors" body="Which financing structures and terms fit your fund." />

@@ -41,7 +41,7 @@ export function DashboardBand({
   return (
     <section className="rise-in relative overflow-hidden rounded-[1.75rem] bg-aubergine-800 text-white">
       <Weave tone="dark" fade="l" className="inset-y-0 right-0 w-1/2 opacity-80" />
-      <div className="relative px-6 pt-7 sm:px-9 sm:pt-9">
+      <div className="relative px-7 pt-8 sm:px-10 sm:pt-10">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="font-mono text-[11px] tracking-[0.1em] text-saffron-300 uppercase">{eyebrow}</p>
@@ -75,7 +75,7 @@ export function DashboardBand({
       )}
       <dl className="stagger relative grid grid-cols-2 gap-px border-t border-aubergine-700 bg-aubergine-700 lg:grid-cols-4">
         {stats.map((s) => (
-          <div key={s.label} className="bg-aubergine-800 px-6 py-5 sm:px-9">
+          <div key={s.label} className="bg-aubergine-800 px-7 py-6 sm:px-10">
             <dt className="flex items-center gap-2 font-mono text-[11px] tracking-[0.1em] text-aubergine-200 uppercase">
               {s.label}
             </dt>

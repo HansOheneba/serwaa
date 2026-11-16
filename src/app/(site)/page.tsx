@@ -123,7 +123,7 @@ export default function HomePage() {
       </section>
 
       <section className="bg-white">
-        <div data-reveal-stagger className="mx-auto grid max-w-7xl gap-4 px-4 py-16 sm:px-8 md:grid-cols-3">
+        <div data-reveal-stagger className="mx-auto grid max-w-7xl gap-6 px-4 py-24 sm:px-8 md:grid-cols-3">
           {audiences.map((a) => (
             <Link
               key={a.href}
@@ -140,7 +140,7 @@ export default function HomePage() {
       </section>
 
       <section className="bg-white">
-        <div className="mx-auto max-w-7xl px-4 pt-8 pb-20 sm:px-8">
+        <div className="mx-auto max-w-7xl px-4 pt-8 pb-28 sm:px-8">
           <div data-reveal className="max-w-3xl">
             <Label>The gap we close</Label>
             <h2 className="mt-3 text-4xl leading-[1.05] font-extrabold tracking-[-0.03em] text-aubergine-800 text-balance">
@@ -185,14 +185,14 @@ export default function HomePage() {
       </SplitSection>
 
       <section className="relative overflow-hidden bg-white">
-        <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-8">
+        <div className="relative mx-auto max-w-7xl px-4 py-28 sm:px-8">
           <div data-reveal className="max-w-2xl">
             <Label>How a deal moves</Label>
             <h2 className="mt-3 text-4xl leading-[1.05] font-extrabold tracking-[-0.03em] text-aubergine-800 text-balance">
               From application to repayment, in one system
             </h2>
           </div>
-          <ol data-reveal-stagger className="mt-12 grid gap-8 md:grid-cols-3">
+          <ol data-reveal-stagger className="mt-16 grid gap-10 md:grid-cols-3">
             {tracks.map((t) => (
               <li key={t.step}>
                 <div className="flex h-56 items-center justify-center rounded-3xl bg-ink-50">
@@ -222,9 +222,9 @@ export default function HomePage() {
 
       <section className="relative overflow-hidden bg-aubergine-800 text-white">
         <Weave tone="dark" fade="l" className="inset-y-0 right-0 w-2/3 lg:w-1/2" />
-        <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-8">
+        <div className="relative mx-auto max-w-7xl px-4 py-28 sm:px-8">
           <h2 data-reveal className="max-w-2xl text-4xl leading-[1.05] font-extrabold tracking-[-0.03em] text-balance">Why you can trust Serwaa</h2>
-          <div data-reveal-stagger className="mt-12 grid gap-x-12 gap-y-10 sm:grid-cols-2">
+          <div data-reveal-stagger className="mt-14 grid gap-x-16 gap-y-12 sm:grid-cols-2">
             {principles.map((p) => (
               <div key={p.title} className="flex gap-4">
                 <span className="mt-1.5 h-4 w-4 shrink-0 bg-saffron-500" aria-hidden="true" />
@@ -260,7 +260,7 @@ export default function HomePage() {
         </ButtonLink>
       </SplitSection>
 
-      <section className="bg-white px-2 py-3 sm:px-4">
+      <section className="bg-white px-2 pt-6 pb-4 sm:px-4">
         <div data-reveal="clip" className="relative overflow-hidden rounded-[2rem] bg-saffron-500">
           <Weave fade="r" className="inset-y-0 left-0 w-1/2 opacity-40 mix-blend-multiply" />
           <div className="relative mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 py-16 sm:flex-row sm:items-center sm:px-10 lg:py-20">

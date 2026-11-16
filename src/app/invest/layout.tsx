@@ -6,6 +6,7 @@ export const metadata: Metadata = { title: { default: "Investor portal", templat
 export default function InvestLayout({ children }: LayoutProps<"/invest">) {
   return (
     <AppShell
+      audience="investor"
       portal="Investor"
       user={{ name: "Ama Owusu", detail: "Income focused profile" }}
       nav={[

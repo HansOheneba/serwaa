@@ -71,7 +71,7 @@ export default function HowItWorksPage() {
         title="Every deal is judged by people who understand credit"
         lead="A deal is only offered to investors once our credit team is satisfied with three things."
       >
-        <div data-reveal-stagger className="grid gap-4 sm:grid-cols-3">
+        <div data-reveal-stagger className="grid gap-6 sm:grid-cols-3">
           <InfoCard tone="dark" title="The business" body="Is it well run, honestly owned and making money? We look at its accounts, bank statements and the people behind it." />
           <InfoCard tone="dark" title="The deal" body="Is the customer good for the money, and is the repayment date realistic? Two requests from the same business can get different answers." />
           <InfoCard tone="dark" title="The investor" body="Does it suit what you've told us you can afford to put at risk? Your appetite for risk is judged on its own, apart from the business." />
@@ -86,7 +86,7 @@ export default function HowItWorksPage() {
           <p className="mt-2 max-w-2xl text-ink-600">
             Money you&apos;re owed and money you&apos;ve been paid are never added together. Every amount carries one of these labels.
           </p>
-          <dl data-reveal-stagger className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <dl data-reveal-stagger className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {states.map((s) => (
               <div key={s.state} className="rounded-2xl bg-white p-5 ring-1 ring-ink-200">
                 <dt>

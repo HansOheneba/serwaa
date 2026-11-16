@@ -84,7 +84,7 @@ export function FilterChip({
 export function Card({ className = "", children }: { className?: string; children: ReactNode }) {
   // Default surface is white; a caller-supplied background replaces it rather than fighting it.
   const surface = /(^|\s)bg-/.test(className) ? "" : "bg-white";
-  return <div className={`rounded-2xl p-5 ring-1 ring-ink-200 ${surface} ${className}`}>{children}</div>;
+  return <div className={`rounded-2xl p-6 ring-1 ring-ink-200 sm:p-7 ${surface} ${className}`}>{children}</div>;
 }
 
 export function Label({ children, className = "" }: { children: ReactNode; className?: string }) {
@@ -133,7 +133,7 @@ export function Stat({
   hint?: string;
 }) {
   return (
-    <div className="rounded-2xl bg-white p-5 ring-1 ring-ink-200">
+    <div className="rounded-2xl bg-white p-6 ring-1 ring-ink-200">
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm font-medium text-ink-600">{label}</p>
         {state && <MoneyBadge state={state} />}
@@ -173,7 +173,7 @@ export function StatusPill({ tone = "neutral", children }: { tone?: "neutral" | 
 
 export function PageHeader({ eyebrow, title, children }: { eyebrow?: string; title: string; children?: ReactNode }) {
   return (
-    <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+    <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
       <div>
         {eyebrow && <Label>{eyebrow}</Label>}
         <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-aubergine-800 text-balance">{title}</h1>

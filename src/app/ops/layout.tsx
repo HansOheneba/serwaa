@@ -6,6 +6,7 @@ export const metadata: Metadata = { title: { default: "Operations", template: "%
 export default function OpsLayout({ children }: LayoutProps<"/ops">) {
   return (
     <AppShell
+      audience="ops"
       portal="Operations"
       user={{ name: "A. Mensah", detail: "Credit analyst" }}
       nav={[

@@ -73,7 +73,7 @@ export default function ProtectionPage() {
           <div data-reveal className="flex justify-center rounded-3xl bg-white p-8 ring-1 ring-ink-200">
             <CustodyIllustration className="h-56 w-auto" />
           </div>
-          <div data-reveal-stagger className="grid gap-3 sm:grid-cols-2">
+          <div data-reveal-stagger className="grid gap-5 sm:grid-cols-2">
             {states.map((s) => (
               <div key={s.state} className="rounded-2xl bg-white p-5 ring-1 ring-ink-200">
                 <MoneyBadge state={s.state} />
@@ -92,7 +92,7 @@ export default function ProtectionPage() {
         lead="Investors only ever see businesses that have passed every check."
       >
         <div className="grid items-start gap-10 lg:grid-cols-[1.4fr_1fr]">
-          <ol data-reveal-stagger className="grid gap-3">
+          <ol data-reveal-stagger className="grid gap-4">
             {checks.map((k, i) => (
               <li key={k.title} className="flex gap-4 rounded-2xl bg-white p-5 ring-1 ring-ink-200">
                 <span className="font-mono text-sm text-saffron-700">{String(i + 1).padStart(2, "0")}</span>
@@ -110,7 +110,7 @@ export default function ProtectionPage() {
       </ContentSection>
 
       <ContentSection tone="dark" eyebrow="What you can count on" title="Six promises we hold ourselves to">
-        <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div data-reveal-stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {promises.map((p) => (
             <InfoCard key={p.title} tone="dark" title={p.title} body={p.body} />
           ))}
@@ -123,7 +123,7 @@ export default function ProtectionPage() {
         title="What happens to your money in every case"
         lead="When a deal stops taking money, one of five things happens, and you're told which."
       >
-        <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div data-reveal-stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
           {outcomes.map((o) => (
             <InfoCard key={o.title} {...o} />
           ))}
@@ -137,7 +137,7 @@ export default function ProtectionPage() {
         title="The risks you should know about"
         lead="Lending to growing businesses can earn steady returns, but it isn't a savings account. Please read this before you invest."
       >
-        <div data-reveal-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div data-reveal-stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {risks.map((r) => (
             <div key={r.title} className="rounded-2xl bg-white p-6 ring-1 ring-danger-600/20">
               <p className="font-bold text-danger-600">{r.title}</p>

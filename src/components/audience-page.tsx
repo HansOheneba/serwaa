@@ -34,7 +34,7 @@ export function AudiencePage({
   return (
     <>
       <section className="bg-white">
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-8 lg:grid-cols-[1.2fr_1fr] lg:py-20">
+        <div className="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-8 lg:grid-cols-[1.2fr_1fr] lg:py-28">
           <div>
             <Label>{eyebrow}</Label>
             <h1 className="mt-4 text-4xl leading-tight font-extrabold tracking-[-0.025em] text-aubergine-800 text-balance sm:text-5xl">{title}</h1>
@@ -64,11 +64,11 @@ export function AudiencePage({
 
       <section className="relative overflow-hidden border-t border-ink-100 bg-ink-50">
         <Weave fade="b" className="inset-x-0 top-0 h-16" />
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-8">
+        <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-8">
           <h2 data-reveal className="text-2xl font-bold tracking-tight text-aubergine-800">What you get</h2>
-          <div data-reveal-stagger className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div data-reveal-stagger className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((f) => (
-              <div key={f.title} className="rounded-2xl bg-white p-6 ring-1 ring-ink-200">
+              <div key={f.title} className="rounded-2xl bg-white p-7 ring-1 ring-ink-200">
                 <h3 className="font-bold text-aubergine-800">{f.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-ink-600">{f.body}</p>
               </div>
@@ -78,9 +78,9 @@ export function AudiencePage({
       </section>
 
       <section className="bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-8">
           <h2 data-reveal className="text-2xl font-bold tracking-tight text-aubergine-800">Getting started</h2>
-          <ol data-reveal-stagger className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <ol data-reveal-stagger className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s, i) => (
               <li key={s} className="flex gap-4">
                 <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-aubergine-800 font-mono text-sm text-white">{i + 1}</span>

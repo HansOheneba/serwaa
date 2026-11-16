@@ -1,20 +1,8 @@
 import type { Metadata } from "next";
-import { PageHeader } from "@/components/ui";
-import { Weave } from "@/components/weave";
+import { FacilityView } from "@/components/business-views";
 
-export const metadata: Metadata = { title: "Facilities" };
+export const metadata: Metadata = { title: "Repayments" };
 
 export default function FacilitiesPage() {
-  return (
-    <>
-      <PageHeader eyebrow="Facilities" title="Facilities and repayments" />
-      <div className="relative overflow-hidden rounded-2xl bg-white px-5 pt-28 pb-14 text-center ring-1 ring-ink-200">
-        <Weave fade="b" className="inset-x-0 top-0 h-28" />
-        <h2 className="text-lg font-bold text-aubergine-800">Your first facility will appear here</h2>
-        <p className="mx-auto mt-2 max-w-md text-ink-600">
-          Once your deal is funded and the money reaches you, your repayment dates, balance and payment history appear here.
-        </p>
-      </div>
-    </>
-  );
+  return <FacilityView />;
 }

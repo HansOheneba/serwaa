@@ -67,7 +67,7 @@ export default function BrandPage() {
         </p>
       </header>
 
-      <section className="grid gap-4 sm:grid-cols-2">
+      <section className="grid gap-6 sm:grid-cols-2">
         <div className="flex min-h-48 items-center justify-center rounded-2xl bg-white p-10 ring-1 ring-ink-200">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/brand/serwaa-logo.svg" alt="Serwaa" className="h-14 w-auto" />
@@ -94,7 +94,7 @@ export default function BrandPage() {
 
       <section className="mt-16">
         <h2 className="text-2xl font-bold text-aubergine-800">Core colours</h2>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {core.map((c) => (
             <div key={c.name} className="overflow-hidden rounded-2xl ring-1 ring-ink-200">
               <div className={`flex h-28 items-end p-4 font-mono text-sm ${c.cls}`}>{c.hex}</div>
@@ -133,11 +133,11 @@ export default function BrandPage() {
           A quiet basket weave: blocks of three bars in two close shades of aubergine, turning at right angles, with a small saffron
           knot where they meet. Use it in bands and fading edges, never as a full background behind text.
         </p>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        <div className="mt-6 grid gap-6 sm:grid-cols-2">
           <div className="weave-dark h-48 rounded-2xl bg-aubergine-800" />
           <div className="weave h-48 rounded-2xl bg-white ring-1 ring-ink-200" />
         </div>
-        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+        <div className="mt-4 grid gap-6 sm:grid-cols-3">
           <div className="relative overflow-hidden rounded-2xl bg-white p-5 pt-20 ring-1 ring-ink-200">
             <div className="weave fade-to-b absolute inset-x-0 top-0 h-20" />
             <p className="font-semibold text-aubergine-800">Card header</p>
@@ -162,7 +162,7 @@ export default function BrandPage() {
           Flat, geometric scenes in aubergine and saffron that explain an idea at a glance: connecting businesses and investors,
           verification, custody and tracking.
         </p>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        <div className="mt-6 grid gap-6 sm:grid-cols-2">
           {[BridgeIllustration, VerifyIllustration, CustodyIllustration, TrackIllustration].map((Ill, i) => (
             <div key={i} className="flex items-center justify-center rounded-2xl bg-white p-6 ring-1 ring-ink-200">
               <Ill className="h-auto w-full max-w-sm" />
