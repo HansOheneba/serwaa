@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
+import type { Photo } from "@/lib/photos";
 import { Mark } from "./brand";
+import { FramedPhoto } from "./framed-photo";
 import { ButtonLink, Label } from "./ui";
 import { Weave } from "./weave";
 
@@ -13,6 +15,7 @@ export function AudiencePage({
   steps,
   note,
   aside,
+  photo,
 }: {
   eyebrow: string;
   title: string;
@@ -23,6 +26,7 @@ export function AudiencePage({
   steps: string[];
   note?: string;
   aside?: ReactNode;
+  photo?: Photo;
 }) {
   return (
     <>
@@ -41,7 +45,9 @@ export function AudiencePage({
               )}
             </div>
           </div>
-          {aside ? (
+          {photo ? (
+            <FramedPhoto photo={photo} priority overlay={aside} className="mb-6 lg:mb-0" />
+          ) : aside ? (
             <div>{aside}</div>
           ) : (
             <div className="relative hidden min-h-72 items-center justify-center overflow-hidden rounded-3xl bg-aubergine-50 lg:flex" aria-hidden="true">

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AudiencePage } from "@/components/audience-page";
+import { photos } from "@/lib/photos";
 
 export const metadata: Metadata = { title: "For businesses" };
 
@@ -11,6 +12,7 @@ export default function BusinessesPage() {
       intro="Turn invoices, purchase orders and contracts into working capital. Register once, and your verified profile carries into every application."
       primary={{ href: "/onboarding?as=business", label: "Start an application" }}
       secondary={{ href: "/how-it-works", label: "How it works" }}
+      photo={photos.carpenter}
       features={[
         { title: "Twelve financing structures", body: "Invoice, purchase order, contract, working capital, inventory, equipment, supply chain and more." },
         { title: "Enter it once", body: "Your company details, owners and documents prefill every application. No re-typing at each stage." },

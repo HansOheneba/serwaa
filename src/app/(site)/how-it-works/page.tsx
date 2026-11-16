@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BridgeIllustration } from "@/components/illustrations";
 import { ButtonLink, Label, MoneyBadge } from "@/components/ui";
 import type { MoneyState } from "@/lib/data";
 
@@ -25,10 +26,18 @@ export default function HowItWorksPage() {
   return (
     <div className="bg-white">
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-8 lg:py-20">
-        <Label>How it works</Label>
-        <h1 className="mt-4 max-w-3xl text-4xl leading-tight font-extrabold tracking-[-0.025em] text-aubergine-800 text-balance sm:text-5xl">
-          One connected record, from first application to final repayment
-        </h1>
+        <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
+          <div>
+            <Label>How it works</Label>
+            <h1 className="mt-4 max-w-3xl text-4xl leading-tight font-extrabold tracking-[-0.025em] text-aubergine-800 text-balance sm:text-5xl">
+              One connected record, from first application to final repayment
+            </h1>
+            <p className="mt-5 max-w-xl text-lg leading-8 text-ink-600">
+              Businesses get the funding they need to deliver. Investors get verified opportunities and honest numbers. Serwaa runs everything in between.
+            </p>
+          </div>
+          <BridgeIllustration className="h-auto w-full" />
+        </div>
         <div className="mt-14 grid gap-6 md:grid-cols-5">
           {lifecycle.map((l, i) => (
             <div key={l.phase} className="rounded-2xl bg-ink-50 p-5 ring-1 ring-ink-100">

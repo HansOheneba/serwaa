@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { AudiencePage } from "@/components/audience-page";
 import { OpportunityCard } from "@/components/opportunity-card";
 import { opportunities } from "@/lib/data";
+import { photos } from "@/lib/photos";
 
 export const metadata: Metadata = { title: "For investors" };
 
@@ -13,7 +14,8 @@ export default function InvestorsPage() {
       intro="Lend to verified businesses from GH₵100. See opportunities that fit your goals, pay by Mobile Money or bank transfer, and track every cedi you are owed."
       primary={{ href: "/onboarding?as=investor", label: "Start investing" }}
       secondary={{ href: "/how-it-works", label: "How it works" }}
-      aside={<OpportunityCard o={opportunities[1]} showMatch anonymous />}
+      photo={photos.investorLaptop}
+      aside={<div className="shadow-xl shadow-aubergine-900/10"><OpportunityCard o={opportunities[1]} showMatch anonymous /></div>}
       features={[
         { title: "Matched to you", body: "A short questionnaire builds your profile. Each opportunity shows which of your preferences it meets and which it doesn't." },
         { title: "Your money stays protected", body: "Payments go straight to a licensed custodian, never to a Serwaa wallet." },

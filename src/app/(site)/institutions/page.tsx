@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AudiencePage } from "@/components/audience-page";
+import { photos } from "@/lib/photos";
 
 export const metadata: Metadata = { title: "For institutions" };
 
@@ -11,6 +12,7 @@ export default function InstitutionsPage() {
       intro="For private credit funds, banks, development finance institutions, family offices and corporate investors who want structured access to SME lending."
       primary={{ href: "/onboarding?as=institution", label: "Request access" }}
       secondary={{ href: "/how-it-works", label: "How it works" }}
+      photo={photos.boardroom}
       features={[
         { title: "Mandate-based pipeline", body: "Set sectors, ticket sizes, structures, tenors and return parameters. The pipeline follows them." },
         { title: "Data rooms", body: "Full transaction detail, credit memoranda and documents, with every access logged." },

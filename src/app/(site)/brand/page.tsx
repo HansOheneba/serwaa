@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import { BridgeIllustration, CustodyIllustration, TrackIllustration, VerifyIllustration } from "@/components/illustrations";
+import { photos } from "@/lib/photos";
 
 export const metadata: Metadata = { title: "Brand" };
 
@@ -150,6 +153,39 @@ export default function BrandPage() {
             <p className="font-semibold text-aubergine-800">Divider</p>
             <p className="mt-1 text-sm text-ink-600">A strip at a section&apos;s edge that leads into the next one.</p>
           </div>
+        </div>
+      </section>
+
+      <section className="mt-16">
+        <h2 className="text-2xl font-bold text-aubergine-800">Illustrations</h2>
+        <p className="mt-2 max-w-2xl text-ink-600">
+          Flat, geometric scenes in aubergine and saffron that explain an idea at a glance: connecting businesses and investors,
+          verification, custody and tracking.
+        </p>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          {[BridgeIllustration, VerifyIllustration, CustodyIllustration, TrackIllustration].map((Ill, i) => (
+            <div key={i} className="flex items-center justify-center rounded-2xl bg-white p-6 ring-1 ring-ink-200">
+              <Ill className="h-auto w-full max-w-sm" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-16">
+        <h2 className="text-2xl font-bold text-aubergine-800">Photography</h2>
+        <p className="mt-2 max-w-2xl text-ink-600">
+          Real business owners and teams at work, warm and natural. Photos are from Unsplash and free to use under the Unsplash License.
+        </p>
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {Object.values(photos).map((ph) => (
+            <figure key={ph.src} className="overflow-hidden rounded-xl ring-1 ring-ink-200">
+              <Image src={ph.src} alt={ph.alt} width={400} height={300} className="aspect-[4/3] w-full object-cover" />
+              <figcaption className="px-3 py-2 text-xs text-ink-600">
+                <a href={ph.page} className="hover:underline">Photo</a> by{" "}
+                <a href={ph.profile} className="font-semibold hover:underline">{ph.credit}</a>
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </section>
 

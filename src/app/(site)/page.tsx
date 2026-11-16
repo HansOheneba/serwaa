@@ -1,5 +1,9 @@
 import Link from "next/link";
+import Image from "next/image";
+import { FramedPhoto } from "@/components/framed-photo";
+import { CustodyIllustration, TrackIllustration, VerifyIllustration } from "@/components/illustrations";
 import { OpportunityCard } from "@/components/opportunity-card";
+import { photos } from "@/lib/photos";
 import { ButtonLink, Label } from "@/components/ui";
 import { Weave } from "@/components/weave";
 import { opportunities } from "@/lib/data";
@@ -27,16 +31,19 @@ const audiences = [
 
 const tracks = [
   {
+    art: VerifyIllustration,
     step: "1",
     title: "Verify and assess",
     body: "The business completes a five-stage verification. Our credit team analyses its finances and the deal, and people make the decision.",
   },
   {
+    art: CustodyIllustration,
     step: "2",
     title: "Raise capital",
     body: "Approved deals open as campaigns. Investors subscribe and pay by Mobile Money or bank transfer, straight to a licensed custodian.",
   },
   {
+    art: TrackIllustration,
     step: "3",
     title: "Fund and service",
     body: "Once enough money has cleared, funds go to the business. Repayments flow back to investors on the agreed schedule.",
@@ -85,13 +92,16 @@ export default function HomePage() {
               </ButtonLink>
             </div>
           </div>
-          <div className="relative">
-            <div className="absolute -inset-4 -z-0 rounded-3xl bg-aubergine-50" aria-hidden="true" />
-            <div className="relative">
-              <OpportunityCard o={opportunities[0]} anonymous />
-              <p className="mt-3 text-center text-xs text-ink-500">Illustrative opportunity</p>
-            </div>
-          </div>
+          <FramedPhoto
+            photo={photos.shopkeeper}
+            priority
+            overlay={
+              <div className="shadow-xl shadow-aubergine-900/10">
+                <OpportunityCard o={opportunities[0]} anonymous />
+                <p className="mt-2 text-center text-xs text-ink-500">Illustrative opportunity</p>
+              </div>
+            }
+          />
         </div>
       </section>
 
@@ -112,6 +122,26 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="bg-white">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pt-20 sm:px-8 lg:grid-cols-[1fr_1.3fr]">
+          <div>
+            <Label>Why Serwaa</Label>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-aubergine-800 text-balance">
+              Funding for the businesses that get things done
+            </h2>
+            <p className="mt-4 max-w-md leading-7 text-ink-600">
+              Workshops, shops, distributors and manufacturers often have orders, contracts and customers but not the cash to deliver.
+              Serwaa connects them with investors who want their money working in the real economy.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Image src={photos.tailor.src} alt={photos.tailor.alt} width={600} height={760} sizes="(min-width: 1024px) 300px, 50vw" className="row-span-2 h-full w-full rounded-2xl object-cover" />
+            <Image src={photos.carpenter.src} alt={photos.carpenter.alt} width={600} height={400} sizes="(min-width: 1024px) 300px, 50vw" className="aspect-[3/2] w-full rounded-2xl object-cover" />
+            <Image src={photos.workshop.src} alt={photos.workshop.alt} width={600} height={400} sizes="(min-width: 1024px) 300px, 50vw" className="aspect-[3/2] w-full rounded-2xl object-cover" />
+          </div>
+        </div>
+      </section>
+
       <section className="relative overflow-hidden bg-white">
         <Weave fade="t" className="inset-x-0 bottom-0 h-20" />
         <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-8">
@@ -122,6 +152,9 @@ export default function HomePage() {
           <ol className="mt-12 grid gap-8 md:grid-cols-3">
             {tracks.map((t) => (
               <li key={t.step} className="border-t-2 border-aubergine-800 pt-5">
+                <div className="mb-5 flex h-44 items-center justify-center rounded-2xl bg-ink-50">
+                  <t.art className="h-36 w-auto" />
+                </div>
                 <span className="font-mono text-sm text-saffron-700">{t.step}</span>
                 <h3 className="mt-2 text-xl font-bold text-aubergine-800">{t.title}</h3>
                 <p className="mt-2 leading-7 text-ink-600">{t.body}</p>

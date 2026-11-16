@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Mark } from "@/components/brand";
+import { photos } from "@/lib/photos";
 import { SignInForm } from "@/components/forms";
 import { Weave } from "@/components/weave";
 
@@ -17,6 +19,14 @@ export default function LoginPage() {
           <p className="mt-4 max-w-md leading-7 text-ink-600">
             Track applications, review matched opportunities and follow every repayment, all in one place.
           </p>
+          <Image
+            src={photos.vendorPhone.src}
+            alt={photos.vendorPhone.alt}
+            width={720}
+            height={480}
+            sizes="480px"
+            className="mt-8 aspect-[3/2] w-full max-w-md rounded-3xl object-cover"
+          />
         </div>
         <div className="rounded-2xl bg-white p-6 ring-1 ring-ink-200 sm:p-8">
           <h2 className="text-2xl font-bold text-aubergine-800 lg:sr-only">Sign in</h2>
