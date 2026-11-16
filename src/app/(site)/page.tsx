@@ -247,7 +247,7 @@ export default function HomePage() {
           Honest numbers, every time
         </h2>
         <p className="mt-5 text-lg leading-8 text-ink-600">
-          Your statement never blends what you've been paid with what you're still owed. Every amount carries its real status, so you always
+          Your statement never blends what you&apos;ve been paid with what you&apos;re still owed. Every amount carries its real status, so you always
           know what is actually in your pocket.
         </p>
         <div className="mt-8 flex flex-wrap gap-2">
