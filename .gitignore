@@ -34,3 +34,4 @@ npm-debug.log*
 
 # Local-only docs (brand guide is shared separately)
 docs/
+.env*.local

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { OpportunityCard } from "@/components/opportunity-card";
 import { ButtonLink, Label } from "@/components/ui";
-import { opportunities } from "@/lib/demo-data";
+import { opportunities } from "@/lib/data";
 
 const audiences = [
   {
@@ -87,8 +87,8 @@ export default function HomePage() {
           <div className="relative">
             <div className="absolute -inset-4 -z-0 rounded-3xl bg-aubergine-50" aria-hidden="true" />
             <div className="relative">
-              <OpportunityCard o={opportunities[0]} />
-              <p className="mt-3 text-center text-xs text-ink-500">Sample opportunity for illustration</p>
+              <OpportunityCard o={opportunities[0]} anonymous />
+              <p className="mt-3 text-center text-xs text-ink-500">Illustrative opportunity</p>
             </div>
           </div>
         </div>
@@ -160,10 +160,10 @@ export default function HomePage() {
           </ul>
           <div className="mt-14 flex flex-col items-start justify-between gap-6 rounded-3xl bg-saffron-500 p-8 sm:flex-row sm:items-center sm:p-10">
             <div>
-              <h2 className="text-2xl font-extrabold tracking-tight text-aubergine-900">See the platform</h2>
-              <p className="mt-1 text-aubergine-900/80">Walk through the business, investor and operations portals with sample data.</p>
+              <h2 className="text-2xl font-extrabold tracking-tight text-aubergine-900">Ready to start?</h2>
+              <p className="mt-1 text-aubergine-900/80">Create an account to apply for financing or to start investing.</p>
             </div>
-            <ButtonLink href="/login">Open the demo</ButtonLink>
+            <ButtonLink href="/login">Get started</ButtonLink>
           </div>
         </div>
       </section>

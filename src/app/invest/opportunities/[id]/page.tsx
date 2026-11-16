@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { Button, Card, FundingBar, Label, MoneyBadge, StatusPill } from "@/components/ui";
-import { opportunities } from "@/lib/demo-data";
+import { opportunities } from "@/lib/data";
 import { cedis, percent } from "@/lib/format";
 
 export function generateStaticParams() {

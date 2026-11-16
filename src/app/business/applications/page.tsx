@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { StageTracker } from "@/components/stage-tracker";
-import { Button, ButtonLink, Card, Label, PageHeader } from "@/components/ui";
-import { applicationStages, businessApplication } from "@/lib/demo-data";
+import { RespondButton } from "@/components/forms";
+import { ButtonLink, Card, Label, PageHeader } from "@/components/ui";
+import { applicationStages, businessApplication } from "@/lib/data";
 import { cedis } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Applications" };
@@ -32,14 +33,7 @@ export default function ApplicationsPage() {
                 <p className="mt-1 text-sm text-ink-600">
                   Your credit analyst needs these to complete the cash flow analysis. Due {r.due}.
                 </p>
-                <div className="mt-4 rounded-xl border-2 border-dashed border-ink-200 p-6 text-center text-sm text-ink-500">
-                  Drop PDF statements here
-                </div>
-                <div className="mt-4 flex gap-2">
-                  <Button disabled title="Uploads are not enabled in the prototype">
-                    Send response
-                  </Button>
-                </div>
+                <RespondButton />
               </div>
             ))}
           </Card>
@@ -51,7 +45,7 @@ export default function ApplicationsPage() {
                 ["Structure", app.product],
                 ["Repayment", "Single repayment at invoice settlement"],
                 ["Expected funding", "December 2026"],
-                ["Debtor", "National supermarket chain (sample)"],
+                ["Debtor", "National supermarket chain"],
                 ["Invoice due", "28 Feb 2027"],
               ].map(([k, v]) => (
                 <div key={k}>

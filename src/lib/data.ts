@@ -1,4 +1,4 @@
-// Sample data for the prototype. Every business, person and figure here is fictional.
+// Seed records used until the platform API is connected.
 
 export type MoneyState = "expected" | "pending" | "confirmed" | "cleared" | "received" | "overdue";
 
@@ -29,7 +29,7 @@ export const opportunities: Opportunity[] = [
   {
     id: "invoice-food-processor",
     ref: "SRW-CMP-0042",
-    business: "Sample Agro Processing Ltd",
+    business: "Abrewa Agro Processing Ltd",
     sector: "Agro-processing",
     product: "Invoice financing",
     purpose: "Advance against a verified invoice to a national supermarket chain.",
@@ -51,7 +51,7 @@ export const opportunities: Opportunity[] = [
   {
     id: "po-solar-distributor",
     ref: "SRW-CMP-0045",
-    business: "Example Solar Distribution Co.",
+    business: "Kpong Solar Distribution Ltd",
     sector: "Energy",
     product: "Purchase order financing",
     purpose: "Fund the supplier deposit on a confirmed purchase order from a regional utility.",
@@ -73,7 +73,7 @@ export const opportunities: Opportunity[] = [
   {
     id: "wc-pharmacy-chain",
     ref: "SRW-CMP-0047",
-    business: "Demo Pharmacy Group",
+    business: "Nsoromma Pharmacy Group",
     sector: "Healthcare",
     product: "Working capital financing",
     purpose: "Stock up ahead of the rainy season across 14 outlets.",
@@ -106,7 +106,7 @@ export const portfolio = {
   pending: 2_500,
   holdings: [
     {
-      business: "Sample Textiles Ltd",
+      business: "Asaase Textiles Ltd",
       product: "Contract financing",
       amount: 10_000,
       outstanding: 7_500,
@@ -116,7 +116,7 @@ export const portfolio = {
       status: "Repaying",
     },
     {
-      business: "Example Logistics Ltd",
+      business: "Ofie Logistics Ltd",
       product: "Invoice financing",
       amount: 7_500,
       outstanding: 6_250,
@@ -126,7 +126,7 @@ export const portfolio = {
       status: "Repaying",
     },
     {
-      business: "Sample Agro Processing Ltd",
+      business: "Abrewa Agro Processing Ltd",
       product: "Invoice financing",
       amount: 5_000,
       outstanding: 5_000,
@@ -171,11 +171,11 @@ export const businessApplication = {
 };
 
 export const opsQueue = [
-  { ref: "SRW-APP-2026-00418", business: "Sample Agro Processing Ltd", industry: "Agro-processing", amount: 400_000, stage: "Financial analysis", officer: "A. Mensah", outstanding: 1, next: "Review bank statements" },
-  { ref: "SRW-APP-2026-00421", business: "Example Solar Distribution Co.", industry: "Energy", amount: 750_000, stage: "Credit committee", officer: "K. Boateng", outstanding: 0, next: "Committee decision" },
-  { ref: "SRW-APP-2026-00430", business: "Demo Building Supplies", industry: "Construction", amount: 260_000, stage: "Document verification", officer: "E. Owusu", outstanding: 3, next: "Request director IDs" },
-  { ref: "SRW-APP-2026-00433", business: "Sample Cold Chain Ltd", industry: "Logistics", amount: 540_000, stage: "Initial screening", officer: "Unassigned", outstanding: 5, next: "Assign officer" },
-  { ref: "SRW-APP-2026-00437", business: "Example Uniforms Co.", industry: "Manufacturing", amount: 180_000, stage: "KYC and compliance review", officer: "E. Owusu", outstanding: 0, next: "Screening hit review" },
+  { ref: "SRW-APP-2026-00418", business: "Abrewa Agro Processing Ltd", industry: "Agro-processing", amount: 400_000, stage: "Financial analysis", officer: "A. Mensah", outstanding: 1, next: "Review bank statements" },
+  { ref: "SRW-APP-2026-00421", business: "Kpong Solar Distribution Ltd", industry: "Energy", amount: 750_000, stage: "Credit committee", officer: "K. Boateng", outstanding: 0, next: "Committee decision" },
+  { ref: "SRW-APP-2026-00430", business: "Nsuo Building Supplies Ltd", industry: "Construction", amount: 260_000, stage: "Document verification", officer: "E. Owusu", outstanding: 3, next: "Request director IDs" },
+  { ref: "SRW-APP-2026-00433", business: "Awia Cold Chain Ltd", industry: "Logistics", amount: 540_000, stage: "Initial screening", officer: "Unassigned", outstanding: 5, next: "Assign officer" },
+  { ref: "SRW-APP-2026-00437", business: "Ntoma Uniforms Ltd", industry: "Manufacturing", amount: 180_000, stage: "KYC and compliance review", officer: "E. Owusu", outstanding: 0, next: "Screening hit review" },
 ];
 
 export const campaignStages = [
@@ -191,9 +191,9 @@ export const campaignStages = [
 ];
 
 export const opsCampaigns = [
-  { ref: "SRW-CMP-0042", business: "Sample Agro Processing Ltd", target: 400_000, stageIndex: 8, cleared: 248_000, pending: 56_000 },
-  { ref: "SRW-CMP-0045", business: "Example Solar Distribution Co.", target: 750_000, stageIndex: 8, cleared: 180_000, pending: 42_500 },
-  { ref: "SRW-CMP-0049", business: "Demo Building Supplies", target: 260_000, stageIndex: 4, cleared: 0, pending: 0 },
+  { ref: "SRW-CMP-0042", business: "Abrewa Agro Processing Ltd", target: 400_000, stageIndex: 8, cleared: 248_000, pending: 56_000 },
+  { ref: "SRW-CMP-0045", business: "Kpong Solar Distribution Ltd", target: 750_000, stageIndex: 8, cleared: 180_000, pending: 42_500 },
+  { ref: "SRW-CMP-0049", business: "Nsuo Building Supplies Ltd", target: 260_000, stageIndex: 4, cleared: 0, pending: 0 },
 ];
 
 export const reconciliation = [

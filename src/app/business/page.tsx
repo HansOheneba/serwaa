@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ButtonLink, Card, Label, PageHeader, StatusPill } from "@/components/ui";
-import { applicationStages, businessApplication, kybStages } from "@/lib/demo-data";
+import { applicationStages, businessApplication, kybStages } from "@/lib/data";
 import { cedis } from "@/lib/format";
 
 export default function BusinessOverview() {
@@ -8,7 +8,7 @@ export default function BusinessOverview() {
   const app = businessApplication;
   return (
     <>
-      <PageHeader eyebrow="Overview" title="Good morning, Sample Agro">
+      <PageHeader eyebrow="Overview" title="Good morning, Abrewa Agro">
         <ButtonLink href="/business/applications/new">New application</ButtonLink>
       </PageHeader>
 

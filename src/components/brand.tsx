@@ -31,11 +31,3 @@ export function Logo({ reversed = false, href = "/", className = "h-7" }: { reve
     </Link>
   );
 }
-
-export function PrototypeBanner() {
-  return (
-    <div className="bg-aubergine-900 px-4 py-2 text-center text-xs font-medium text-aubergine-100">
-      Prototype with sample data. No real businesses, investments or payments.
-    </div>
-  );
-}

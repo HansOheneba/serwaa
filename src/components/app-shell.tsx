@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { Logo, PrototypeBanner } from "./brand";
+import { Logo } from "./brand";
 
 export type NavItem = { href: string; label: string };
 
@@ -24,7 +24,6 @@ export function AppShell({
 
   return (
     <div className="flex min-h-full flex-1 flex-col bg-ink-50">
-      <PrototypeBanner />
       <div className="flex flex-1 flex-col lg:flex-row">
         <aside className="border-b border-aubergine-900 bg-aubergine-800 text-white lg:sticky lg:top-0 lg:flex lg:h-screen lg:w-64 lg:shrink-0 lg:flex-col lg:border-b-0">
           <div className="flex items-center justify-between gap-4 px-5 py-4 lg:py-6">

@@ -9,7 +9,7 @@ export default function BusinessesPage() {
       eyebrow="For businesses"
       title="Finance that fits your trade"
       intro="Turn invoices, purchase orders and contracts into working capital. Register once, and your verified profile carries into every application."
-      primary={{ href: "/business", label: "Start an application" }}
+      primary={{ href: "/login", label: "Start an application" }}
       secondary={{ href: "/how-it-works", label: "How it works" }}
       features={[
         { title: "Twelve financing structures", body: "Invoice, purchase order, contract, working capital, inventory, equipment, supply chain and more." },

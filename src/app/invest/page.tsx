@@ -1,5 +1,5 @@
 import { ButtonLink, Card, Label, PageHeader, Stat, StatusPill } from "@/components/ui";
-import { portfolio as p } from "@/lib/demo-data";
+import { portfolio as p } from "@/lib/data";
 import { cedis } from "@/lib/format";
 
 export default function PortfolioPage() {

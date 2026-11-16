@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Button, Card, Label, PageHeader } from "@/components/ui";
+import { ApplicationForm } from "@/components/forms";
+import { Card, Label, PageHeader } from "@/components/ui";
 
 export const metadata: Metadata = { title: "New application" };
 
@@ -20,7 +21,7 @@ export default function NewApplicationPage() {
       <PageHeader eyebrow="New application" title="Apply for financing" />
       <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr]">
         <Card>
-          <form className="space-y-8">
+          <ApplicationForm>
             <fieldset>
               <legend className="text-lg font-bold text-aubergine-800">Financing requirements</legend>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -63,15 +64,7 @@ export default function NewApplicationPage() {
                 </label>
               </div>
             </fieldset>
-            <div className="flex flex-wrap gap-2">
-              <Button type="button" disabled title="Saving is not enabled in the prototype">
-                Submit application
-              </Button>
-              <Button type="button" variant="secondary" disabled title="Saving is not enabled in the prototype">
-                Save draft
-              </Button>
-            </div>
-          </form>
+          </ApplicationForm>
         </Card>
         <Card className="h-fit bg-aubergine-50 ring-aubergine-100">
           <Label>Prefilled from your profile</Label>

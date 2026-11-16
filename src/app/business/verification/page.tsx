@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Card, PageHeader, StatusPill } from "@/components/ui";
-import { kybStages } from "@/lib/demo-data";
+import { kybStages } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Verification" };
 

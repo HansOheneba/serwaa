@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   title: { default: "Serwaa", template: "%s · Serwaa" },
   description:
     "Serwaa connects SMEs that need financing with investors seeking private credit.",
+  // Remove before public launch so search engines can index the site.
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

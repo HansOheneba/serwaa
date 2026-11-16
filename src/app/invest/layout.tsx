@@ -7,7 +7,7 @@ export default function InvestLayout({ children }: LayoutProps<"/invest">) {
   return (
     <AppShell
       portal="Investor"
-      user={{ name: "Demo investor", detail: "Income focused profile" }}
+      user={{ name: "Ama Owusu", detail: "Income focused profile" }}
       nav={[
         { href: "/invest", label: "Portfolio" },
         { href: "/invest/discover", label: "Discover" },

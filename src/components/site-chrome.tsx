@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Logo, Mark, PrototypeBanner } from "./brand";
+import { Logo, Mark } from "./brand";
 import { ButtonLink } from "./ui";
 
 const links = [
@@ -12,7 +12,6 @@ const links = [
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-20 border-b border-ink-100 bg-white/90 backdrop-blur">
-      <PrototypeBanner />
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4 sm:px-8">
         <Logo />
         <nav aria-label="Main" className="hidden md:block">
@@ -28,7 +27,7 @@ export function SiteHeader() {
         </nav>
         <div className="flex items-center gap-2">
           <ButtonLink href="/login" variant="ghost" className="hidden sm:inline-flex">
-            Log in
+            Sign in
           </ButtonLink>
           <ButtonLink href="/login">Get started</ButtonLink>
         </div>
@@ -63,18 +62,18 @@ export function SiteFooter() {
         </div>
         <FooterCol title="Platform" links={links} />
         <FooterCol
-          title="Portals"
+          title="Account"
           links={[
-            { href: "/business", label: "Business portal" },
-            { href: "/invest", label: "Investor portal" },
-            { href: "/ops", label: "Operations console" },
+            { href: "/login", label: "Sign in" },
+            { href: "/businesses", label: "Register a business" },
+            { href: "/investors", label: "Become an investor" },
           ]}
         />
-        <FooterCol title="Company" links={[{ href: "/brand", label: "Brand" }, { href: "/login", label: "Log in" }]} />
+        <FooterCol title="Company" links={[{ href: "/brand", label: "Brand" }, { href: "/institutions", label: "Partnerships" }]} />
       </div>
       <div className="border-t border-aubergine-800">
         <p className="mx-auto max-w-6xl px-4 py-5 text-xs text-aubergine-300 sm:px-8">
-          Prototype. Investing on Serwaa will open only after regulatory approval. Expected returns are never guaranteed and capital is at risk.
+          © 2026 Serwaa. Investing on Serwaa opens after regulatory approval. Expected returns are not guaranteed and your capital is at risk.
         </p>
       </div>
     </footer>

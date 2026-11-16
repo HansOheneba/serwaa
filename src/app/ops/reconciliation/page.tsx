@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Card, PageHeader, StatusPill } from "@/components/ui";
-import { reconciliation } from "@/lib/demo-data";
+import { reconciliation } from "@/lib/data";
 import { cedis } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Reconciliation" };

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { OpportunityCard } from "@/components/opportunity-card";
 import { PageHeader } from "@/components/ui";
-import { opportunities } from "@/lib/demo-data";
+import { opportunities } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Discover" };
 

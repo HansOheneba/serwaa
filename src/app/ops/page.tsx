@@ -1,5 +1,5 @@
 import { Card, PageHeader, Stat, StatusPill } from "@/components/ui";
-import { opsQueue } from "@/lib/demo-data";
+import { opsQueue } from "@/lib/data";
 import { cedis } from "@/lib/format";
 
 export default function QueuePage() {

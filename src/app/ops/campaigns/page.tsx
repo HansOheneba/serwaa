@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Card, FundingBar, Label, MoneyBadge, PageHeader, StatusPill } from "@/components/ui";
-import { campaignStages, opsCampaigns } from "@/lib/demo-data";
+import { campaignStages, opsCampaigns } from "@/lib/data";
 import { cedis, percent } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Campaigns" };

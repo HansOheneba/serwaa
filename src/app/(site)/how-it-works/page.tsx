@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ButtonLink, Label, MoneyBadge } from "@/components/ui";
-import type { MoneyState } from "@/lib/demo-data";
+import type { MoneyState } from "@/lib/data";
 
 export const metadata: Metadata = { title: "How it works" };
 
@@ -61,7 +61,7 @@ export default function HowItWorksPage() {
             ))}
           </dl>
           <div className="mt-12">
-            <ButtonLink href="/login">Open the demo</ButtonLink>
+            <ButtonLink href="/login">Get started</ButtonLink>
           </div>
         </div>
       </section>

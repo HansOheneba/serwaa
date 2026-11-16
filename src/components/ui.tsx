@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
-import type { MoneyState } from "@/lib/demo-data";
+import type { MoneyState } from "@/lib/data";
 
 type ButtonVariant = "primary" | "secondary" | "ghost" | "accent";
 

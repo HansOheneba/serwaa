@@ -1,9 +1,20 @@
 import Link from "next/link";
-import type { Opportunity } from "@/lib/demo-data";
+import type { Opportunity } from "@/lib/data";
 import { cedis, percent } from "@/lib/format";
 import { FundingBar, Label, MoneyBadge } from "./ui";
 
-export function OpportunityCard({ o, href, showMatch = false }: { o: Opportunity; href?: string; showMatch?: boolean }) {
+export function OpportunityCard({
+  o,
+  href,
+  showMatch = false,
+  anonymous = false,
+}: {
+  o: Opportunity;
+  href?: string;
+  showMatch?: boolean;
+  /** Public pages describe the borrower by sector instead of naming it. */
+  anonymous?: boolean;
+}) {
   const body = (
     <div className="flex h-full flex-col gap-4 rounded-2xl bg-white p-5 ring-1 ring-ink-200 transition-shadow group-hover:shadow-md group-hover:ring-aubergine-200">
       <div className="flex items-start justify-between gap-3">
@@ -17,7 +28,7 @@ export function OpportunityCard({ o, href, showMatch = false }: { o: Opportunity
         )}
       </div>
       <div>
-        <h3 className="text-lg font-bold text-aubergine-800">{o.business}</h3>
+        <h3 className="text-lg font-bold text-aubergine-800">{anonymous ? `${o.sector} company` : o.business}</h3>
         <p className="mt-1 text-sm leading-6 text-ink-600">{o.purpose}</p>
       </div>
       <div className="mt-auto space-y-2">
