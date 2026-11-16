@@ -1,26 +1,22 @@
 # Serwaa
 
-Next.js 16 (App Router) + TypeScript + Tailwind CSS v4.
+A prototype of Serwaa, a private credit platform connecting growing businesses with investors.
 
-## Getting started
+This repository is an early interface shell. All businesses, people and figures in it are fictional sample data. It does not process real applications, investments or payments.
+
+## Running locally
 
 ```bash
 npm install
-cp .env.example .env.local   # fill in values
-npm run dev                  # http://localhost:3010
+npm run dev
 ```
 
-## Scripts
+Then open http://localhost:3010.
 
-| Command         | What it does                 |
-| --------------- | ---------------------------- |
-| `npm run dev`   | Start dev server (Turbopack) |
-| `npm run build` | Production build             |
-| `npm run start` | Serve the production build   |
-| `npm run lint`  | Run ESLint                   |
+## Stack
 
-## Structure
+Next.js (App Router), TypeScript and Tailwind CSS.
 
-- `src/app/` — routes, layouts and pages
-- `public/` — static assets
-- Import alias: `@/*` → `src/*`
+## Licence
+
+All rights reserved.

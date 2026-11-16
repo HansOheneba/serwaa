@@ -31,3 +31,6 @@ next-env.d.ts
 .pnp
 .pnp.*
 npm-debug.log*
+
+# Local-only docs (brand guide is shared separately)
+docs/
