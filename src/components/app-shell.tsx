@@ -168,11 +168,11 @@ export function AppShell({
   );
 
   return (
-    <div className="relative flex min-h-svh flex-col bg-aubergine-900">
+    <div className="relative flex h-svh flex-col overflow-hidden bg-aubergine-900">
       {/* Pattern only in the header strip beside the navigation; every control on it has a solid fill. */}
       <div className="weave-dark fade-x pointer-events-none absolute top-0 right-0 left-0 h-16 opacity-70 lg:left-60" aria-hidden="true" />
 
-      <header className="relative z-20 flex h-16 items-center gap-3 px-3 sm:px-4">
+      <header className="relative z-20 flex h-16 shrink-0 items-center gap-3 px-3 sm:px-4">
         <button
           type="button"
           aria-label="Open menu"
@@ -246,9 +246,9 @@ export function AppShell({
         </div>
       </header>
 
-      <div className="relative z-10 flex flex-1">
+      <div className="relative z-10 flex min-h-0 flex-1">
         <aside className={`hidden shrink-0 overflow-hidden pt-3 transition-[width] duration-300 ease-[var(--ease-in-out)] motion-reduce:transition-none lg:block ${collapsed ? "w-[4.5rem]" : "w-60"}`}>
-          <div className="sticky top-3 h-[calc(100svh-5.5rem)]">{drawer(collapsed)}</div>
+          <div className="h-full pb-1">{drawer(collapsed)}</div>
         </aside>
 
         {mobileOpen && (
@@ -264,8 +264,9 @@ export function AppShell({
           </div>
         )}
 
-        <main className="min-w-0 flex-1 pb-3 sm:pr-3 lg:pl-0">
-          <div className="min-h-[calc(100svh-4.75rem)] bg-white px-4 py-6 sm:rounded-[1.25rem] sm:px-8 sm:py-8">
+        {/* Only the work panel scrolls; the frame, command bar and navigation stay fixed. */}
+        <main className="flex min-w-0 flex-1 flex-col sm:pr-3 sm:pb-3 lg:pl-0">
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-white px-4 py-6 [scrollbar-gutter:stable] sm:rounded-[1.25rem] sm:px-8 sm:py-8">
             <div className="mx-auto max-w-7xl">{children}</div>
           </div>
         </main>
