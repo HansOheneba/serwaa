@@ -63,6 +63,9 @@ export function SiteFooter() {
           <p className="mt-4 max-w-xs text-sm leading-6 text-aubergine-200">
             Private credit for growing businesses. Investor money is held by licensed custodians, never by Serwaa.
           </p>
+          <p className="mt-3 max-w-xs text-sm leading-6 text-aubergine-200">
+            Serwaa is owned and operated by <span className="font-semibold text-white">Bomevan Group</span>.
+          </p>
         </div>
         <FooterCol title="Platform" links={links} />
         <FooterCol
@@ -85,7 +88,7 @@ export function SiteFooter() {
       </div>
       <div className="relative border-t border-aubergine-800">
         <p className="mx-auto max-w-7xl px-4 py-5 text-xs text-aubergine-300 sm:px-8">
-          © 2026 Serwaa. Investing on Serwaa opens after regulatory approval. Expected returns are not guaranteed and your capital is at risk.
+          © 2026 Bomevan Group. Investing on Serwaa opens after regulatory approval. Expected returns are not guaranteed and your capital is at risk.
         </p>
       </div>
     </footer>

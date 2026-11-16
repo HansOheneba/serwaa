@@ -166,7 +166,7 @@ export default function ProtectionPage() {
       <ContentSection
         eyebrow="Regulation"
         title="Investing opens only after regulatory approval"
-        lead="Regulated investment features stay switched off until the required approval and licensing from Ghana's Securities and Exchange Commission are in place. Serwaa is designed to meet Ghanaian data protection, anti-money-laundering and financial sector requirements, with encryption, multi-factor sign-in, role-based access and a complete audit trail."
+        lead="Regulated investment features stay switched off until the required approval and licensing from Ghana's Securities and Exchange Commission are in place. Serwaa is owned and operated by Bomevan Group and is designed to meet Ghanaian data protection, anti-money-laundering and financial sector requirements, with encryption, multi-factor sign-in, role-based access and a complete audit trail."
       >
         <ButtonLink href="/faq">Read the FAQs</ButtonLink>
       </ContentSection>

@@ -13,6 +13,10 @@ const groups: { title: string; items: { q: string; a: React.ReactNode }[] }[] = 
         a: "Serwaa is a private credit platform. It connects small and medium businesses that need financing with individual and institutional investors who want access to private credit, and gives one team a single system to verify, assess, structure, fund and service every deal.",
       },
       {
+        q: "Who runs Serwaa?",
+        a: "Serwaa is owned and operated by Bomevan Group. Bomevan's team runs verification, credit assessment, structuring, campaigns and servicing on the platform, while investor money is held by licensed custodians.",
+      },
+      {
         q: "Who is Serwaa for?",
         a: "Businesses seeking financing for invoices, purchase orders, contracts, working capital and more; individual investors; and institutions such as private credit funds, banks, development finance institutions, family offices and corporate investors.",
       },
