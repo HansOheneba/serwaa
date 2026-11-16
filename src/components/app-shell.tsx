@@ -173,15 +173,22 @@ export function AppShell({
       <div className="weave-dark fade-x pointer-events-none absolute top-0 right-0 left-0 h-16 opacity-70 lg:left-60" aria-hidden="true" />
 
       <header className="relative z-20 flex h-16 shrink-0 items-center gap-3 px-3 sm:px-4">
+        {/* Sits directly above the navigation it controls: collapses it on desktop, opens it on phones. */}
         <button
           type="button"
-          aria-label="Open menu"
-          onClick={() => setMobileOpen(true)}
-          className="state-layer flex size-10 shrink-0 items-center justify-center rounded-full text-white lg:hidden"
+          aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
+          aria-expanded={!collapsed}
+          onClick={() => (window.matchMedia("(min-width: 1024px)").matches ? setCollapsed((c) => !c) : setMobileOpen(true))}
+          className="state-layer flex size-10 shrink-0 items-center justify-center rounded-full text-aubergine-100"
         >
-          <Menu className="size-5" aria-hidden="true" />
+          <Menu className="size-5 lg:hidden" aria-hidden="true" />
+          {collapsed ? (
+            <PanelLeftOpen className="hidden size-5 lg:block" aria-hidden="true" />
+          ) : (
+            <PanelLeftClose className="hidden size-5 lg:block" aria-hidden="true" />
+          )}
         </button>
-        <Link href="/" className="flex shrink-0 items-center rounded-lg focus-visible:outline-2 focus-visible:outline-saffron-400 lg:w-[13.5rem] lg:pl-1">
+        <Link href="/" className="flex shrink-0 items-center rounded-lg focus-visible:outline-2 focus-visible:outline-saffron-400 lg:w-[11.5rem]">
           <Mark reversed className="size-7 lg:hidden" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/brand/serwaa-logo-reversed.svg" alt="Serwaa home" className="hidden h-7 w-auto lg:block" />
@@ -232,14 +239,6 @@ export function AppShell({
               <Icon className="size-5" aria-hidden="true" />
             </button>
           ))}
-          <button
-            type="button"
-            onClick={() => setCollapsed((c) => !c)}
-            aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
-            className="state-layer hidden size-10 items-center justify-center rounded-full bg-aubergine-900 text-aubergine-100 lg:flex"
-          >
-            {collapsed ? <PanelLeftOpen className="size-5" aria-hidden="true" /> : <PanelLeftClose className="size-5" aria-hidden="true" />}
-          </button>
           <span className="ml-1 flex size-9 shrink-0 items-center justify-center rounded-xl bg-saffron-400 text-sm font-bold text-aubergine-950" aria-label={user.name} title={`${user.name} · ${user.detail}`}>
             {initials}
           </span>
