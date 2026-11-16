@@ -61,7 +61,7 @@ export default function HowItWorksPage() {
             ))}
           </dl>
           <div className="mt-12">
-            <ButtonLink href="/login">Get started</ButtonLink>
+            <ButtonLink href="/onboarding">Get started</ButtonLink>
           </div>
         </div>
       </section>

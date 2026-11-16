@@ -23,11 +23,11 @@ export default function LoginPage() {
           </div>
           <p className="mt-6 text-center text-sm text-ink-600">
             New to Serwaa?{" "}
-            <Link href="/businesses" className="font-semibold text-aubergine-500 hover:underline">
+            <Link href="/onboarding?as=business" className="font-semibold text-aubergine-500 hover:underline">
               Register a business
             </Link>{" "}
             or{" "}
-            <Link href="/investors" className="font-semibold text-aubergine-500 hover:underline">
+            <Link href="/onboarding?as=investor" className="font-semibold text-aubergine-500 hover:underline">
               become an investor
             </Link>
           </p>

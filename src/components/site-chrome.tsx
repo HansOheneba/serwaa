@@ -29,7 +29,7 @@ export function SiteHeader() {
           <ButtonLink href="/login" variant="ghost" className="hidden sm:inline-flex">
             Sign in
           </ButtonLink>
-          <ButtonLink href="/login">Get started</ButtonLink>
+          <ButtonLink href="/onboarding">Get started</ButtonLink>
         </div>
       </div>
       <nav aria-label="Main, small screens" className="border-t border-ink-100 md:hidden">
@@ -65,8 +65,8 @@ export function SiteFooter() {
           title="Account"
           links={[
             { href: "/login", label: "Sign in" },
-            { href: "/businesses", label: "Register a business" },
-            { href: "/investors", label: "Become an investor" },
+            { href: "/onboarding?as=business", label: "Register a business" },
+            { href: "/onboarding?as=investor", label: "Become an investor" },
           ]}
         />
         <FooterCol title="Company" links={[{ href: "/brand", label: "Brand" }, { href: "/institutions", label: "Partnerships" }]} />

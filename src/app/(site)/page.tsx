@@ -78,7 +78,7 @@ export default function HomePage() {
               verified, every deal is assessed by people, and investor money stays with licensed custodians.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <ButtonLink href="/businesses">Apply for financing</ButtonLink>
+              <ButtonLink href="/onboarding?as=business">Apply for financing</ButtonLink>
               <ButtonLink href="/investors" variant="secondary">
                 Explore opportunities
               </ButtonLink>
@@ -163,7 +163,7 @@ export default function HomePage() {
               <h2 className="text-2xl font-extrabold tracking-tight text-aubergine-900">Ready to start?</h2>
               <p className="mt-1 text-aubergine-900/80">Create an account to apply for financing or to start investing.</p>
             </div>
-            <ButtonLink href="/login">Get started</ButtonLink>
+            <ButtonLink href="/onboarding">Get started</ButtonLink>
           </div>
         </div>
       </section>

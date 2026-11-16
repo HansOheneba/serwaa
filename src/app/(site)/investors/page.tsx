@@ -11,7 +11,7 @@ export default function InvestorsPage() {
       eyebrow="For investors"
       title="Private credit, explained plainly"
       intro="Lend to verified businesses from GH₵100. See opportunities that fit your goals, pay by Mobile Money or bank transfer, and track every cedi you are owed."
-      primary={{ href: "/login", label: "Start investing" }}
+      primary={{ href: "/onboarding?as=investor", label: "Start investing" }}
       secondary={{ href: "/how-it-works", label: "How it works" }}
       aside={<OpportunityCard o={opportunities[1]} showMatch anonymous />}
       features={[

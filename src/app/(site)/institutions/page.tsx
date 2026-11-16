@@ -9,7 +9,7 @@ export default function InstitutionsPage() {
       eyebrow="For institutions"
       title="A verified SME credit pipeline, matched to your mandate"
       intro="For private credit funds, banks, development finance institutions, family offices and corporate investors who want structured access to SME lending."
-      primary={{ href: "/login", label: "Request access" }}
+      primary={{ href: "/onboarding?as=institution", label: "Request access" }}
       secondary={{ href: "/how-it-works", label: "How it works" }}
       features={[
         { title: "Mandate-based pipeline", body: "Set sectors, ticket sizes, structures, tenors and return parameters. The pipeline follows them." },
