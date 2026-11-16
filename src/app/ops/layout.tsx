@@ -9,10 +9,12 @@ export default function OpsLayout({ children }: LayoutProps<"/ops">) {
       portal="Operations"
       user={{ name: "A. Mensah", detail: "Credit analyst" }}
       nav={[
-        { href: "/ops", label: "Application queue" },
-        { href: "/ops/campaigns", label: "Campaigns" },
-        { href: "/ops/reconciliation", label: "Reconciliation" },
+        { href: "/ops", label: "Application queue", icon: "queue", count: 5 },
+        { href: "/ops/campaigns", label: "Campaigns", icon: "campaigns", count: 3 },
+        { href: "/ops/reconciliation", label: "Reconciliation", icon: "reconcile", count: 3 },
       ]}
+      action={{ href: "/ops", label: "Review next", icon: "queue" }}
+      search={{ href: "/ops", placeholder: "Search applications, businesses and references" }}
     >
       {children}
     </AppShell>

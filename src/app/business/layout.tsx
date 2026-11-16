@@ -9,11 +9,13 @@ export default function BusinessLayout({ children }: LayoutProps<"/business">) {
       portal="Business"
       user={{ name: "Abrewa Trading Ltd", detail: "Finance lead" }}
       nav={[
-        { href: "/business", label: "Overview" },
-        { href: "/business/verification", label: "Verification" },
-        { href: "/business/applications", label: "Applications" },
-        { href: "/business/facilities", label: "Facilities" },
+        { href: "/business", label: "Overview", icon: "overview" },
+        { href: "/business/verification", label: "Verification", icon: "verify", count: 3 },
+        { href: "/business/applications", label: "Applications", icon: "applications", count: 1 },
+        { href: "/business/facilities", label: "Facilities", icon: "facilities" },
       ]}
+      action={{ href: "/business/applications/new", label: "New application", icon: "plus" }}
+      search={{ href: "/business/applications", placeholder: "Search applications and documents" }}
     >
       {children}
     </AppShell>

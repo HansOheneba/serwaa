@@ -233,3 +233,41 @@ body {
     animation: none;
   }
 }
+
+/* ── Material 3 interaction model (values from Google's md-sys tokens) ──
+ * State layer: a currentColor overlay at 8% on hover, 12% on focus and press.
+ * Elevation: M3 levels 1–4 (key + ambient shadows).
+ */
+.state-layer {
+  position: relative;
+  isolation: isolate;
+}
+.state-layer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms var(--ease-out);
+  z-index: -1;
+}
+.state-layer:hover::before { opacity: 0.08; }
+.state-layer:focus-visible::before,
+.state-layer:active::before { opacity: 0.12; }
+.state-layer:disabled::before,
+.state-layer[aria-disabled="true"]::before { opacity: 0; }
+
+@utility elev-1 {
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 1px 3px 1px rgb(0 0 0 / 0.15);
+}
+@utility elev-2 {
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 2px 6px 2px rgb(0 0 0 / 0.15);
+}
+@utility elev-3 {
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3), 0 4px 8px 3px rgb(0 0 0 / 0.15);
+}
+@utility elev-4 {
+  box-shadow: 0 2px 3px rgb(0 0 0 / 0.3), 0 6px 10px 4px rgb(0 0 0 / 0.15);
+}

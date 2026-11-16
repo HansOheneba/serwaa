@@ -9,10 +9,12 @@ export default function InvestLayout({ children }: LayoutProps<"/invest">) {
       portal="Investor"
       user={{ name: "Ama Owusu", detail: "Income focused profile" }}
       nav={[
-        { href: "/invest", label: "Portfolio" },
-        { href: "/invest/discover", label: "Discover" },
-        { href: "/invest/profile", label: "My profile" },
+        { href: "/invest", label: "Portfolio", icon: "portfolio" },
+        { href: "/invest/discover", label: "Discover", icon: "discover", count: 3 },
+        { href: "/invest/profile", label: "My profile", icon: "profile" },
       ]}
+      action={{ href: "/invest/discover", label: "Find opportunities", icon: "discover" }}
+      search={{ href: "/invest/discover", placeholder: "Search opportunities, sectors and businesses" }}
     >
       {children}
     </AppShell>

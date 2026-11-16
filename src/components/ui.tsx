@@ -2,20 +2,35 @@ import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 import type { MoneyState } from "@/lib/data";
 
-type ButtonVariant = "primary" | "secondary" | "ghost" | "accent";
+/*
+ * Buttons follow Material 3 (md-comp-*-button tokens): 40px container, full
+ * corner, 24px side padding (16px on an icon side), label-large type (14/20,
+ * medium, 0.1px tracking), 18px icons, state layers 8% hover / 12% press.
+ *   filled    – primary action (aubergine)
+ *   tonal     – secondary emphasis (aubergine container)
+ *   outlined  – medium emphasis
+ *   text      – lowest emphasis
+ *   accent    – brand filled (saffron), for use on aubergine surfaces
+ * Legacy names map onto these: primary→filled, secondary→outlined, ghost→text.
+ */
+type ButtonVariant = "filled" | "tonal" | "outlined" | "text" | "accent" | "primary" | "secondary" | "ghost";
 
 const buttonStyles: Record<ButtonVariant, string> = {
-  primary: "bg-aubergine-800 text-white hover:bg-aubergine-700",
-  accent: "bg-saffron-500 text-aubergine-900 hover:bg-saffron-400",
-  secondary: "bg-white text-aubergine-800 ring-1 ring-inset ring-ink-200 hover:bg-aubergine-50",
-  ghost: "text-aubergine-800 hover:bg-aubergine-50",
+  filled: "bg-aubergine-800 text-white hover:elev-1",
+  primary: "bg-aubergine-800 text-white hover:elev-1",
+  tonal: "bg-aubergine-100 text-aubergine-900 hover:elev-1",
+  outlined: "bg-transparent text-aubergine-700 ring-1 ring-inset ring-ink-400",
+  secondary: "bg-transparent text-aubergine-700 ring-1 ring-inset ring-ink-400",
+  text: "bg-transparent px-3 text-aubergine-700",
+  ghost: "bg-transparent px-3 text-aubergine-700",
+  accent: "bg-saffron-500 text-aubergine-950 hover:elev-1",
 };
 
 const buttonBase =
-  "inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aubergine-500 disabled:cursor-not-allowed disabled:opacity-60";
+  "state-layer inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full px-6 text-sm leading-5 font-semibold tracking-[0.1px] whitespace-nowrap transition-shadow select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aubergine-500 [&>svg]:size-[18px] has-[>svg:first-child]:pl-4 has-[>svg:last-child]:pr-4 disabled:cursor-not-allowed disabled:bg-ink-900/12 disabled:text-ink-900/38 disabled:shadow-none disabled:ring-0";
 
 export function ButtonLink({
-  variant = "primary",
+  variant = "filled",
   className = "",
   ...props
 }: ComponentProps<typeof Link> & { variant?: ButtonVariant }) {
@@ -23,11 +38,47 @@ export function ButtonLink({
 }
 
 export function Button({
-  variant = "primary",
+  variant = "filled",
   className = "",
   ...props
 }: ComponentProps<"button"> & { variant?: ButtonVariant }) {
   return <button className={`${buttonBase} ${buttonStyles[variant]} ${className}`} {...props} />;
+}
+
+/** Material 3 extended FAB (Gmail's Compose): 56px, 16px corners, level-3 elevation. */
+export function Fab({ className = "", ...props }: ComponentProps<typeof Link>) {
+  return (
+    <Link
+      className={`state-layer elev-3 hover:elev-4 inline-flex h-14 items-center gap-3 rounded-2xl bg-aubergine-100 pr-5 pl-4 text-sm font-semibold tracking-[0.1px] text-aubergine-900 transition-shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aubergine-500 [&>svg]:size-6 ${className}`}
+      {...props}
+    />
+  );
+}
+
+/** Material 3 filter chip: 32px, 8px corners, 1px outline; selected fills and shows a check. */
+export function FilterChip({
+  selected,
+  className = "",
+  children,
+  ...props
+}: ComponentProps<"button"> & { selected: boolean }) {
+  return (
+    <button
+      type="button"
+      aria-pressed={selected}
+      className={`state-layer inline-flex h-8 shrink-0 items-center gap-2 rounded-lg text-sm font-semibold tracking-[0.1px] whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aubergine-500 ${
+        selected ? "bg-aubergine-100 pr-4 pl-2 text-aubergine-900" : "px-4 text-ink-700 ring-1 ring-inset ring-ink-400"
+      } ${className}`}
+      {...props}
+    >
+      {selected && (
+        <svg viewBox="0 0 24 24" className="size-[18px]" aria-hidden="true">
+          <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z" fill="currentColor" />
+        </svg>
+      )}
+      {children}
+    </button>
+  );
 }
 
 export function Card({ className = "", children }: { className?: string; children: ReactNode }) {
