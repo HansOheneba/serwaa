@@ -25,7 +25,7 @@ const states: { state: MoneyState; body: string }[] = [
 export default function HowItWorksPage() {
   return (
     <div className="bg-white">
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-8 lg:py-20">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-8 lg:py-20">
         <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
           <div>
             <Label>How it works</Label>
@@ -56,7 +56,7 @@ export default function HowItWorksPage() {
       </section>
 
       <section className="border-t border-ink-100 bg-ink-50">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-8">
           <h2 className="text-2xl font-bold tracking-tight text-aubergine-800">Every amount has a label</h2>
           <p className="mt-2 max-w-2xl text-ink-600">Serwaa never adds expected returns to money received. You will see one of these six labels next to every figure.</p>
           <dl className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ButtonLink, Card, Label, PageHeader, StatusPill } from "@/components/ui";
+import { DashboardBand } from "@/components/dashboard-band";
+import { ButtonLink, Card, Label, StatusPill } from "@/components/ui";
 import { applicationStages, businessApplication, kybStages } from "@/lib/data";
 import { cedis } from "@/lib/format";
 
@@ -8,11 +9,22 @@ export default function BusinessOverview() {
   const app = businessApplication;
   return (
     <>
-      <PageHeader eyebrow="Overview" title="Good morning, Abrewa Trading">
-        <ButtonLink href="/business/applications/new">New application</ButtonLink>
-      </PageHeader>
+      <DashboardBand
+        eyebrow="Business overview"
+        greeting="Good morning, Abrewa Trading"
+        figureLabel="Financing requested"
+        figure={cedis(app.amount)}
+        action={<ButtonLink href="/business/applications/new" variant="accent">New application</ButtonLink>}
+        stats={[
+          { label: "Application stage", value: `${app.stageIndex + 1} of ${applicationStages.length}`, hint: applicationStages[app.stageIndex] },
+          { label: "Verification", value: `${overall}%`, hint: "Across five stages" },
+          { label: "Open requests", value: String(app.requests.length), hint: `Due ${app.requests[0]?.due ?? "-"}` },
+          { label: "Active facilities", value: "0", hint: "After disbursement" },
+        ]}
+      />
+      <div className="mt-6" />
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="stagger grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
@@ -57,7 +69,7 @@ export default function BusinessOverview() {
         </Card>
       </div>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+      <div className="stagger mt-4 grid gap-4 lg:grid-cols-2">
         <Card>
           <Label>Needs your attention</Label>
           <ul className="mt-3 divide-y divide-ink-100">

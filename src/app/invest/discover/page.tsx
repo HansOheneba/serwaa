@@ -13,7 +13,7 @@ export default function DiscoverPage() {
       <p className="-mt-4 mb-8 max-w-2xl text-ink-600">
         Ranked by how closely each one fits the preferences you gave us. This is a factual comparison, not advice.
       </p>
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="stagger grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {sorted.map((o) => (
           <OpportunityCard key={o.id} o={o} href={`/invest/opportunities/${o.id}`} showMatch />
         ))}

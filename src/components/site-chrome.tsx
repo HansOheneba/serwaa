@@ -13,7 +13,7 @@ const links = [
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-20 border-b border-ink-100 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4 sm:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 sm:px-8">
         <Logo />
         <nav aria-label="Main" className="hidden md:block">
           <ul className="flex gap-1">
@@ -52,7 +52,7 @@ export function SiteFooter() {
   return (
     <footer className="relative overflow-hidden bg-aubergine-900 text-aubergine-100">
       <Weave tone="dark" fade="b" className="inset-x-0 top-0 h-28 opacity-60" />
-      <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-8 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-8 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
           <div className="flex items-center gap-3">
             <Mark reversed className="size-8" />
@@ -74,7 +74,7 @@ export function SiteFooter() {
         <FooterCol title="Company" links={[{ href: "/brand", label: "Brand" }, { href: "/institutions", label: "Partnerships" }]} />
       </div>
       <div className="relative border-t border-aubergine-800">
-        <p className="mx-auto max-w-6xl px-4 py-5 text-xs text-aubergine-300 sm:px-8">
+        <p className="mx-auto max-w-7xl px-4 py-5 text-xs text-aubergine-300 sm:px-8">
           © 2026 Serwaa. Investing on Serwaa opens after regulatory approval. Expected returns are not guaranteed and your capital is at risk.
         </p>
       </div>

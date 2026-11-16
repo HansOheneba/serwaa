@@ -1,4 +1,5 @@
-import { Card, PageHeader, Stat, StatusPill } from "@/components/ui";
+import { DashboardBand } from "@/components/dashboard-band";
+import { Card, StatusPill } from "@/components/ui";
 import { opsQueue } from "@/lib/data";
 import { cedis } from "@/lib/format";
 
@@ -6,13 +7,20 @@ export default function QueuePage() {
   const total = opsQueue.reduce((s, a) => s + a.amount, 0);
   return (
     <>
-      <PageHeader eyebrow="Operations" title="Application queue" />
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Stat label="Open applications" value={String(opsQueue.length)} />
-        <Stat label="Financing requested" value={cedis(total)} />
-        <Stat label="Awaiting documents" value={String(opsQueue.filter((a) => a.outstanding > 0).length)} />
-      </div>
-      <Card className="mt-6 overflow-x-auto p-0">
+      <DashboardBand
+        eyebrow="Operations · application queue"
+        greeting="Today's queue"
+        figureLabel="Financing requested in the queue"
+        figure={cedis(total)}
+        series={[3, 4, 4, 6, 5, 7, 8, 7, 9, 10, 12]}
+        stats={[
+          { label: "Open applications", value: String(opsQueue.length) },
+          { label: "Awaiting documents", value: String(opsQueue.filter((a) => a.outstanding > 0).length) },
+          { label: "At committee", value: String(opsQueue.filter((a) => a.stage === "Credit committee").length) },
+          { label: "Unassigned", value: String(opsQueue.filter((a) => a.officer === "Unassigned").length), hint: "Needs an officer" },
+        ]}
+      />
+      <Card className="rise-in mt-6 overflow-x-auto p-0">
         <table className="w-full min-w-[860px] text-sm">
           <thead>
             <tr className="border-b border-ink-100 text-left text-xs tracking-[0.08em] text-ink-500 uppercase">
@@ -25,7 +33,7 @@ export default function QueuePage() {
               <th className="px-5 py-3 font-semibold">Next action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-ink-100">
+          <tbody className="stagger divide-y divide-ink-100">
             {opsQueue.map((a) => (
               <tr key={a.ref} className="hover:bg-aubergine-50/50">
                 <td className="px-5 py-4 font-mono text-xs">{a.ref}</td>

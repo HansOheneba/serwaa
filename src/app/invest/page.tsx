@@ -1,25 +1,29 @@
-import { ButtonLink, Card, Label, PageHeader, Stat, StatusPill } from "@/components/ui";
+import { DashboardBand } from "@/components/dashboard-band";
+import { ButtonLink, Card, Label, StatusPill } from "@/components/ui";
 import { portfolio as p } from "@/lib/data";
 import { cedis } from "@/lib/format";
 
 export default function PortfolioPage() {
   return (
     <>
-      <PageHeader eyebrow="Portfolio" title="Your investments">
-        <ButtonLink href="/invest/discover">Discover opportunities</ButtonLink>
-      </PageHeader>
+      <DashboardBand
+        eyebrow={`Portfolio · as of ${p.asOf}`}
+        greeting="Good morning, Ama"
+        figureLabel="Outstanding principal"
+        figure={cedis(p.outstandingPrincipal)}
+        figureState="cleared"
+        series={[0, 5000, 5000, 12500, 12500, 17500, 22500, 21250, 20000, 19375, 18750]}
+        action={<ButtonLink href="/invest/discover" variant="accent">Discover opportunities</ButtonLink>}
+        stats={[
+          { label: "Returns received", value: cedis(p.returnsReceived, true), state: "received" },
+          { label: "Expected returns", value: cedis(p.expectedFutureReturns), state: "expected", hint: "Not guaranteed" },
+          { label: "Pending", value: cedis(p.pending), state: "pending", hint: "Not yet invested" },
+          { label: "Overdue", value: cedis(p.overdue), state: "overdue" },
+        ]}
+      />
+      <p className="mt-3 text-xs text-ink-500">Principal repaid so far {cedis(p.principalRepaid)}.</p>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="Outstanding principal" value={cedis(p.outstandingPrincipal)} state="cleared" />
-        <Stat label="Returns received" value={cedis(p.returnsReceived, true)} state="received" />
-        <Stat label="Expected future returns" value={cedis(p.expectedFutureReturns)} state="expected" hint="Not guaranteed" />
-        <Stat label="Pending subscriptions" value={cedis(p.pending)} state="pending" hint="Not yet counted as invested" />
-      </div>
-      <p className="mt-3 text-xs text-ink-500">
-        As of {p.asOf}. Principal repaid so far {cedis(p.principalRepaid)}. Overdue {cedis(p.overdue)}.
-      </p>
-
-      <Card className="mt-6 overflow-x-auto p-0">
+      <Card className="rise-in mt-6 overflow-x-auto p-0">
         <table className="w-full min-w-[720px] text-sm">
           <thead>
             <tr className="border-b border-ink-100 text-left text-xs tracking-[0.08em] text-ink-500 uppercase">
@@ -31,7 +35,7 @@ export default function PortfolioPage() {
               <th className="px-5 py-3 font-semibold">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-ink-100">
+          <tbody className="stagger divide-y divide-ink-100">
             {p.holdings.map((h) => (
               <tr key={h.business}>
                 <td className="px-5 py-4">
