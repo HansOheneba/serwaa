@@ -2,6 +2,7 @@
 
 import {
   Bell,
+  ChevronsUpDown,
   Compass,
   FileText,
   HelpCircle,
@@ -10,18 +11,20 @@ import {
   ListChecks,
   Megaphone,
   Menu,
+  PanelLeftClose,
+  PanelLeftOpen,
   Plus,
   Scale,
   Search,
-  Settings,
   ShieldCheck,
   UserRound,
   Wallet,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, type FormEvent, type ReactNode } from "react";
-import { Fab } from "./ui";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { Mark } from "./brand";
+import { ButtonLink } from "./ui";
 
 const icons = {
   overview: LayoutDashboard,
@@ -41,8 +44,9 @@ export type IconName = keyof typeof icons;
 export type NavItem = { href: string; label: string; icon: IconName; count?: number };
 
 /**
- * Gmail-style workspace: a top bar with search, a navigation drawer led by an
- * extended FAB, and the page on a white panel floating over the woven background.
+ * The Serwaa workspace. A dark aubergine frame holds the navigation and the
+ * command bar; the work itself sits on a white panel. The woven pattern lives
+ * only in the frame's top band, where nothing has to be read over it.
  */
 export function AppShell({
   portal,
@@ -50,6 +54,7 @@ export function AppShell({
   nav,
   action,
   search,
+  metric,
   children,
 }: {
   portal: string;
@@ -57,10 +62,13 @@ export function AppShell({
   nav: NavItem[];
   action: { href: string; label: string; icon: IconName };
   search: { href: string; placeholder: string };
+  /** One live figure shown in the command bar, e.g. verification progress. */
+  metric?: { label: string; value: string };
   children: ReactNode;
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const searchRef = useRef<HTMLInputElement>(null);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const isActive = (href: string) => pathname === href || (href !== nav[0].href && pathname.startsWith(`${href}/`));
@@ -72,21 +80,47 @@ export function AppShell({
     .slice(0, 2)
     .toUpperCase();
 
+  // ⌘K / Ctrl+K or "/" focuses the command search, wherever you are.
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      const typing = e.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
+      if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || (e.key === "/" && !typing)) {
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   function onSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const q = new FormData(e.currentTarget).get("q")?.toString().trim() ?? "";
     router.push(q ? `${search.href}?q=${encodeURIComponent(q)}` : search.href);
   }
 
+  // One drawer for both states. Icons never move; labels, counts and the account
+  // card fade and clip while the column width eases, so collapsing is a glide.
+  const fade = (compact: boolean) =>
+    `whitespace-nowrap transition-opacity duration-200 ${compact ? "pointer-events-none opacity-0" : "opacity-100 delay-100"}`;
+
   const drawer = (compact: boolean) => (
-    <nav aria-label={`${portal} navigation`} className="flex flex-col gap-4">
-      <div className="px-2">
-        <Fab href={action.href} className={compact ? "w-14 justify-center px-0" : ""} aria-label={compact ? action.label : undefined}>
+    <nav aria-label={`${portal} navigation`} className="flex h-full flex-col overflow-hidden">
+      <div className="px-3">
+        <ButtonLink
+          href={action.href}
+          variant="accent"
+          onClick={() => setMobileOpen(false)}
+          aria-label={action.label}
+          title={compact ? action.label : undefined}
+          className="w-full justify-start! overflow-hidden has-[>svg:first-child]:pl-[15px]!"
+        >
           <ActionIcon aria-hidden="true" />
-          {!compact && action.label}
-        </Fab>
+          <span className={fade(compact)}>{action.label}</span>
+        </ButtonLink>
       </div>
-      <ul className="flex flex-col">
+
+      <ul className="mt-6 flex flex-col gap-0.5 px-3">
         {nav.map((item) => {
           const Icon = icons[item.icon];
           const active = isActive(item.href);
@@ -97,100 +131,141 @@ export function AppShell({
                 onClick={() => setMobileOpen(false)}
                 aria-current={active ? "page" : undefined}
                 title={compact ? item.label : undefined}
-                className={`state-layer flex h-8 items-center gap-4 text-sm tracking-[0.1px] ${
-                  compact ? "mx-2 w-14 justify-center rounded-full" : "mr-2 rounded-r-full pr-4 pl-6"
-                } ${active ? "bg-aubergine-100 font-bold text-aubergine-900" : "font-medium text-ink-800"}`}
+                className={`state-layer relative flex h-10 items-center gap-3 overflow-hidden rounded-xl px-[15px] text-sm tracking-[0.1px] transition-colors ${
+                  active ? "bg-white/10 font-bold text-white" : "font-medium text-aubergine-200 hover:text-white"
+                }`}
               >
-                <Icon className="size-5 shrink-0" aria-hidden="true" />
-                {!compact && <span className="flex-1 truncate">{item.label}</span>}
-                {!compact && item.count !== undefined && <span className="font-mono text-xs">{item.count}</span>}
+                {/* The saffron thread marks where you are, echoing the mark. */}
+                <span
+                  className={`absolute top-2 bottom-2 left-0 w-[3px] rounded-full bg-saffron-400 transition-opacity ${active ? "opacity-100" : "opacity-0"}`}
+                  aria-hidden="true"
+                />
+                <Icon className="size-[18px] shrink-0" aria-hidden="true" />
+                <span className={`flex-1 truncate ${fade(compact)}`}>{item.label}</span>
+                {item.count !== undefined && (
+                  <span
+                    className={`rounded-md px-1.5 font-mono text-[11px] ${fade(compact)} ${
+                      active ? "bg-saffron-400 text-aubergine-950" : "bg-white/10 text-aubergine-100"
+                    }`}
+                  >
+                    {item.count}
+                  </span>
+                )}
               </Link>
             </li>
           );
         })}
       </ul>
+
+      <div className={`mx-3 mt-auto mb-4 w-[13.5rem] rounded-2xl bg-white/5 p-4 ring-1 ring-white/10 ${fade(compact)}`} aria-hidden={compact}>
+        <p className="truncate text-sm font-semibold text-white">{user.name}</p>
+        <p className="text-xs text-aubergine-200">{user.detail}</p>
+        <Link href="/login" tabIndex={compact ? -1 : undefined} className="mt-3 inline-block text-xs font-semibold text-saffron-300 hover:underline">
+          Switch account
+        </Link>
+      </div>
     </nav>
   );
 
   return (
-    <div className="relative flex min-h-svh flex-col bg-ink-50">
-      {/* The woven background, like a Gmail theme behind the workspace. */}
-      <div className="weave pointer-events-none fixed inset-0 opacity-70" aria-hidden="true" />
+    <div className="relative flex min-h-svh flex-col bg-aubergine-900">
+      {/* Pattern only in the header strip beside the navigation; every control on it has a solid fill. */}
+      <div className="weave-dark fade-x pointer-events-none absolute top-0 right-0 left-0 h-16 opacity-70 lg:left-60" aria-hidden="true" />
 
-      <header className="relative z-20 flex h-16 items-center gap-2 px-2 sm:px-4">
+      <header className="relative z-20 flex h-16 items-center gap-3 px-3 sm:px-4">
         <button
           type="button"
-          aria-label="Toggle menu"
-          onClick={() => (window.innerWidth >= 1024 ? setCollapsed((c) => !c) : setMobileOpen((o) => !o))}
-          className="state-layer flex size-12 shrink-0 items-center justify-center rounded-full text-ink-700"
+          aria-label="Open menu"
+          onClick={() => setMobileOpen(true)}
+          className="state-layer flex size-10 shrink-0 items-center justify-center rounded-full text-white lg:hidden"
         >
-          <Menu className="size-6" aria-hidden="true" />
+          <Menu className="size-5" aria-hidden="true" />
         </button>
-        <Link href="/" className="mr-4 hidden shrink-0 items-center gap-2 rounded sm:flex lg:w-[184px]">
+        <Link href="/" className="flex shrink-0 items-center rounded-lg focus-visible:outline-2 focus-visible:outline-saffron-400 lg:w-[13.5rem] lg:pl-1">
+          <Mark reversed className="size-7 lg:hidden" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/serwaa-logo.svg" alt="Serwaa home" className="h-7 w-auto" />
+          <img src="/brand/serwaa-logo-reversed.svg" alt="Serwaa home" className="hidden h-7 w-auto lg:block" />
         </Link>
+
+        <Link
+          href="/login"
+          className="state-layer hidden h-10 shrink-0 items-center gap-2 rounded-xl bg-aubergine-800 px-3 text-sm text-white ring-1 ring-white/10 md:inline-flex"
+          title="Switch account"
+        >
+          <span className="size-2 rounded-full bg-saffron-400" aria-hidden="true" />
+          <span className="font-semibold">{portal}</span>
+          <span className="max-w-40 truncate text-aubergine-200">{user.name}</span>
+          <ChevronsUpDown className="size-4 text-aubergine-200" aria-hidden="true" />
+        </Link>
+
         <form
           onSubmit={onSearch}
           role="search"
-          className="flex h-12 max-w-3xl min-w-0 flex-1 items-center gap-1 rounded-full bg-white/90 px-1 ring-1 ring-ink-100 backdrop-blur focus-within:bg-white focus-within:elev-1"
+          className="group flex h-10 max-w-xl min-w-0 flex-1 items-center gap-2 rounded-xl bg-aubergine-800 pr-1.5 pl-3 ring-1 ring-white/10 transition-colors focus-within:bg-white focus-within:ring-white"
         >
-          <button type="submit" aria-label="Search" className="state-layer flex size-10 shrink-0 items-center justify-center rounded-full text-ink-700">
-            <Search className="size-5" aria-hidden="true" />
-          </button>
+          <Search className="size-[18px] shrink-0 text-aubergine-200 group-focus-within:text-aubergine-700" aria-hidden="true" />
           <input
+            ref={searchRef}
             name="q"
             type="search"
             placeholder={search.placeholder}
             aria-label={search.placeholder}
-            className="h-full min-w-0 flex-1 bg-transparent pr-3 text-base text-ink-900 placeholder:text-ink-500 focus:outline-none"
+            className="h-full min-w-0 flex-1 bg-transparent text-sm text-white placeholder:text-aubergine-300 focus:outline-none group-focus-within:text-ink-900 group-focus-within:placeholder:text-ink-400"
           />
+          <kbd className="hidden shrink-0 rounded-md bg-white/10 px-1.5 py-0.5 font-mono text-[11px] text-aubergine-200 group-focus-within:hidden sm:block">
+            ⌘K
+          </kbd>
         </form>
+
         <div className="ml-auto flex items-center gap-1">
-          <span className="mr-2 hidden h-10 items-center gap-2 rounded-full bg-white/90 px-4 text-sm font-semibold text-ink-800 ring-1 ring-ink-100 xl:inline-flex">
-            <span className="size-2.5 rounded-full bg-success-600" aria-hidden="true" />
-            {portal}
-          </span>
+          {metric && (
+            <div className="mr-2 hidden items-baseline gap-2 rounded-xl bg-aubergine-800 px-3 py-2 ring-1 ring-white/10 xl:flex">
+              <span className="font-mono text-[11px] tracking-[0.08em] text-aubergine-200 uppercase">{metric.label}</span>
+              <span className="font-mono text-sm font-medium text-saffron-300">{metric.value}</span>
+            </div>
+          )}
           {[
             { label: "Help", Icon: HelpCircle },
             { label: "Notifications", Icon: Bell },
-            { label: "Settings", Icon: Settings },
           ].map(({ label, Icon }) => (
-            <button key={label} type="button" aria-label={label} className="state-layer hidden size-12 items-center justify-center rounded-full text-ink-700 md:flex">
-              <Icon className="size-6" aria-hidden="true" />
+            <button key={label} type="button" aria-label={label} className="state-layer hidden size-10 items-center justify-center rounded-full bg-aubergine-900 text-aubergine-100 sm:flex">
+              <Icon className="size-5" aria-hidden="true" />
             </button>
           ))}
-          <Link
-            href="/login"
-            title={`${user.name} · ${user.detail}. Switch account`}
-            aria-label={`${user.name}, switch account`}
-            className="ml-1 flex size-10 shrink-0 items-center justify-center rounded-full bg-aubergine-800 text-sm font-bold text-saffron-300 ring-2 ring-white"
+          <button
+            type="button"
+            onClick={() => setCollapsed((c) => !c)}
+            aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
+            className="state-layer hidden size-10 items-center justify-center rounded-full bg-aubergine-900 text-aubergine-100 lg:flex"
           >
+            {collapsed ? <PanelLeftOpen className="size-5" aria-hidden="true" /> : <PanelLeftClose className="size-5" aria-hidden="true" />}
+          </button>
+          <span className="ml-1 flex size-9 shrink-0 items-center justify-center rounded-xl bg-saffron-400 text-sm font-bold text-aubergine-950" aria-label={user.name} title={`${user.name} · ${user.detail}`}>
             {initials}
-          </Link>
+          </span>
         </div>
       </header>
 
       <div className="relative z-10 flex flex-1">
-        <aside className={`hidden shrink-0 pt-2 lg:block ${collapsed ? "w-20" : "w-64"}`}>
-          <div className="sticky top-2">{drawer(collapsed)}</div>
+        <aside className={`hidden shrink-0 overflow-hidden pt-3 transition-[width] duration-300 ease-[var(--ease-in-out)] motion-reduce:transition-none lg:block ${collapsed ? "w-[4.5rem]" : "w-60"}`}>
+          <div className="sticky top-3 h-[calc(100svh-5.5rem)]">{drawer(collapsed)}</div>
         </aside>
 
         {mobileOpen && (
           <div className="fixed inset-0 z-30 lg:hidden">
-            <button type="button" aria-label="Close menu" className="absolute inset-0 bg-aubergine-950/40" onClick={() => setMobileOpen(false)} />
-            <aside className="rise-in elev-3 absolute inset-y-0 left-0 w-72 rounded-r-2xl bg-ink-50 pt-4">
-              <div className="mb-4 px-6">
+            <button type="button" aria-label="Close menu" className="absolute inset-0 bg-aubergine-950/60" onClick={() => setMobileOpen(false)} />
+            <aside className="rise-in absolute inset-y-0 left-0 flex w-72 flex-col bg-aubergine-900 pt-5">
+              <div className="mb-5 px-5">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/brand/serwaa-logo.svg" alt="Serwaa" className="h-7 w-auto" />
+                <img src="/brand/serwaa-logo-reversed.svg" alt="Serwaa" className="h-7 w-auto" />
               </div>
-              {drawer(false)}
+              <div className="flex-1">{drawer(false)}</div>
             </aside>
           </div>
         )}
 
-        <main className="min-w-0 flex-1 pb-4 sm:pr-4 sm:pl-2 lg:pl-0">
-          <div className="min-h-[calc(100svh-5rem)] bg-white px-4 py-6 sm:rounded-2xl sm:px-8 sm:py-8">
+        <main className="min-w-0 flex-1 pb-3 sm:pr-3 lg:pl-0">
+          <div className="min-h-[calc(100svh-4.75rem)] bg-white px-4 py-6 sm:rounded-[1.25rem] sm:px-8 sm:py-8">
             <div className="mx-auto max-w-7xl">{children}</div>
           </div>
         </main>

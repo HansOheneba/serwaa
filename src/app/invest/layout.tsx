@@ -14,7 +14,8 @@ export default function InvestLayout({ children }: LayoutProps<"/invest">) {
         { href: "/invest/profile", label: "My profile", icon: "profile" },
       ]}
       action={{ href: "/invest/discover", label: "Find opportunities", icon: "discover" }}
-      search={{ href: "/invest/discover", placeholder: "Search opportunities, sectors and businesses" }}
+      search={{ href: "/invest/discover", placeholder: "Search opportunities and sectors" }}
+      metric={{ label: "Outstanding", value: "GH₵ 18,750" }}
     >
       {children}
     </AppShell>

@@ -27,7 +27,7 @@ const buttonStyles: Record<ButtonVariant, string> = {
 };
 
 const buttonBase =
-  "state-layer inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full px-6 text-sm leading-5 font-semibold tracking-[0.1px] whitespace-nowrap transition-shadow select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aubergine-500 [&>svg]:size-[18px] has-[>svg:first-child]:pl-4 has-[>svg:last-child]:pr-4 disabled:cursor-not-allowed disabled:bg-ink-900/12 disabled:text-ink-900/38 disabled:shadow-none disabled:ring-0";
+  "state-layer inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full px-6 text-sm leading-5 font-semibold tracking-[0.1px] whitespace-nowrap transition-shadow select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aubergine-500 [&>svg]:size-[18px] [&>svg]:shrink-0 has-[>svg:first-child]:pl-4 has-[>svg:last-child]:pr-4 disabled:cursor-not-allowed disabled:bg-ink-900/12 disabled:text-ink-900/38 disabled:shadow-none disabled:ring-0";
 
 export function ButtonLink({
   variant = "filled",

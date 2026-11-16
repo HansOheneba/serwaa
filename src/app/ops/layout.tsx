@@ -14,7 +14,8 @@ export default function OpsLayout({ children }: LayoutProps<"/ops">) {
         { href: "/ops/reconciliation", label: "Reconciliation", icon: "reconcile", count: 3 },
       ]}
       action={{ href: "/ops", label: "Review next", icon: "queue" }}
-      search={{ href: "/ops", placeholder: "Search applications, businesses and references" }}
+      search={{ href: "/ops", placeholder: "Search businesses and references" }}
+      metric={{ label: "In queue", value: "5" }}
     >
       {children}
     </AppShell>

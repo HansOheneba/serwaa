@@ -4,8 +4,22 @@
     {
       "name": "serwaa-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "port": 3010
+    },
+    {
+      "name": "serwaa-prod",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "next",
+        "start",
+        "-p",
+        "3011"
+      ],
+      "port": 3011
     }
   ]
 }

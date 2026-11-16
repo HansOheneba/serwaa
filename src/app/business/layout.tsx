@@ -16,6 +16,7 @@ export default function BusinessLayout({ children }: LayoutProps<"/business">) {
       ]}
       action={{ href: "/business/applications/new", label: "New application", icon: "plus" }}
       search={{ href: "/business/applications", placeholder: "Search applications and documents" }}
+      metric={{ label: "Verified", value: "86%" }}
     >
       {children}
     </AppShell>
