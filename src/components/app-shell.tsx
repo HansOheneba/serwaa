@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  BookOpen,
   ChevronsUpDown,
   Compass,
   FileText,
@@ -12,11 +13,14 @@ import {
   Menu,
   PanelLeftClose,
   PanelLeftOpen,
+  Percent,
   Plus,
   Scale,
   Search,
   ShieldCheck,
+  UserCog,
   UserRound,
+  Users,
   Wallet,
 } from "lucide-react";
 import Link from "next/link";
@@ -39,6 +43,10 @@ const icons = {
   campaigns: Megaphone,
   reconcile: Scale,
   plus: Plus,
+  accounts: Users,
+  ledger: BookOpen,
+  team: UserCog,
+  fees: Percent,
 };
 export type IconName = keyof typeof icons;
 

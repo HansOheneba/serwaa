@@ -152,6 +152,7 @@ export function NewApplicationForm() {
   const [product, setProduct] = useState(products[0]);
   const [amount, setAmount] = useState("");
   const [purpose, setPurpose] = useState("");
+  const [disclosure, setDisclosure] = useState<"public" | "investors">("investors");
   const [error, setError] = useState("");
 
   function submit(e: FormEvent) {
@@ -159,7 +160,7 @@ export function NewApplicationForm() {
     const value = Number(amount.replace(/[^\d.]/g, ""));
     if (!value || value < 10_000) return setError("Enter an amount of at least GH₵ 10,000.");
     if (purpose.trim().length < 10) return setError("Tell us briefly what the money is for.");
-    const ref = submitApplication({ product, amount: value, purpose: purpose.trim() });
+    const ref = submitApplication({ product, amount: value, purpose: purpose.trim(), disclosure });
     router.push(`/business/applications?ref=${ref}`);
   }
 
@@ -181,6 +182,28 @@ export function NewApplicationForm() {
         What&apos;s it for?
         <textarea className={field} rows={4} value={purpose} onChange={(e) => (setPurpose(e.target.value), setError(""))} placeholder="Stock for a supermarket order due on 28 February" />
       </label>
+      <fieldset>
+        <legend className="text-sm font-semibold text-ink-800">Who can see your business name?</legend>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          {(
+            [
+              ["investors", "Signed-in investors only", "The public sees your industry, not your name."],
+              ["public", "Everyone", "Your name appears on the public marketplace."],
+            ] as const
+          ).map(([value, title, body]) => (
+            <label
+              key={value}
+              className={`flex cursor-pointer gap-3 rounded-xl p-4 ring-1 ${disclosure === value ? "bg-aubergine-50 ring-2 ring-aubergine-800" : "ring-ink-200"}`}
+            >
+              <input type="radio" name="disclosure" className="mt-1 accent-aubergine-800" checked={disclosure === value} onChange={() => setDisclosure(value)} />
+              <span>
+                <span className="block text-sm font-semibold text-ink-900">{title}</span>
+                <span className="block text-sm text-ink-600">{body}</span>
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
       {error && <p className="text-sm font-semibold text-danger-600">{error}</p>}
       <Button type="submit">Submit application</Button>
     </form>

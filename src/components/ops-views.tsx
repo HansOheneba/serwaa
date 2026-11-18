@@ -10,6 +10,7 @@ import { applicationStages, campaignStages } from "@/lib/data";
 import { cedis, percent } from "@/lib/format";
 import {
   acceptResponse,
+  agreeAllocation,
   advanceStage,
   approveCampaignStage,
   assignOfficer,
@@ -18,7 +19,6 @@ import {
   requestInformation,
   resetWorkspace,
   setActingStaff,
-  staff,
   useWorkspace,
   type Result,
 } from "@/lib/store";
@@ -29,7 +29,7 @@ const field = "mt-1.5 w-full rounded-xl bg-white px-3.5 py-2.5 text-sm ring-1 ri
 /** Who is acting. Approvals are checked against this person's role and history. */
 export function ActingAs() {
   const ws = useWorkspace();
-  const me = staff.find((s) => s.name === ws.actingStaff) ?? staff[0];
+  const me = ws.staff.find((s) => s.name === ws.actingStaff) ?? ws.staff[0];
   return (
     <div className="mb-8 flex flex-wrap items-center gap-3 rounded-2xl bg-ink-50 px-5 py-4">
       <span className="text-sm text-ink-600">Signed in as</span>
@@ -39,9 +39,9 @@ export function ActingAs() {
         onChange={(e) => setActingStaff(e.target.value)}
         className="rounded-lg bg-white px-3 py-2 text-sm font-semibold ring-1 ring-ink-200 focus:ring-2 focus:ring-aubergine-500 focus:outline-none"
       >
-        {staff.map((s) => (
+        {ws.staff.map((s) => (
           <option key={s.name} value={s.name}>
-            {s.name} · {s.role}
+            {s.name} · {s.roles.join(", ")}
           </option>
         ))}
       </select>
@@ -107,7 +107,7 @@ export function CaseView({ refId }: { refId: string }) {
               Officer
               <select className={field} value={a.officer} onChange={(e) => assignOfficer(refId, e.target.value)}>
                 <option>Unassigned</option>
-                {staff.map((s) => (
+                {ws.staff.map((s) => (
                   <option key={s.name}>{s.name}</option>
                 ))}
               </select>
@@ -271,6 +271,22 @@ export function CampaignsView() {
                 </div>
               )}
               <ActionResult result={results[c.id] ?? null} />
+              {ws.institution.allocations
+                .filter((a) => a.campaignId === c.id)
+                .map((a) => (
+                  <div key={a.id} className="mt-5 flex flex-wrap items-center justify-between gap-4 rounded-xl bg-ink-50 p-5">
+                    <p className="text-sm text-ink-800">
+                      <span className="font-semibold">{ws.institution.name}</span> wants {cedis(a.amount)} of this deal.
+                    </p>
+                    {a.status === "Requested" ? (
+                      <Button variant="tonal" onClick={() => setResults((r) => ({ ...r, [c.id]: agreeAllocation(a.id) }))}>
+                        Agree allocation
+                      </Button>
+                    ) : (
+                      <StatusPill tone={a.status === "Paid" ? "good" : "brand"}>{a.status}</StatusPill>
+                    )}
+                  </div>
+                ))}
               {c.approvals.length > 0 && (
                 <p className="mt-4 text-xs text-ink-500">Signed off by {c.approvals.map((a) => `${a.by} (${a.stage})`).join(" · ")}</p>
               )}
@@ -288,7 +304,7 @@ export function ReconciliationView() {
   const ws = useWorkspace();
   const [reasons, setReasons] = useState<Record<string, string>>({});
   const [results, setResults] = useState<Record<string, Result>>({});
-  const tone = { Matched: "good", Underpayment: "bad", Duplicate: "bad", "Awaiting authorisation": "warn", Pending: "brand" } as const;
+  const tone = { Matched: "good", Underpayment: "bad", Duplicate: "bad", "Awaiting authorisation": "warn", Pending: "brand", Confirmed: "brand" } as const;
   return (
     <>
       <ActingAs />

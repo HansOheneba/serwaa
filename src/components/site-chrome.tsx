@@ -4,6 +4,7 @@ import { ButtonLink } from "./ui";
 import { Weave } from "./weave";
 
 const links = [
+  { href: "/marketplace", label: "Marketplace" },
   { href: "/businesses", label: "Businesses" },
   { href: "/investors", label: "Investors" },
   { href: "/institutions", label: "Institutions" },

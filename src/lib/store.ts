@@ -8,7 +8,8 @@
 import { useSyncExternalStore } from "react";
 import { applicationStages, businessApplication, campaignStages, opportunities, opsCampaigns, opsQueue, reconciliation } from "./data";
 
-export type Audience = "business" | "investor" | "ops";
+export type Audience = "business" | "investor" | "institution" | "ops";
+export type Disclosure = "public" | "investors";
 export type AppStatus = "In review" | "Information requested" | "Approved" | "Rejected" | "Returned for changes";
 
 export type Application = {
@@ -23,6 +24,7 @@ export type Application = {
   status: AppStatus;
   officer: string;
   originator: string;
+  disclosure: Disclosure;
 };
 
 export type InfoRequest = {
@@ -59,6 +61,8 @@ export type Campaign = {
   stageIndex: number;
   drafter: string;
   approvals: { stage: string; by: string; at: string }[];
+  /** Whether the business's name is shown publicly or only to signed-in investors. */
+  disclosure: Disclosure;
 };
 
 export type Interest = { id: string; campaignId: string; amount: number; at: string };
@@ -74,20 +78,71 @@ export type Payment = {
   method: string;
   expected: number;
   received: number;
-  status: "Awaiting authorisation" | "Pending" | "Matched" | "Underpayment" | "Duplicate";
+  status: "Awaiting authorisation" | "Pending" | "Confirmed" | "Matched" | "Underpayment" | "Duplicate";
   at: string;
   lines?: number[];
+  investmentId?: string;
 };
+export type Investor = "individual" | "institution";
+export type Investment = {
+  id: string;
+  investor: Investor;
+  campaignId: string;
+  amount: number;
+  fee: number;
+  method: string;
+  payRef: string;
+  status: "Awaiting authorisation" | "Pending" | "Confirmed" | "Cleared";
+  at: string;
+};
+export type CashEvent = { id: string; kind: "Repayment" | "Withdrawal" | "Reinvestment"; amount: number; note: string; at: string };
+export type Fees = { originationPct: number; servicingPct: number; momoPct: number; bankFlat: number; payoutMomoPct: number; payoutBankFlat: number };
+export type LedgerLine = { account: string; debit: number; credit: number };
+export type LedgerEntry = { id: string; at: string; ref: string; memo: string; lines: LedgerLine[] };
+export type StaffMember = { name: string; email: string; roles: string[] };
+export type TeamMember = { name: string; email: string; role: "Administrator" | "Investment manager" | "Analyst (view only)" };
+export type Allocation = { id: string; campaignId: string; amount: number; status: "Requested" | "Agreed" | "Paid"; at: string };
+export type Institution = {
+  name: string;
+  mandate: { sectors: string[]; minTicket: number; maxTicket: number; maxTenor: number };
+  team: TeamMember[];
+  allocations: Allocation[];
+};
+export type AccountRecord = { name: string; type: "Business" | "Individual investor" | "Institution"; joined: string };
 export type Prefs = { maxTenor: number; securedOnly: boolean; sectors: string[]; monthlyIncome: boolean; maxPerBusiness: number };
 
-export const staff = [
-  { name: "A. Mensah", role: "Credit analyst" },
-  { name: "K. Boateng", role: "Credit risk manager" },
-  { name: "E. Owusu", role: "KYC and compliance officer" },
-  { name: "S. Asante", role: "Structuring officer" },
-  { name: "Y. Darko", role: "Investment committee member" },
-] as const;
+/** The sixteen operations roles from the platform specification. */
+export const ROLES = [
+  "Super administrator",
+  "Operations administrator",
+  "Business origination officer",
+  "Business validation officer",
+  "KYC and compliance officer",
+  "Credit analyst",
+  "Credit risk manager",
+  "Structuring officer",
+  "Investment committee member",
+  "Portfolio manager",
+  "Collections officer",
+  "Investor relations officer",
+  "Finance and reconciliation officer",
+  "Institutional partnerships manager",
+  "Customer support officer",
+  "Read-only management",
+];
 export const approverRoles = ["Credit risk manager", "Investment committee member"];
+const seedStaff: StaffMember[] = [
+  { name: "A. Mensah", email: "a.mensah@serwaa.com", roles: ["Credit analyst"] },
+  { name: "K. Boateng", email: "k.boateng@serwaa.com", roles: ["Credit risk manager"] },
+  { name: "E. Owusu", email: "e.owusu@serwaa.com", roles: ["KYC and compliance officer"] },
+  { name: "S. Asante", email: "s.asante@serwaa.com", roles: ["Structuring officer"] },
+  { name: "Y. Darko", email: "y.darko@serwaa.com", roles: ["Investment committee member"] },
+  { name: "N. Addo", email: "n.addo@serwaa.com", roles: ["Finance and reconciliation officer"] },
+  { name: "M. Ofori", email: "m.ofori@serwaa.com", roles: ["Institutional partnerships manager"] },
+  { name: "J. Quaye", email: "j.quaye@serwaa.com", roles: ["Super administrator"] },
+];
+export const INDIVIDUAL = "Ama Owusu";
+export const INSTITUTION = "Gyata Capital Partners";
 
 export type State = {
   version: number;
@@ -104,9 +159,17 @@ export type State = {
   facility: Facility;
   payments: Payment[];
   payout: { method: string; number: string; reinvest: boolean };
+  staff: StaffMember[];
+  investments: Investment[];
+  cash: { available: number; paidOut: number; reinvested: number; history: CashEvent[] };
+  fees: Fees;
+  ledger: LedgerEntry[];
+  accounts: AccountRecord[];
+  restricted: string[];
+  institution: Institution;
 };
 
-const VERSION = 2;
+const VERSION = 3;
 const KEY = "serwaa-workspace-v1";
 const today = () => new Date().toISOString();
 const uid = () => Math.random().toString(36).slice(2, 10);
@@ -125,6 +188,7 @@ function seed(): State {
     status: q.outstanding > 0 && q.ref === businessApplication.ref ? "Information requested" : "In review",
     officer: q.officer,
     originator: q.ref === "SRW-APP-2026-00421" ? "K. Boateng" : "Business",
+    disclosure: "investors",
   }));
   const requests: InfoRequest[] = businessApplication.requests.map((r) => ({
     id: uid(),
@@ -136,7 +200,7 @@ function seed(): State {
     createdBy: "A. Mensah",
     createdAt: "2026-11-12T10:00:00.000Z",
   }));
-  const fromOpp = opportunities.map((o, i) => ({ ...o, stageIndex: 8, drafter: "S. Asante", approvals: [], appRef: undefined, ref: o.ref, id: o.id, i }));
+  const fromOpp = opportunities.map((o, i) => ({ ...o, stageIndex: 8, drafter: "S. Asante", approvals: [], appRef: undefined, ref: o.ref, id: o.id, i, disclosure: (i === 1 ? "public" : "investors") as Disclosure }));
   const campaigns: Campaign[] = [
     ...fromOpp.map(({ match, matched, unmatched, i, ...c }) => {
       void match;
@@ -168,6 +232,7 @@ function seed(): State {
         stageIndex: c.stageIndex,
         drafter: "S. Asante",
         approvals: [],
+        disclosure: "investors" as Disclosure,
       })),
   ];
   return {
@@ -213,6 +278,36 @@ function seed(): State {
       at: "2026-11-14T09:00:00.000Z",
     })),
     payout: { method: "MTN MoMo", number: "", reinvest: false },
+    staff: seedStaff,
+    investments: [],
+    cash: {
+      available: 2_706.25,
+      paidOut: 1_284.5,
+      reinvested: 0,
+      history: [
+        { id: uid(), kind: "Repayment", amount: 2_706.25, note: "Asaase Textiles Ltd, instalment 3", at: "2026-11-10T08:00:00.000Z" },
+        { id: uid(), kind: "Withdrawal", amount: 1_284.5, note: "Paid to MTN MoMo", at: "2026-10-12T08:00:00.000Z" },
+      ],
+    },
+    fees: { originationPct: 2, servicingPct: 1, momoPct: 1, bankFlat: 10, payoutMomoPct: 0.5, payoutBankFlat: 25 },
+    ledger: [],
+    accounts: [
+      ...Array.from(new Set(applications.map((a) => a.business))).map((name) => ({ name, type: "Business" as const, joined: "2026-10-04" })),
+      { name: INDIVIDUAL, type: "Individual investor" as const, joined: "2026-09-18" },
+      { name: "Kwame Asiedu", type: "Individual investor" as const, joined: "2026-10-02" },
+      { name: "Efua Mensah", type: "Individual investor" as const, joined: "2026-10-21" },
+      { name: INSTITUTION, type: "Institution" as const, joined: "2026-09-30" },
+    ],
+    restricted: [],
+    institution: {
+      name: INSTITUTION,
+      mandate: { sectors: ["Trade and distribution", "Energy", "Manufacturing", "Healthcare"], minTicket: 50_000, maxTicket: 500_000, maxTenor: 12 },
+      team: [
+        { name: "Akosua Frimpong", email: "akosua@gyatacapital.com", role: "Administrator" },
+        { name: "Daniel Tetteh", email: "daniel@gyatacapital.com", role: "Investment manager" },
+      ],
+      allocations: [],
+    },
   };
 }
 
@@ -272,7 +367,10 @@ function update(fn: (s: State) => State) {
 
 /* ── helpers ─────────────────────────────────────────────────── */
 
-const actor = (s: State) => staff.find((x) => x.name === s.actingStaff) ?? staff[0];
+const actor = (s: State) => {
+  const m = s.staff.find((x) => x.name === s.actingStaff) ?? s.staff[0];
+  return { name: m.name, role: m.roles[0] ?? "No role", roles: m.roles };
+};
 const note = (audience: Audience, title: string, body: string, href?: string): Note => ({ id: uid(), audience, title, body, href, at: today(), read: false });
 const log = (s: State, subject: string, action: string, reason?: string, who?: { name: string; role: string }): AuditEntry => {
   const a = who ?? actor(s);
@@ -283,7 +381,7 @@ export type Result = { ok: true; message: string } | { ok: false; message: strin
 
 /* ── business actions ────────────────────────────────────────── */
 
-export function submitApplication(input: { product: string; amount: number; purpose: string }): string {
+export function submitApplication(input: { product: string; amount: number; purpose: string; disclosure: Disclosure }): string {
   const s = load();
   const n = 440 + s.applications.length;
   const ref = `SRW-APP-2026-00${n}`;
@@ -299,6 +397,7 @@ export function submitApplication(input: { product: string; amount: number; purp
     status: "In review",
     officer: "Unassigned",
     originator: "Business",
+    disclosure: input.disclosure,
   };
   update((st) => ({
     ...st,
@@ -469,7 +568,7 @@ export function decide(ref: string, decision: "approve" | "reject" | "return", r
   if (!a) return { ok: false, message: "Application not found." };
   if (!reason.trim()) return { ok: false, message: "Give a reason. It goes on the record." };
   if (decision === "approve") {
-    if (!approverRoles.includes(me.role)) return { ok: false, message: `A ${me.role.toLowerCase()} can't approve credit. Switch to a credit risk manager or committee member.` };
+    if (!me.roles.some((r) => approverRoles.includes(r))) return { ok: false, message: `A ${me.role.toLowerCase()} can't approve credit. Switch to a credit risk manager or committee member.` };
     if (a.originator === me.name) return { ok: false, message: "You brought this application in, so someone else has to approve it." };
     if (a.status === "Information requested") return { ok: false, message: "There's an open information request on this application." };
   }
@@ -499,6 +598,7 @@ export function decide(ref: string, decision: "approve" | "reject" | "return", r
         stageIndex: 1,
         drafter: "S. Asante",
         approvals: [],
+        disclosure: a.disclosure,
       });
     }
     return {
@@ -541,6 +641,7 @@ export function approveCampaignStage(id: string): Result {
     notes: publishing
       ? [
           ...(st.alertsOn ? [note("investor", "New opportunity for you", `${c.business} · ${c.product}`, `/invest/opportunities/${c.id}`)] : []),
+          ...(st.institution.mandate.sectors.includes(c.sector) ? [note("institution", "New deal in your mandate", `${c.business} · ${c.product}`, "/institution/pipeline")] : []),
           note("business", "Your deal is live", "Investors can now back your deal.", "/business"),
           ...st.notes,
         ]
@@ -550,29 +651,290 @@ export function approveCampaignStage(id: string): Result {
   return { ok: true, message: publishing ? "Published. Matching investors have been notified." : `Signed off: ${nextStage}.` };
 }
 
+/** Double-entry booking: every money movement records equal debits and credits. */
+const book = (ref: string, memo: string, lines: LedgerLine[]): LedgerEntry => ({ id: uid(), at: today(), ref, memo, lines });
+const round = (n: number) => Math.round(n * 100) / 100;
+
+export function paymentFee(fees: Fees, method: string, amount: number) {
+  return method === "Bank transfer" ? fees.bankFlat : round((amount * fees.momoPct) / 100);
+}
+export function payoutFee(fees: Fees, method: string, amount: number) {
+  return method === "Bank account" ? fees.payoutBankFlat : round((amount * fees.payoutMomoPct) / 100);
+}
+
 export function matchPayment(ref: string, reason: string): Result {
   if (!reason.trim()) return { ok: false, message: "Give a reason for the match. It goes on the record." };
   const s = load();
   const pay = s.payments.find((p) => p.ref === ref);
   if (!pay) return { ok: false, message: "Payment not found." };
+  const inv = pay.investmentId ? s.investments.find((i) => i.id === pay.investmentId) : undefined;
+  if (inv && inv.status === "Awaiting authorisation") return { ok: false, message: "The payer hasn't approved this Mobile Money prompt yet." };
+  update((st) => {
+    const entries: LedgerEntry[] = [];
+    let campaigns = st.campaigns;
+    let investments = st.investments;
+    let notes = st.notes;
+    let institution = st.institution;
+    if (pay.kind === "Investment" && inv) {
+      const c = st.campaigns.find((x) => x.id === inv.campaignId);
+      campaigns = st.campaigns.map((x) =>
+        x.id === inv.campaignId ? { ...x, pending: Math.max(0, x.pending - inv.amount), cleared: x.cleared + inv.amount, investors: x.investors + 1 } : x,
+      );
+      investments = st.investments.map((i) => (i.id === inv.id ? { ...i, status: "Cleared" } : i));
+      if (inv.investor === "institution")
+        institution = { ...st.institution, allocations: st.institution.allocations.map((a) => (a.campaignId === inv.campaignId ? { ...a, status: "Paid" } : a)) };
+      entries.push(
+        book(pay.ref, `Investment cleared for ${c?.ref ?? inv.campaignId}`, [
+          { account: "Custodian bank: investor money", debit: inv.amount + inv.fee, credit: 0 },
+          { account: `Campaign funds: ${c?.ref ?? inv.campaignId}`, debit: 0, credit: inv.amount },
+          { account: "Fee income: payments", debit: 0, credit: inv.fee },
+        ]),
+      );
+      notes = [
+        note(inv.investor === "institution" ? "institution" : "investor", "Your investment is confirmed", `${cedisText(inv.amount)} in ${c?.business ?? "the deal"} has cleared.`, inv.investor === "institution" ? "/institution" : "/invest"),
+        ...notes,
+      ];
+    }
+    if (pay.kind === "Repayment") {
+      const servicing = round((pay.expected * st.fees.servicingPct) / 100);
+      entries.push(
+        book(pay.ref, `Repayment received for ${pay.subject}`, [
+          { account: "Custodian bank: collections", debit: pay.expected, credit: 0 },
+          { account: "Investor payables", debit: 0, credit: round(pay.expected - servicing) },
+          { account: "Fee income: servicing", debit: 0, credit: servicing },
+        ]),
+      );
+      notes = [
+        note("business", "Payment received", `${cedisText(pay.expected)} confirmed. Thank you.`, "/business/facilities"),
+        note("investor", "Repayment received", `Your share of a ${cedisText(pay.expected)} repayment from ${pay.from}.`, "/invest"),
+        ...notes,
+      ];
+    }
+    return {
+      ...st,
+      campaigns,
+      investments,
+      institution,
+      payments: st.payments.map((p) => (p.ref === ref ? { ...p, status: "Matched", received: p.expected } : p)),
+      facility:
+        pay.kind === "Repayment" && pay.lines
+          ? { ...st.facility, schedule: st.facility.schedule.map((l, i) => (pay.lines!.includes(i) ? { ...l, status: "Paid" } : l)) }
+          : st.facility,
+      ledger: [...entries, ...st.ledger],
+      notes,
+      audit: [log(st, ref, "Payment matched", reason.trim()), ...st.audit],
+    };
+  });
+  return { ok: true, message: "Matched and booked to the ledger." };
+}
+
+const cedisText = (n: number) => `GH₵ ${n.toLocaleString("en-GH", { maximumFractionDigits: 2 })}`;
+
+/* ── investing ───────────────────────────────────────────────── */
+
+/** Invest in a live deal. Money goes to the custodian; it counts only once staff confirm it arrived. */
+export function invest(campaignId: string, amount: number, method: string, number: string, investor: Investor = "individual"): Result & { id?: string; payRef?: string } {
+  const s = load();
+  const c = s.campaigns.find((x) => x.id === campaignId);
+  const who = investor === "institution" ? INSTITUTION : INDIVIDUAL;
+  if (s.restricted.includes(who)) return { ok: false, message: "Your account is under review. Contact support before investing." };
+  if (!c || !isLive(c)) return { ok: false, message: "This deal isn't open for investment." };
+  if (!amount || amount < c.minTicket) return { ok: false, message: `The minimum for this deal is ${cedisText(c.minTicket)}.` };
+  const remaining = c.target - c.cleared - c.pending;
+  if (amount > remaining) return { ok: false, message: `Only ${cedisText(remaining)} is still available.` };
+  if (method !== "Bank transfer" && number.replace(/\D/g, "").length < 9) return { ok: false, message: "Enter the Mobile Money number to charge." };
+  const fee = paymentFee(s.fees, method, amount);
+  const id = uid();
+  const payRef = `SRW-${(Date.now() % 1_000_000).toString().padStart(6, "0")}`;
+  const momo = method !== "Bank transfer";
   update((st) => ({
     ...st,
-    payments: st.payments.map((p) => (p.ref === ref ? { ...p, status: "Matched", received: p.expected } : p)),
-    facility:
-      pay.kind === "Repayment" && pay.lines
-        ? { ...st.facility, schedule: st.facility.schedule.map((l, i) => (pay.lines!.includes(i) ? { ...l, status: "Paid" } : l)) }
-        : st.facility,
-    notes:
-      pay.kind === "Repayment"
-        ? [
-            note("business", "Payment received", `GH₵ ${pay.expected.toLocaleString()} confirmed. Thank you.`, "/business/facilities"),
-            note("investor", "Repayment received", `Your share of a GH₵ ${pay.expected.toLocaleString()} repayment from ${pay.from}.`, "/invest"),
-            ...st.notes,
-          ]
-        : st.notes,
-    audit: [log(st, ref, "Payment matched", reason.trim()), ...st.audit],
+    investments: [{ id, investor, campaignId, amount, fee, method, payRef, status: momo ? "Awaiting authorisation" : "Pending", at: today() }, ...st.investments],
+    campaigns: st.campaigns.map((x) => (x.id === campaignId ? { ...x, pending: x.pending + amount } : x)),
+    payments: [
+      { ref: payRef, from: who, kind: "Investment", subject: c.ref, method, expected: amount, received: momo ? 0 : 0, status: momo ? "Awaiting authorisation" : "Pending", at: today(), investmentId: id },
+      ...st.payments,
+    ],
+    notes: [note("ops", "Investment payment to confirm", `${payRef} · ${cedisText(amount)} from ${who}`, "/ops/reconciliation"), ...st.notes],
+    audit: [log(st, c.ref, `${cedisText(amount)} invested by ${method}`, payRef, { name: who, role: investor === "institution" ? "Institution" : "Investor" }), ...st.audit],
   }));
-  return { ok: true, message: "Matched." };
+  return { ok: true, id, payRef, message: momo ? "Check your phone and approve the payment." : `Transfer ${cedisText(amount + fee)} using reference ${payRef}.` };
+}
+
+/** The Mobile Money provider reports the payer approved the prompt. */
+export function confirmMomo(id: string) {
+  update((s) => ({
+    ...s,
+    investments: s.investments.map((i) => (i.id === id && i.status === "Awaiting authorisation" ? { ...i, status: "Confirmed" } : i)),
+    payments: s.payments.map((p) => (p.investmentId === id && p.status === "Awaiting authorisation" ? { ...p, status: "Confirmed", received: p.expected } : p)),
+  }));
+}
+
+export function withdrawCash(amount: number): Result {
+  const s = load();
+  if (s.restricted.includes(INDIVIDUAL)) return { ok: false, message: "Your account is under review. Contact support before withdrawing." };
+  if (!amount || amount <= 0) return { ok: false, message: "Enter an amount to withdraw." };
+  if (amount > s.cash.available) return { ok: false, message: `You have ${cedisText(s.cash.available)} available.` };
+  if (s.payout.method !== "Bank account" && s.payout.number.replace(/\D/g, "").length < 9) return { ok: false, message: "Add a Mobile Money number under payout settings first." };
+  const fee = payoutFee(s.fees, s.payout.method, amount);
+  update((st) => ({
+    ...st,
+    cash: {
+      available: round(st.cash.available - amount),
+      paidOut: round(st.cash.paidOut + amount),
+      reinvested: st.cash.reinvested,
+      history: [{ id: uid(), kind: "Withdrawal", amount, note: `Paid to ${st.payout.method}${fee ? `, ${cedisText(fee)} fee` : ""}`, at: today() }, ...st.cash.history],
+    },
+    ledger: [
+      book(`WD-${uid()}`, `Withdrawal to ${INDIVIDUAL}`, [
+        { account: "Investor payables", debit: amount, credit: 0 },
+        { account: "Custodian bank: payouts", debit: 0, credit: amount - fee },
+        { account: "Fee income: payouts", debit: 0, credit: fee },
+      ]),
+      ...st.ledger,
+    ],
+    notes: [note("investor", "Withdrawal on its way", `${cedisText(amount - fee)} to your ${st.payout.method}.`, "/invest"), ...st.notes],
+  }));
+  return { ok: true, message: `${cedisText(amount - fee)} is on its way to your ${s.payout.method}${fee ? ` after a ${cedisText(fee)} fee` : ""}.` };
+}
+
+export function reinvestCash(campaignId: string, amount: number): Result {
+  const s = load();
+  const c = s.campaigns.find((x) => x.id === campaignId);
+  if (!c || !isLive(c)) return { ok: false, message: "Pick a deal that's open for investment." };
+  if (amount > s.cash.available) return { ok: false, message: `You have ${cedisText(s.cash.available)} available.` };
+  if (amount < c.minTicket) return { ok: false, message: `The minimum for this deal is ${cedisText(c.minTicket)}.` };
+  const id = uid();
+  update((st) => ({
+    ...st,
+    cash: {
+      available: round(st.cash.available - amount),
+      paidOut: st.cash.paidOut,
+      reinvested: round(st.cash.reinvested + amount),
+      history: [{ id: uid(), kind: "Reinvestment", amount, note: c.business, at: today() }, ...st.cash.history],
+    },
+    investments: [{ id, investor: "individual", campaignId, amount, fee: 0, method: "Reinvested repayments", payRef: `RI-${id}`, status: "Cleared", at: today() }, ...st.investments],
+    campaigns: st.campaigns.map((x) => (x.id === campaignId ? { ...x, cleared: x.cleared + amount, investors: x.investors + 1 } : x)),
+    ledger: [
+      book(`RI-${id}`, `Reinvestment into ${c.ref}`, [
+        { account: "Investor payables", debit: amount, credit: 0 },
+        { account: `Campaign funds: ${c.ref}`, debit: 0, credit: amount },
+      ]),
+      ...st.ledger,
+    ],
+  }));
+  return { ok: true, message: `${cedisText(amount)} reinvested in ${c.business}. No new payment needed.` };
+}
+
+/* ── corporate investors ─────────────────────────────────────── */
+
+export function requestAllocation(campaignId: string, amount: number): Result {
+  const s = load();
+  const c = s.campaigns.find((x) => x.id === campaignId);
+  const m = s.institution.mandate;
+  if (!c) return { ok: false, message: "Deal not found." };
+  if (amount < m.minTicket || amount > m.maxTicket) return { ok: false, message: `Your mandate allows ${cedisText(m.minTicket)} to ${cedisText(m.maxTicket)} per deal.` };
+  const remaining = c.target - c.cleared - c.pending;
+  if (amount > remaining) return { ok: false, message: `Only ${cedisText(remaining)} is still available.` };
+  update((st) => ({
+    ...st,
+    institution: { ...st.institution, allocations: [{ id: uid(), campaignId, amount, status: "Requested", at: today() }, ...st.institution.allocations.filter((a) => a.campaignId !== campaignId)] },
+    notes: [note("ops", "Allocation requested", `${INSTITUTION} · ${cedisText(amount)} in ${c.ref}`, "/ops/campaigns"), ...st.notes],
+  }));
+  return { ok: true, message: "Allocation requested. Our partnerships team will confirm it." };
+}
+
+export function agreeAllocation(id: string): Result {
+  const s = load();
+  const me = actor(s);
+  if (!me.roles.some((r) => r === "Institutional partnerships manager" || r === "Super administrator"))
+    return { ok: false, message: "Only an institutional partnerships manager can agree allocations." };
+  const a = s.institution.allocations.find((x) => x.id === id);
+  if (!a) return { ok: false, message: "Allocation not found." };
+  update((st) => ({
+    ...st,
+    institution: { ...st.institution, allocations: st.institution.allocations.map((x) => (x.id === id ? { ...x, status: "Agreed" } : x)) },
+    notes: [note("institution", "Allocation agreed", `${cedisText(a.amount)} confirmed. You can now pay by bank transfer.`, "/institution/pipeline"), ...st.notes],
+    audit: [log(st, INSTITUTION, `Agreed allocation of ${cedisText(a.amount)}`), ...st.audit],
+  }));
+  return { ok: true, message: "Agreed. The institution can now pay." };
+}
+
+export function updateMandate(m: Institution["mandate"]): Result {
+  if (m.minTicket > m.maxTicket) return { ok: false, message: "The minimum can't be above the maximum." };
+  update((s) => ({ ...s, institution: { ...s.institution, mandate: m } }));
+  return { ok: true, message: "Mandate saved. Your pipeline has been updated." };
+}
+
+export function inviteMember(member: TeamMember): Result {
+  if (!member.name.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(member.email)) return { ok: false, message: "Add a name and a valid email." };
+  const s = load();
+  if (s.institution.team.some((t) => t.email === member.email)) return { ok: false, message: "That person is already on your team." };
+  update((st) => ({ ...st, institution: { ...st.institution, team: [...st.institution.team, member] } }));
+  return { ok: true, message: `Invitation sent to ${member.email}.` };
+}
+
+export function setMemberRole(email: string, role: TeamMember["role"]) {
+  update((s) => ({ ...s, institution: { ...s.institution, team: s.institution.team.map((t) => (t.email === email ? { ...t, role } : t)) } }));
+}
+
+export function removeMember(email: string): Result {
+  const s = load();
+  const admins = s.institution.team.filter((t) => t.role === "Administrator");
+  if (admins.length === 1 && admins[0].email === email) return { ok: false, message: "Keep at least one administrator on the team." };
+  update((st) => ({ ...st, institution: { ...st.institution, team: st.institution.team.filter((t) => t.email !== email) } }));
+  return { ok: true, message: "Removed from the team." };
+}
+
+/* ── back office ─────────────────────────────────────────────── */
+
+const isAdmin = (s: State) => actor(s).roles.includes("Super administrator");
+
+export function addStaff(member: StaffMember): Result {
+  const s = load();
+  if (!isAdmin(s)) return { ok: false, message: "Only a super administrator can add people." };
+  if (!member.name.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(member.email)) return { ok: false, message: "Add a name and a valid email." };
+  if (!member.roles.length) return { ok: false, message: "Give them at least one role." };
+  if (s.staff.some((x) => x.email === member.email)) return { ok: false, message: "Someone with that email already exists." };
+  update((st) => ({ ...st, staff: [...st.staff, member], audit: [log(st, member.name, `Added with roles: ${member.roles.join(", ")}`), ...st.audit] }));
+  return { ok: true, message: `${member.name} added.` };
+}
+
+export function setStaffRoles(name: string, roles: string[]): Result {
+  const s = load();
+  if (!isAdmin(s)) return { ok: false, message: "Only a super administrator can change roles." };
+  if (!roles.length) return { ok: false, message: "Everyone needs at least one role." };
+  if (name === s.actingStaff && !roles.includes("Super administrator") && s.staff.filter((x) => x.roles.includes("Super administrator")).length === 1)
+    return { ok: false, message: "You're the only super administrator. Add another before removing your own access." };
+  update((st) => ({ ...st, staff: st.staff.map((x) => (x.name === name ? { ...x, roles } : x)), audit: [log(st, name, `Roles set to ${roles.join(", ")}`), ...st.audit] }));
+  return { ok: true, message: "Roles updated." };
+}
+
+export function updateFees(fees: Fees, reason: string): Result {
+  const s = load();
+  const me = actor(s);
+  if (!me.roles.some((r) => r === "Super administrator" || r === "Finance and reconciliation officer"))
+    return { ok: false, message: "Only finance or a super administrator can change fees." };
+  if (!reason.trim()) return { ok: false, message: "Say why the fees are changing. It goes on the record." };
+  if (Object.values(fees).some((v) => !Number.isFinite(v) || v < 0)) return { ok: false, message: "Fees can't be negative." };
+  const changes = (Object.keys(fees) as (keyof Fees)[]).filter((k) => fees[k] !== s.fees[k]).map((k) => `${k} ${s.fees[k]} → ${fees[k]}`);
+  if (!changes.length) return { ok: false, message: "Nothing has changed." };
+  update((st) => ({ ...st, fees, audit: [log(st, "Fees", `Changed ${changes.join("; ")}`, reason.trim()), ...st.audit] }));
+  return { ok: true, message: "Fees updated. New charges apply from now on." };
+}
+
+export function setRestricted(name: string, on: boolean, reason: string): Result {
+  const s = load();
+  const me = actor(s);
+  if (!me.roles.some((r) => r === "KYC and compliance officer" || r === "Super administrator"))
+    return { ok: false, message: "Only compliance can restrict or reopen an account." };
+  if (!reason.trim()) return { ok: false, message: "Give a reason. It goes on the record." };
+  update((st) => ({
+    ...st,
+    restricted: on ? [...st.restricted, name] : st.restricted.filter((x) => x !== name),
+    audit: [log(st, name, on ? "Account restricted" : "Account reopened", reason.trim()), ...st.audit],
+  }));
+  return { ok: true, message: on ? `${name} is restricted.` : `${name} is active again.` };
 }
 
 /* ── notifications ───────────────────────────────────────────── */

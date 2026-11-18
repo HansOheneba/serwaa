@@ -7,6 +7,7 @@ import { Button } from "./ui";
 const accountTypes = [
   { value: "/business", label: "Business" },
   { value: "/invest", label: "Investor" },
+  { value: "/institution", label: "Corporate" },
   { value: "/ops", label: "Serwaa team" },
 ];
 
@@ -26,7 +27,7 @@ export function SignInForm() {
     <form onSubmit={submit} className="space-y-5">
       <fieldset>
         <legend className="text-sm font-semibold text-ink-800">Account type</legend>
-        <div className="mt-2 grid grid-cols-3 gap-1 rounded-xl bg-ink-100 p-1">
+        <div className="mt-2 grid grid-cols-2 gap-1 rounded-xl bg-ink-100 p-1 sm:grid-cols-4">
           {accountTypes.map((a) => (
             <label
               key={a.value}

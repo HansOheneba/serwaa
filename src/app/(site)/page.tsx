@@ -110,8 +110,8 @@ export default function HomePage() {
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <ButtonLink href="/onboarding?as=business">Apply for financing</ButtonLink>
-                <ButtonLink href="/onboarding?as=investor" variant="secondary">
-                  Start investing
+                <ButtonLink href="/marketplace" variant="secondary">
+                  Explore the marketplace
                 </ButtonLink>
               </div>
             </div>

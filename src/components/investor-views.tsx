@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { DashboardBand } from "./dashboard-band";
 import { ActionResult } from "./notifications";
+import { InvestPanel } from "./invest-panel";
 import { OpportunityCard } from "./opportunity-card";
 import { Button, ButtonLink, Card, FilterChip, FundingBar, Label, MoneyBadge, StatusPill } from "./ui";
 import { portfolio as seedPortfolio, type Opportunity } from "@/lib/data";
@@ -13,13 +14,13 @@ import { cedis, percent } from "@/lib/format";
 import {
   isLive,
   matchFor,
-  registerInterest,
   setAlerts,
   setPayout,
   toggleWatch,
   updatePrefs,
   useWorkspace,
-  withdrawInterest,
+  reinvestCash,
+  withdrawCash,
   type Campaign,
   type Prefs,
   type Result,
@@ -149,15 +150,12 @@ export function DiscoverView() {
 export function OpportunityDetail({ id }: { id: string }) {
   const ws = useWorkspace();
   const c = ws.campaigns.find((x) => x.id === id);
-  const [amount, setAmount] = useState("");
-  const [result, setResult] = useState<Result | null>(null);
   if (!c) return <p className="text-ink-600">This opportunity isn&apos;t available.</p>;
   const o = asOpportunity(c, ws.prefs);
-  const mine = ws.interests.find((i) => i.campaignId === id);
   const saved = ws.watchlist.includes(id);
-  const invested = seedPortfolio.invested + ws.interests.reduce((t, i) => t + i.amount, 0);
-  const value = Number(amount.replace(/[^\d.]/g, "")) || 0;
-  const share = value ? Math.round((value / (invested + value)) * 100) : 0;
+  const invested = seedPortfolio.invested + ws.investments.filter((i) => i.investor === "individual").reduce((t, i) => t + i.amount, 0);
+  const already = ws.investments.filter((i) => i.campaignId === id && i.investor === "individual").reduce((t, i) => t + i.amount, 0);
+  const share = already ? Math.round((already / invested) * 100) : 0;
   const tooMuch = share > ws.prefs.maxPerBusiness;
   const terms: [string, string][] = [
     ["Structure", o.product],
@@ -266,43 +264,13 @@ export function OpportunityDetail({ id }: { id: string }) {
           </Card>
 
           <Card className="bg-aubergine-800 p-7 text-white ring-aubergine-800">
-            <p className="text-xs font-semibold tracking-[0.08em] text-saffron-300 uppercase">Reserve your place</p>
-            {mine ? (
-              <>
-                <p className="mt-3 text-2xl font-bold">{cedis(mine.amount)} reserved</p>
-                <p className="mt-2 text-sm leading-6 text-aubergine-100">
-                  We&apos;ll tell you as soon as payments open. Nothing has been taken from you, and you can change your mind.
-                </p>
-                <Button variant="outlined" className="mt-5 text-white ring-white/30" onClick={() => withdrawInterest(id)}>
-                  Cancel reservation
-                </Button>
-              </>
-            ) : (
-              <>
-                <p className="mt-3 text-sm leading-6 text-aubergine-100">
-                  Investing opens after regulatory approval. Reserve a place now and you&apos;ll be first to know. No money is taken.
-                </p>
-                <label className="mt-5 block text-sm font-semibold">
-                  Amount (GH₵)
-                  <input
-                    className="mt-1.5 w-full rounded-xl bg-white px-3.5 py-3 font-mono text-sm text-ink-900 focus:ring-2 focus:ring-saffron-400 focus:outline-none"
-                    inputMode="numeric"
-                    value={amount}
-                    onChange={(e) => (setAmount(e.target.value), setResult(null))}
-                    placeholder={`From ${o.minTicket.toLocaleString()}`}
-                  />
-                </label>
-                {tooMuch && (
-                  <p className="mt-3 rounded-lg bg-aubergine-700 p-3 text-xs leading-5 text-saffron-200">
-                    This would put {share}% of your money in one business, above your {ws.prefs.maxPerBusiness}% limit. You can still go ahead.
-                  </p>
-                )}
-                <Button variant="accent" className="mt-5 w-full" onClick={() => setResult(registerInterest(id, value))}>
-                  Reserve my place
-                </Button>
-                <ActionResult result={result} />
-              </>
+            <p className="mb-5 text-xs font-semibold tracking-[0.08em] text-saffron-300 uppercase">Invest</p>
+            {tooMuch && (
+              <p className="mb-4 rounded-lg bg-aubergine-700 p-3 text-xs leading-5 text-saffron-200">
+                This would put {share}% of your money in one business, above your {ws.prefs.maxPerBusiness}% limit. You can still go ahead.
+              </p>
             )}
+            <InvestPanel c={c} afterHref="/invest?invested=1" />
           </Card>
         </div>
       </div>
@@ -310,31 +278,59 @@ export function OpportunityDetail({ id }: { id: string }) {
   );
 }
 
-/* ── Portfolio extras: reservations, upcoming payments, payout ── */
+/* ── Portfolio: investments, cash, withdraw, reinvest, rebalance ── */
+
+const invTone = { Cleared: "good", Confirmed: "brand", Pending: "warn", "Awaiting authorisation": "warn" } as const;
 
 export function PortfolioView() {
   const ws = useWorkspace();
   const p = seedPortfolio;
-  const reserved = ws.interests.reduce((t, i) => t + i.amount, 0);
+  const justInvested = useSearchParams().get("invested");
+  const mine = ws.investments.filter((i) => i.investor === "individual");
+  const newInvested = mine.reduce((t, i) => t + i.amount, 0);
   const [payout, setP] = useState(ws.payout);
   const [result, setResult] = useState<Result | null>(null);
+  const [wAmount, setWAmount] = useState("");
+  const [cashResult, setCashResult] = useState<Result | null>(null);
+  const [riCampaign, setRiCampaign] = useState("");
+  const [riAmount, setRiAmount] = useState("");
+  const live = ws.campaigns.filter(isLive);
   const upcoming = p.holdings.filter((h) => h.nextAmount > 0);
+
+  // Allocation by sector across old holdings and new investments, against the investor's own limit.
+  const sectorOf: Record<string, string> = { "Asaase Textiles Ltd": "Manufacturing", "Ofie Logistics Ltd": "Logistics", "Abrewa Trading Ltd": "Trade and distribution" };
+  const alloc: Record<string, number> = {};
+  p.holdings.forEach((h) => (alloc[sectorOf[h.business] ?? "Other"] = (alloc[sectorOf[h.business] ?? "Other"] ?? 0) + h.outstanding));
+  mine.forEach((i) => {
+    const c = ws.campaigns.find((x) => x.id === i.campaignId);
+    const k = c?.sector ?? "Other";
+    alloc[k] = (alloc[k] ?? 0) + i.amount;
+  });
+  const total = Object.values(alloc).reduce((t, v) => t + v, 0) || 1;
+  const rows = Object.entries(alloc).sort((a, b) => b[1] - a[1]);
+  const over = rows.filter(([, v]) => (v / total) * 100 > ws.prefs.maxPerBusiness);
+  const under = ws.prefs.sectors.filter((sct) => !alloc[sct]);
 
   return (
     <div className="space-y-10">
+      {justInvested && (
+        <p role="status" className="rise-in rounded-2xl bg-success-50 px-6 py-4 font-semibold text-success-600">
+          Your investment is in. It shows below and will count as cleared once the custodian confirms your money has arrived.
+        </p>
+      )}
       <DashboardBand
         eyebrow={`Portfolio · as of ${p.asOf}`}
         greeting="Good morning, Ama"
-        figureLabel="Outstanding principal"
-        figure={cedis(p.outstandingPrincipal)}
+        figureLabel="Invested and outstanding"
+        figure={cedis(p.outstandingPrincipal + newInvested)}
         figureState="cleared"
-        series={[0, 5000, 5000, 12500, 12500, 17500, 22500, 21250, 20000, 19375, 18750]}
+        series={[0, 5000, 5000, 12500, 12500, 17500, 22500, 21250, 20000, 19375, 18750 + newInvested]}
         action={<ButtonLink href="/invest/discover" variant="accent">Find opportunities</ButtonLink>}
         stats={[
-          { label: "Returns received", value: cedis(p.returnsReceived, true), state: "received" },
+          { label: "Available to use", value: cedis(ws.cash.available, true), hint: "Held by the custodian" },
+          { label: "Paid out to you", value: cedis(ws.cash.paidOut, true), state: "received" },
+          { label: "Reinvested", value: cedis(ws.cash.reinvested, true) },
           { label: "Expected returns", value: cedis(p.expectedFutureReturns), state: "expected", hint: "Not guaranteed" },
-          { label: "Places reserved", value: cedis(reserved), hint: `${ws.interests.length} opportunit${ws.interests.length === 1 ? "y" : "ies"}` },
-          { label: "Overdue", value: cedis(p.overdue), state: "overdue" },
         ]}
       />
 
@@ -346,8 +342,10 @@ export function PortfolioView() {
               variant="text"
               onClick={() =>
                 downloadCsv("serwaa-statement.csv", [
-                  ["Investment", "Structure", "Invested", "Outstanding", "Received", "Next payment", "Status"],
-                  ...p.holdings.map((h) => [h.business, h.product, h.amount, h.outstanding, h.received, h.nextPayment, h.status]),
+                  ["Investment", "Amount", "Received", "Status", "Date"],
+                  ...p.holdings.map((h) => [h.business, h.amount, h.received, h.status, ""]),
+                  ...mine.map((i) => [ws.campaigns.find((c) => c.id === i.campaignId)?.business ?? i.campaignId, i.amount, 0, i.status, i.at.slice(0, 10)]),
+                  ...ws.cash.history.map((h) => [h.kind + ": " + h.note, h.amount, "", "", h.at.slice(0, 10)]),
                 ])
               }
             >
@@ -365,6 +363,26 @@ export function PortfolioView() {
               </tr>
             </thead>
             <tbody className="stagger divide-y divide-ink-100">
+              {mine.map((i) => {
+                const c = ws.campaigns.find((x) => x.id === i.campaignId);
+                return (
+                  <tr key={i.id}>
+                    <td className="px-7 py-4">
+                      <Link href={`/invest/opportunities/${i.campaignId}`} className="font-semibold text-ink-900 hover:underline">
+                        {c?.business ?? i.campaignId}
+                      </Link>
+                      <p className="text-xs text-ink-500">
+                        {i.method} · {i.payRef}
+                      </p>
+                    </td>
+                    <td className="px-4 py-4 text-right font-mono tabular-nums">{cedis(i.amount)}</td>
+                    <td className="px-4 py-4 text-right font-mono tabular-nums text-ink-400">–</td>
+                    <td className="px-7 py-4">
+                      <StatusPill tone={invTone[i.status]}>{i.status === "Awaiting authorisation" ? "Approve on phone" : i.status}</StatusPill>
+                    </td>
+                  </tr>
+                );
+              })}
               {p.holdings.map((h) => (
                 <tr key={h.business}>
                   <td className="px-7 py-4">
@@ -378,31 +396,13 @@ export function PortfolioView() {
                   </td>
                 </tr>
               ))}
-              {ws.interests.map((i) => {
-                const c = ws.campaigns.find((x) => x.id === i.campaignId);
-                return (
-                  <tr key={i.id}>
-                    <td className="px-7 py-4">
-                      <Link href={`/invest/opportunities/${i.campaignId}`} className="font-semibold text-ink-900 hover:underline">
-                        {c?.business ?? i.campaignId}
-                      </Link>
-                      <p className="text-xs text-ink-500">{c?.product}</p>
-                    </td>
-                    <td className="px-4 py-4 text-right font-mono tabular-nums">{cedis(i.amount)}</td>
-                    <td className="px-4 py-4 text-right font-mono tabular-nums text-ink-400">–</td>
-                    <td className="px-7 py-4">
-                      <StatusPill tone="warn">Place reserved</StatusPill>
-                    </td>
-                  </tr>
-                );
-              })}
             </tbody>
           </table>
         </Card>
 
         <Card className="p-7">
           <Label>Coming up</Label>
-          <ul className="mt-4 space-y-4">
+          <ul className="mt-5 space-y-5">
             {upcoming.map((h) => (
               <li key={h.business} className="flex items-center justify-between gap-4">
                 <div>
@@ -419,11 +419,97 @@ export function PortfolioView() {
         </Card>
       </div>
 
+      <div className="grid gap-8 lg:grid-cols-2">
+        <Card className="p-7">
+          <Label>Your available money</Label>
+          <p className="mt-3 font-mono text-3xl font-medium text-aubergine-800">{cedis(ws.cash.available, true)}</p>
+          <p className="mt-1 text-sm text-ink-600">From repayments, held by the custodian until you withdraw or reinvest it.</p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
+            <label className="block text-sm font-semibold text-ink-800">
+              Withdraw to {ws.payout.method}
+              <input className={`${field} font-mono`} inputMode="numeric" value={wAmount} onChange={(e) => setWAmount(e.target.value)} placeholder={ws.cash.available.toFixed(2)} />
+            </label>
+            <Button onClick={() => (setCashResult(withdrawCash(Number(wAmount.replace(/[^\d.]/g, "")))), setWAmount(""))}>Withdraw</Button>
+          </div>
+          <div className="mt-5 grid gap-4 border-t border-ink-100 pt-5 sm:grid-cols-[1fr_8rem_auto] sm:items-end">
+            <label className="block text-sm font-semibold text-ink-800">
+              Or reinvest in
+              <select className={field} value={riCampaign} onChange={(e) => setRiCampaign(e.target.value)}>
+                <option value="">Choose a deal</option>
+                {live.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.business}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="block text-sm font-semibold text-ink-800">
+              Amount
+              <input className={`${field} font-mono`} inputMode="numeric" value={riAmount} onChange={(e) => setRiAmount(e.target.value)} placeholder="1,000" />
+            </label>
+            <Button variant="tonal" onClick={() => (setCashResult(reinvestCash(riCampaign, Number(riAmount.replace(/[^\d.]/g, "")))), setRiAmount(""))}>
+              Reinvest
+            </Button>
+          </div>
+          <ActionResult result={cashResult} />
+          <ul className="mt-6 divide-y divide-ink-100 border-t border-ink-100">
+            {ws.cash.history.slice(0, 6).map((h) => (
+              <li key={h.id} className="flex items-center justify-between gap-3 py-3 text-sm">
+                <span>
+                  <span className="font-semibold text-ink-900">{h.kind}</span>
+                  <span className="block text-xs text-ink-500">
+                    {h.note} · {new Date(h.at).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                  </span>
+                </span>
+                <span className={`font-mono ${h.kind === "Repayment" ? "text-success-600" : "text-ink-700"}`}>
+                  {h.kind === "Repayment" ? "+" : "−"}
+                  {cedis(h.amount, true)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+
+        <Card className="p-7">
+          <Label>How your money is spread</Label>
+          <ul className="mt-5 space-y-4">
+            {rows.map(([sct, v]) => {
+              const pct = Math.round((v / total) * 100);
+              return (
+                <li key={sct}>
+                  <div className="flex justify-between text-sm">
+                    <span className="font-semibold text-ink-800">{sct}</span>
+                    <span className="font-mono text-ink-600">{pct}%</span>
+                  </div>
+                  <div className="mt-2 h-2 overflow-hidden rounded-full bg-ink-100">
+                    <div className={`h-full ${pct > ws.prefs.maxPerBusiness ? "bg-saffron-500" : "bg-aubergine-800"}`} style={{ width: `${pct}%` }} />
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+          <div className="mt-6 rounded-xl bg-aubergine-50 p-5 text-sm leading-6 text-aubergine-900">
+            <p className="font-semibold">Rebalancing</p>
+            {over.length ? (
+              <p className="mt-1">
+                {over.map(([k]) => k).join(" and ")} {over.length > 1 ? "are" : "is"} above your {ws.prefs.maxPerBusiness}% limit.
+                {under.length ? ` Point new money or repayments at ${under.slice(0, 2).join(" or ")} to even things out.` : " Let new money go to other sectors to even things out."}
+              </p>
+            ) : (
+              <p className="mt-1">You&apos;re within your limits. Nothing to rebalance.</p>
+            )}
+            <ButtonLink href="/invest/discover" variant="text" className="mt-2 -ml-3">
+              See matching deals
+            </ButtonLink>
+          </div>
+        </Card>
+      </div>
+
       <Card className="p-7">
         <div className="grid gap-8 lg:grid-cols-[1fr_1.4fr]">
           <div>
             <Label>Where your repayments go</Label>
-            <p className="mt-3 text-ink-600">Repayments are paid straight to your Mobile Money or bank account. You can also put them back to work automatically.</p>
+            <p className="mt-3 text-ink-600">Paid straight to your Mobile Money or bank account, or kept with the custodian to reinvest.</p>
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="block text-sm font-semibold text-ink-800">
@@ -440,7 +526,7 @@ export function PortfolioView() {
             </label>
             <label className="flex items-center gap-3 text-sm text-ink-800 sm:col-span-2">
               <input type="checkbox" checked={payout.reinvest} onChange={(e) => setP({ ...payout, reinvest: e.target.checked })} className="size-4 accent-aubergine-800" />
-              Reserve repayments for my next best match instead of paying them out
+              Keep repayments to reinvest instead of paying them out
             </label>
             <div className="sm:col-span-2">
               <Button onClick={() => setResult(setPayout(payout))}>Save</Button>
