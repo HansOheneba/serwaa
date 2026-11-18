@@ -4,6 +4,7 @@
 // works out who is signed in, checks what their role allows, writes to the database,
 // and returns a fresh view of the data that person is allowed to see.
 
+import { updateTag } from "next/cache";
 import { after } from "next/server";
 import { applicationStages, campaignStages } from "./data";
 import {
@@ -58,6 +59,9 @@ async function run<E = object>(fn: (ctx: Ctx) => Promise<Result & Partial<NoInfe
   }
   return { ...r, ws: await snapshot(await getCtx()) };
 }
+
+/** Deals, totals or fees changed: everyone's next read gets fresh numbers. */
+const dealsChanged = () => updateTag("deals");
 
 class Denied extends Error {}
 function as(ctx: Ctx, kind: Profile["kind"]): Profile {
@@ -423,6 +427,7 @@ export async function invest(campaignId: string, amount: number, method: string,
     if (p.kind === "investor") await must(db().from("interests").delete().eq("investor_id", p.id).eq("campaign_id", campaignId));
     await notify([{ audience: "ops", title: "Investment payment to confirm", body: `${payRef} · ${cedisText(amount)} from ${who}`, href: "/ops/reconciliation" }]);
     await audit({ name: who, role: p.kind === "institution" ? "Institution" : "Investor" }, c.ref, `${cedisText(amount)} invested by ${method}`, payRef);
+    dealsChanged();
     return { ...ok(momo ? "Check your phone and approve the payment." : `Transfer ${cedisText(amount + fee)} using reference ${payRef}.`), id: inv.id, payRef };
   });
 }
@@ -437,6 +442,7 @@ export async function confirmMomo(id: string) {
     await must(db().from("investments").update({ status: "Confirmed" }).eq("id", id));
     const pay = await must(db().from("payments").select("ref, expected").eq("investment_id", id).single());
     await must(db().from("payments").update({ status: "Confirmed", received: pay.expected }).eq("ref", pay.ref));
+    dealsChanged();
     return ok("Payment approved.");
   });
 }
@@ -492,6 +498,7 @@ export async function reinvestCash(campaignId: string, amount: number) {
         { account: "Investor payables", debit: amount, credit: 0 },
         { account: `Campaign funds: ${c.ref}`, debit: 0, credit: amount },
       ]);
+      dealsChanged();
       return ok(`${cedisText(amount)} reinvested in ${c.business}. No new payment needed.`);
     } catch (e) {
       return denied(e);
@@ -756,6 +763,7 @@ export async function decide(ref: string, decision: "approve" | "reject" | "retu
         biz.map((b) => ({ to: b.email, title, body: `${ref}: ${body}`, cta: { label: "See your application", href: `/business/applications?ref=${ref}` } })),
       );
       await audit(p, ref, decision === "approve" ? "Approved credit" : status, reason.trim());
+      dealsChanged();
       return ok(decision === "approve" ? "Approved. A campaign draft has been created." : `Marked as ${status.toLowerCase()}.`);
     } catch (e) {
       return staffDenied(e);
@@ -788,6 +796,7 @@ export async function approveCampaignStage(id: string) {
       if (!updated.length) return fail("Someone else just signed this stage. Refresh to see it.");
       await audit(p, row.ref, publishing ? "Published to investors" : `Signed off: ${nextStage}`);
       if (publishing) await announce(row);
+      dealsChanged();
       return ok(publishing ? "Published. Matching investors have been notified." : `Signed off: ${nextStage}.`);
     } catch (e) {
       return staffDenied(e);
@@ -860,6 +869,7 @@ export async function disburseCampaign(id: string) {
         biz.map((b) => ({ to: b.email, title: "Your funds are on the way", body: `${cedisText(principal - arrangement)} is being paid to you (${cedisText(principal)} raised, less a ${cedisText(arrangement)} arrangement fee). Your repayment schedule is in your dashboard.`, cta: { label: "See your schedule", href: "/business/facilities" } })),
       );
       await audit(p, c.ref, `Disbursed ${cedisText(principal)}`);
+      dealsChanged();
       return ok(`Disbursed. ${ref} is set up with ${schedule.length} repayment${schedule.length === 1 ? "" : "s"}.`);
     } catch (e) {
       return staffDenied(e);
@@ -959,6 +969,7 @@ export async function matchPayment(ref: string, reason: string) {
       }
       await must(db().from("payments").update({ status: "Matched", received: pay.expected }).eq("ref", ref));
       await audit(p, ref, "Payment matched", reason.trim());
+      dealsChanged();
       return ok("Matched and booked to the ledger.");
     } catch (e) {
       return staffDenied(e);
@@ -1016,6 +1027,7 @@ export async function updateFees(fees: Fees, reason: string) {
       if (!changes.length) return fail("Nothing has changed.");
       await must(db().from("settings").update({ value: fees }).eq("key", "fees"));
       await audit(p, "Fees", `Changed ${changes.join("; ")}`, reason.trim());
+      dealsChanged();
       return ok("Fees updated. New charges apply from now on.");
     } catch (e) {
       return staffDenied(e);

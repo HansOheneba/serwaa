@@ -1,4 +1,5 @@
 import "server-only";
+import { cacheLife, cacheTag } from "next/cache";
 import { db, sessionClient } from "./supabase";
 import {
   LIVE_STAGE,
@@ -98,6 +99,24 @@ export function toCampaign(r: any, t: any, hideName: boolean): Campaign {
 
 const none = Promise.resolve({ data: [] as any[] });
 
+/**
+ * Deals, their running totals and fees are the same for everyone, so they're read
+ * once and shared across all visitors and server instances until something changes
+ * them (see dealsChanged in actions). This keeps database reads low.
+ */
+export async function publicData() {
+  "use cache: remote";
+  cacheTag("deals");
+  cacheLife("hours");
+  const d = db();
+  const [fees, camps, totals] = await Promise.all([
+    d.from("settings").select("value").eq("key", "fees").maybeSingle(),
+    d.from("campaigns").select("*").order("created_at", { ascending: false }),
+    d.from("campaign_totals").select("*"),
+  ]);
+  return { fees: (fees.data?.value as Fees | undefined) ?? defaultFees, campaigns: camps.data ?? [], totals: totals.data ?? [] };
+}
+
 /** Everything one person is allowed to see, in a single round of parallel queries. */
 export async function snapshot(ctx: Ctx): Promise<State> {
   const d = db();
@@ -106,10 +125,8 @@ export async function snapshot(ctx: Ctx): Promise<State> {
   const staff = kind === "staff";
   const ownerId = kind === "institution" ? p!.institution_id : p?.id;
 
-  const [fees, camps, totals, apps, invs, pays, facs, cash, ints, allocs, inst, team, staffRows, ledger, audit, notes, restr, accts] = await Promise.all([
-    d.from("settings").select("value").eq("key", "fees").maybeSingle(),
-    staff ? d.from("campaigns").select("*").order("created_at", { ascending: false }) : d.from("campaigns").select("*").eq("stage_index", LIVE_STAGE),
-    d.from("campaign_totals").select("*"),
+  const [pub, apps, invs, pays, facs, cash, ints, allocs, inst, team, staffRows, ledger, audit, notes, restr, accts] = await Promise.all([
+    publicData(),
     staff
       ? d.from("applications").select("*").order("submitted_at", { ascending: false }).limit(300)
       : kind === "business"
@@ -149,9 +166,9 @@ export async function snapshot(ctx: Ctx): Promise<State> {
     staff ? Promise.all([d.from("profiles").select("name, org_name, kind, created_at").neq("kind", "staff"), d.from("institutions").select("name, created_at")]) : Promise.resolve(null),
   ]);
 
-  const totalsById = new Map((totals.data ?? []).map((t: any) => [t.id, t]));
+  const totalsById = new Map(pub.totals.map((t: any) => [t.id, t]));
   const hideName = !(staff || kind === "investor" || kind === "institution");
-  const campaigns = (camps.data ?? []).map((r: any) => toCampaign(r, totalsById.get(r.id), hideName));
+  const campaigns = pub.campaigns.filter((r: any) => staff || r.stage_index === LIVE_STAGE).map((r: any) => toCampaign(r, totalsById.get(r.id), hideName));
   const appRows = apps.data ?? [];
 
   const requests = appRows.length
@@ -270,7 +287,7 @@ export async function snapshot(ctx: Ctx): Promise<State> {
       reinvested: sum("Reinvestment"),
       history: cashRows.map((c: any) => ({ id: c.id, kind: c.kind, amount: num(c.amount), note: c.note, at: c.created_at })),
     },
-    fees: { ...defaultFees, ...((fees.data?.value as Fees | undefined) ?? {}) },
+    fees: { ...defaultFees, ...pub.fees },
     ledger: (ledger.data ?? []).map((e: any) => ({ id: e.id, at: e.created_at, ref: e.ref, memo: e.memo, lines: e.lines })),
     accounts,
     restricted: (restr.data ?? []).map((r: any) => r.account),

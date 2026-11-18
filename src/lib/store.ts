@@ -6,19 +6,35 @@
 
 import { useEffect, useSyncExternalStore } from "react";
 import * as api from "./actions";
-import { emptyState, type Result, type State } from "./domain";
+import { demoState } from "./demo";
+import { emptyState, type Audience, type Result, type State } from "./domain";
 
 export * from "./domain";
 
 let state: State = emptyState;
+/** A sample account shown in a portal while nobody is signed in. */
+let demo: State | null = null;
 let loading: Promise<void> | null = null;
 let lastLoad = 0;
 const listeners = new Set<() => void>();
 
+const emit = () => listeners.forEach((l) => l());
+
 function set(next: State) {
   state = next;
   lastLoad = Date.now();
-  listeners.forEach((l) => l());
+  if (next.me) demo = null;
+  emit();
+}
+
+export function enterDemo(audience: Audience) {
+  demo = demoState(audience);
+  emit();
+}
+export function leaveDemo() {
+  if (!demo) return;
+  demo = null;
+  emit();
 }
 
 export function refresh(): Promise<void> {
@@ -32,8 +48,8 @@ export function refresh(): Promise<void> {
 
 function subscribe(listener: () => void) {
   listeners.add(listener);
-  // Pick up changes others made while this tab was in the background (at most every 20s).
-  const onFocus = () => Date.now() - lastLoad > 20_000 && refresh();
+  // Pick up changes others made while this tab was in the background (at most once a minute).
+  const onFocus = () => Date.now() - lastLoad > 60_000 && refresh();
   window.addEventListener("focus", onFocus);
   return () => {
     listeners.delete(listener);
@@ -41,8 +57,17 @@ function subscribe(listener: () => void) {
   };
 }
 
-export function useWorkspace(): State {
+/** The signed-in person's real data, ignoring any demo account on screen. */
+export function useAccount(): State {
   const s = useSyncExternalStore(subscribe, () => state, () => emptyState);
+  useEffect(() => {
+    if (!state.ready) refresh();
+  }, []);
+  return s;
+}
+
+export function useWorkspace(): State {
+  const s = useSyncExternalStore(subscribe, () => demo ?? state, () => emptyState);
   useEffect(() => {
     if (!state.ready) refresh();
   }, []);
@@ -54,6 +79,7 @@ type Returned<T> = Omit<Awaited<T>, "ws">;
 /** Sends an action to the server and takes the fresh view it returns. */
 function call<A extends unknown[], R extends Result & { ws: State }>(fn: (...a: A) => Promise<R>) {
   return async (...args: A): Promise<Returned<R>> => {
+    if (demo) return { ok: false, message: "This is a demo account, so nothing is saved. Create a free account to do this for real." } as Returned<R>;
     try {
       const { ws, ...rest } = await fn(...args);
       set(ws);
@@ -99,6 +125,7 @@ export const setRestricted = call(api.setRestricted);
 export const markAllRead = call(api.markAllRead);
 
 export async function signOut() {
+  leaveDemo();
   await api.signOut();
   set({ ...emptyState, ready: true });
 }
