@@ -1,6 +1,5 @@
 "use client";
 
-import { RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { ActionResult } from "./notifications";
@@ -15,10 +14,9 @@ import {
   approveCampaignStage,
   assignOfficer,
   decide,
+  disburseCampaign,
   matchPayment,
   requestInformation,
-  resetWorkspace,
-  setActingStaff,
   useWorkspace,
   type Result,
 } from "@/lib/store";
@@ -26,29 +24,16 @@ import {
 const date = (iso: string) => new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 const field = "mt-1.5 w-full rounded-xl bg-white px-3.5 py-2.5 text-sm ring-1 ring-ink-200 focus:ring-2 focus:ring-aubergine-500 focus:outline-none";
 
-/** Who is acting. Approvals are checked against this person's role and history. */
+/** Who is acting. Approvals are checked against this person's roles and history. */
 export function ActingAs() {
   const ws = useWorkspace();
-  const me = ws.staff.find((s) => s.name === ws.actingStaff) ?? ws.staff[0];
+  const me = ws.staff.find((s) => s.name === ws.actingStaff);
+  if (!me) return null;
   return (
-    <div className="mb-8 flex flex-wrap items-center gap-3 rounded-2xl bg-ink-50 px-5 py-4">
-      <span className="text-sm text-ink-600">Signed in as</span>
-      <select
-        aria-label="Signed in as"
-        value={me.name}
-        onChange={(e) => setActingStaff(e.target.value)}
-        className="rounded-lg bg-white px-3 py-2 text-sm font-semibold ring-1 ring-ink-200 focus:ring-2 focus:ring-aubergine-500 focus:outline-none"
-      >
-        {ws.staff.map((s) => (
-          <option key={s.name} value={s.name}>
-            {s.name} · {s.roles.join(", ")}
-          </option>
-        ))}
-      </select>
-      <button type="button" onClick={resetWorkspace} className="ml-auto inline-flex items-center gap-1.5 text-xs font-semibold text-ink-500 hover:text-ink-800">
-        <RotateCcw className="size-3.5" aria-hidden="true" />
-        Reset workspace data
-      </button>
+    <div className="mb-8 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl bg-ink-50 px-5 py-4 text-sm">
+      <span className="text-ink-600">Signed in as</span>
+      <span className="font-semibold text-ink-900">{me.name}</span>
+      <span className="text-ink-600">· {me.roles.join(", ")}</span>
     </div>
   );
 }
@@ -95,7 +80,7 @@ export function CaseView({ refId }: { refId: string }) {
               <StageTracker stages={applicationStages} current={a.stageIndex} />
             </div>
             {!decided && (
-              <Button variant="tonal" className="mt-6" onClick={() => setResult(advanceStage(refId))}>
+              <Button variant="tonal" className="mt-6" onClick={() => advanceStage(refId).then(setResult)}>
                 Move to next stage
               </Button>
             )}
@@ -126,11 +111,11 @@ export function CaseView({ refId }: { refId: string }) {
                 <textarea rows={3} className={field} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Strong receivable from a creditworthy buyer; 18 months of steady bank inflows." />
               </label>
               <div className="mt-5 flex flex-wrap gap-3">
-                <Button onClick={() => setResult(decide(refId, "approve", reason))}>Approve</Button>
-                <Button variant="outlined" onClick={() => setResult(decide(refId, "return", reason))}>
+                <Button onClick={() => decide(refId, "approve", reason).then(setResult)}>Approve</Button>
+                <Button variant="outlined" onClick={() => decide(refId, "return", reason).then(setResult)}>
                   Return for changes
                 </Button>
-                <Button variant="text" className="text-danger-600" onClick={() => setResult(decide(refId, "reject", reason))}>
+                <Button variant="text" className="text-danger-600" onClick={() => decide(refId, "reject", reason).then(setResult)}>
                   Reject
                 </Button>
               </div>
@@ -186,8 +171,8 @@ export function CaseView({ refId }: { refId: string }) {
                   <input type="date" className={field} value={due} onChange={(e) => setDue(e.target.value)} />
                 </label>
                 <Button
-                  onClick={() => {
-                    const r = requestInformation(refId, ask, due);
+                  onClick={async () => {
+                    const r = await requestInformation(refId, ask, due);
                     setResult(r);
                     if (r.ok) setAsk("");
                   }}
@@ -265,21 +250,39 @@ export function CampaignsView() {
                   <p className="text-sm text-saffron-900">
                     Next sign-off: <span className="font-semibold">{campaignStages[c.stageIndex + 1]}</span>. The drafter can&apos;t sign off, and no one signs two stages in a row.
                   </p>
-                  <Button onClick={() => setResults((r) => ({ ...r, [c.id]: approveCampaignStage(c.id) }))}>
+                  <Button onClick={() => approveCampaignStage(c.id).then((res) => setResults((r) => ({ ...r, [c.id]: res })))}>
                     {c.stageIndex + 1 === campaignStages.length - 1 ? "Publish to investors" : "Sign off"}
                   </Button>
                 </div>
               )}
               <ActionResult result={results[c.id] ?? null} />
-              {ws.institution.allocations
+              {live && c.cleared > 0 && (
+                <div className="mt-5 flex flex-wrap items-center justify-between gap-4 rounded-xl bg-ink-50 p-5">
+                  <p className="text-sm text-ink-800">
+                    {c.disbursed ? (
+                      <>Disbursed to the business. Repayments are being tracked.</>
+                    ) : (
+                      <>
+                        {cedis(c.cleared)} has cleared{c.pending > 0 ? `, ${cedis(c.pending)} still being confirmed` : ""}. Pay it out to the business to start the repayment schedule.
+                      </>
+                    )}
+                  </p>
+                  {!c.disbursed && (
+                    <Button variant="tonal" onClick={() => disburseCampaign(c.id).then((res) => setResults((r) => ({ ...r, [c.id]: res })))}>
+                      Disburse
+                    </Button>
+                  )}
+                </div>
+              )}
+              {ws.allocations
                 .filter((a) => a.campaignId === c.id)
                 .map((a) => (
                   <div key={a.id} className="mt-5 flex flex-wrap items-center justify-between gap-4 rounded-xl bg-ink-50 p-5">
                     <p className="text-sm text-ink-800">
-                      <span className="font-semibold">{ws.institution.name}</span> wants {cedis(a.amount)} of this deal.
+                      <span className="font-semibold">{a.institution}</span> wants {cedis(a.amount)} of this deal.
                     </p>
                     {a.status === "Requested" ? (
-                      <Button variant="tonal" onClick={() => setResults((r) => ({ ...r, [c.id]: agreeAllocation(a.id) }))}>
+                      <Button variant="tonal" onClick={() => agreeAllocation(a.id).then((res) => setResults((r) => ({ ...r, [c.id]: res })))}>
                         Agree allocation
                       </Button>
                     ) : (
@@ -349,7 +352,7 @@ export function ReconciliationView() {
                         placeholder="Reason, e.g. MoMo ID 448210"
                         className="min-w-0 flex-1 rounded-lg bg-white px-3 py-2 text-xs ring-1 ring-ink-200 focus:ring-2 focus:ring-aubergine-500 focus:outline-none"
                       />
-                      <Button variant="tonal" onClick={() => setResults((r) => ({ ...r, [p.ref]: matchPayment(p.ref, reasons[p.ref] ?? "") }))}>
+                      <Button variant="tonal" onClick={() => matchPayment(p.ref, reasons[p.ref] ?? "").then((res) => setResults((r) => ({ ...r, [p.ref]: res })))}>
                         Match
                       </Button>
                     </div>

@@ -25,6 +25,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { Gate } from "./gate";
+import { campaignStages } from "@/lib/data";
+import { signOut, useWorkspace } from "@/lib/store";
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Mark } from "./brand";
 import { NotificationBell } from "./notifications";
@@ -80,12 +83,24 @@ export function AppShell({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const ws = useWorkspace();
+  // The signed-in person's name replaces the portal's placeholder once it loads.
+  // Live counts beside the navigation, worked out from the signed-in person's data.
+  const counts: Record<string, number> = {
+    "/ops": ws.applications.filter((x) => x.status !== "Approved" && x.status !== "Rejected").length,
+    "/ops/campaigns": ws.campaigns.filter((c) => c.stageIndex < campaignStages.length - 1).length,
+    "/ops/reconciliation": ws.payments.filter((x) => x.status !== "Matched").length,
+    "/business/applications": ws.requests.filter((r) => r.status === "Open").length,
+    "/invest/discover": ws.campaigns.filter((c) => c.stageIndex === campaignStages.length - 1).length,
+  };
+  const items = nav.map((item) => ({ ...item, count: counts[item.href] || undefined }));
+  const who = ws.me ? { name: ws.me.name, detail: ws.me.kind === "staff" ? (ws.staff.find((s) => s.name === ws.me!.name)?.roles[0] ?? user.detail) : user.detail } : user;
   const searchRef = useRef<HTMLInputElement>(null);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const isActive = (href: string) => pathname === href || (href !== nav[0].href && pathname.startsWith(`${href}/`));
   const ActionIcon = icons[action.icon];
-  const initials = user.name
+  const initials = who.name
     .split(/\s+/)
     .map((w) => w[0])
     .join("")
@@ -133,7 +148,7 @@ export function AppShell({
       </div>
 
       <ul className="mt-6 flex flex-col gap-0.5 px-3">
-        {nav.map((item) => {
+        {items.map((item) => {
           const Icon = icons[item.icon];
           const active = isActive(item.href);
           return (
@@ -170,11 +185,16 @@ export function AppShell({
       </ul>
 
       <div className={`mx-3 mt-auto mb-4 w-[13.5rem] rounded-2xl bg-white/5 p-4 ring-1 ring-white/10 ${fade(compact)}`} aria-hidden={compact}>
-        <p className="truncate text-sm font-semibold text-white">{user.name}</p>
-        <p className="text-xs text-aubergine-200">{user.detail}</p>
-        <Link href="/login" tabIndex={compact ? -1 : undefined} className="mt-3 inline-block text-xs font-semibold text-saffron-300 hover:underline">
-          Switch account
-        </Link>
+        <p className="truncate text-sm font-semibold text-white">{who.name}</p>
+        <p className="text-xs text-aubergine-200">{who.detail}</p>
+        <button
+          type="button"
+          tabIndex={compact ? -1 : undefined}
+          onClick={() => signOut().then(() => router.push("/login"))}
+          className="mt-3 inline-block text-xs font-semibold text-saffron-300 hover:underline"
+        >
+          Sign out
+        </button>
       </div>
     </nav>
   );
@@ -213,7 +233,7 @@ export function AppShell({
         >
           <span className="size-2 rounded-full bg-saffron-400" aria-hidden="true" />
           <span className="font-semibold">{portal}</span>
-          <span className="max-w-40 truncate text-aubergine-200">{user.name}</span>
+          <span className="max-w-40 truncate text-aubergine-200">{who.name}</span>
           <ChevronsUpDown className="size-4 text-aubergine-200" aria-hidden="true" />
         </Link>
 
@@ -251,7 +271,7 @@ export function AppShell({
             <HelpCircle className="size-5" aria-hidden="true" />
           </a>
           <NotificationBell audience={audience} />
-          <span className="ml-1 flex size-9 shrink-0 items-center justify-center rounded-xl bg-saffron-400 text-sm font-bold text-aubergine-950" aria-label={user.name} title={`${user.name} · ${user.detail}`}>
+          <span className="ml-1 flex size-9 shrink-0 items-center justify-center rounded-xl bg-saffron-400 text-sm font-bold text-aubergine-950" aria-label={who.name} title={`${who.name} · ${who.detail}`}>
             {initials}
           </span>
         </div>
@@ -278,7 +298,9 @@ export function AppShell({
         {/* Only the work panel scrolls; the frame, command bar and navigation stay fixed. */}
         <main className="flex min-w-0 flex-1 flex-col sm:pr-3 sm:pb-3 lg:pl-0">
           <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-white px-4 py-8 [scrollbar-gutter:stable] sm:rounded-[1.25rem] sm:px-10 sm:py-10">
-            <div className="mx-auto max-w-7xl">{children}</div>
+            <div className="mx-auto max-w-7xl">
+              <Gate audience={audience}>{children}</Gate>
+            </div>
           </div>
         </main>
       </div>

@@ -83,9 +83,9 @@ function Complete({ s }: { s: OnboardingState }) {
   const profile = investorProfile(s.investor);
   const content: Record<Mode, { body: string; cta: string; href: string; extra?: React.ReactNode }> = {
     business: {
-      body: "Your business account is ready. Next, upload your company documents so we can finish verification and you can apply.",
-      cta: "Go to your dashboard",
-      href: "/business",
+      body: `Your business account is ready. We've emailed a sign-in link to ${s.account.email}. Open it, then upload your company documents so we can finish verification.`,
+      cta: "Back to Serwaa",
+      href: "/",
       extra: (
         <ul className="mx-auto mt-8 max-w-sm space-y-2 text-left text-sm text-aubergine-100">
           {["Certificate of incorporation", "Director and shareholder IDs", "Last 6 months of bank statements", s.need.product === "Invoice financing" ? "The invoice you want to finance" : "Your latest management accounts"].map((d) => (
@@ -98,12 +98,12 @@ function Complete({ s }: { s: OnboardingState }) {
       ),
     },
     investor: {
-      body: `Your profile is ${profile?.category.toLowerCase() ?? "ready"}. Verify your identity from your dashboard, then review the opportunities matched to you.`,
-      cta: "See your matches",
-      href: "/invest/discover",
+      body: `Your profile is ${profile?.category.toLowerCase() ?? "ready"}. We've emailed a sign-in link to ${s.account.email}. Open it to see the deals open now.`,
+      cta: "Explore the marketplace",
+      href: "/marketplace",
     },
     institution: {
-      body: `Thanks. Our partnerships team will contact you within two working days to verify ${s.institution.orgName || "your organisation"} and set up your mandate.`,
+      body: `We've emailed a sign-in link to ${s.account.email}. Our partnerships team will contact you within two working days to verify ${s.institution.orgName || "your organisation"}.`,
       cta: "Back to Serwaa",
       href: "/",
     },

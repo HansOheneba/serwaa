@@ -4,7 +4,7 @@ import { CalendarClock, Download, FileUp, Smartphone } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { DashboardBand } from "./dashboard-band";
+import { DashboardBand, hello } from "./dashboard-band";
 import { ActionResult } from "./notifications";
 import { StageTracker } from "./stage-tracker";
 import { Button, ButtonLink, Card, Label, StatusPill } from "./ui";
@@ -21,7 +21,6 @@ import {
   type Result,
 } from "@/lib/store";
 
-const BUSINESS = "Abrewa Trading Ltd";
 const date = (iso: string) => new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 const statusTone = (s: AppStatus) =>
   s === "Approved" ? "good" : s === "Rejected" ? "bad" : s === "Information requested" || s === "Returned for changes" ? "warn" : "brand";
@@ -38,7 +37,7 @@ function downloadCsv(name: string, rows: (string | number)[][]) {
 
 export function BusinessOverview() {
   const ws = useWorkspace();
-  const apps = ws.applications.filter((a) => a.business === BUSINESS);
+  const apps = ws.applications;
   const current = apps[0];
   const open = ws.requests.filter((r) => apps.some((a) => a.ref === r.appRef) && r.status === "Open");
   const next = ws.facility.schedule.find((l) => l.status === "Due" || l.status === "Upcoming");
@@ -49,7 +48,7 @@ export function BusinessOverview() {
     <div className="space-y-10">
       <DashboardBand
         eyebrow="Business overview"
-        greeting="Good morning, Abrewa Trading"
+        greeting={hello(ws.me?.name)}
         figureLabel="Still to repay on your facility"
         figure={cedis(outstanding)}
         action={<ButtonLink href="/business/applications/new" variant="accent">New application</ButtonLink>}
@@ -155,13 +154,14 @@ export function NewApplicationForm() {
   const [disclosure, setDisclosure] = useState<"public" | "investors">("investors");
   const [error, setError] = useState("");
 
-  function submit(e: FormEvent) {
+  async function submit(e: FormEvent) {
     e.preventDefault();
     const value = Number(amount.replace(/[^\d.]/g, ""));
     if (!value || value < 10_000) return setError("Enter an amount of at least GH₵ 10,000.");
     if (purpose.trim().length < 10) return setError("Tell us briefly what the money is for.");
-    const ref = submitApplication({ product, amount: value, purpose: purpose.trim(), disclosure });
-    router.push(`/business/applications?ref=${ref}`);
+    const r = await submitApplication({ product, amount: value, purpose: purpose.trim(), disclosure });
+    if (!r.ok || !r.ref) return setError(r.message);
+    router.push(`/business/applications?ref=${r.ref}`);
   }
 
   return (
@@ -239,7 +239,7 @@ function ReplyBox({ id }: { id: string }) {
 export function BusinessApplications() {
   const ws = useWorkspace();
   const params = useSearchParams();
-  const apps = ws.applications.filter((a) => a.business === BUSINESS);
+  const apps = ws.applications;
   const selected = apps.find((a) => a.ref === params.get("ref")) ?? apps[0];
   if (!selected) return <p className="text-ink-600">No applications yet.</p>;
   const requests = ws.requests.filter((r) => r.appRef === selected.ref);
@@ -378,7 +378,7 @@ export function FacilityView() {
             </label>
           )}
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button onClick={() => setResult(payFacility("next", method, number))} disabled={!next || pending}>
+            <Button onClick={() => payFacility("next", method, number).then(setResult)} disabled={!next || pending}>
               <Smartphone aria-hidden="true" />
               Pay {next ? cedis(next.amount) : ""}
             </Button>
@@ -404,7 +404,7 @@ export function FacilityView() {
               <dd className="font-mono text-sm font-medium text-success-600">{cedis(payoff.saved)}</dd>
             </div>
           </dl>
-          <Button variant="outlined" className="mt-6" onClick={() => setResult(payFacility("all", method, number))} disabled={!next || pending}>
+          <Button variant="outlined" className="mt-6" onClick={() => payFacility("all", method, number).then(setResult)} disabled={!next || pending}>
             Pay off {cedis(payoff.total)}
           </Button>
         </Card>
@@ -453,7 +453,7 @@ export function FacilityView() {
             Number to debit
             <input className={`${field} font-mono`} inputMode="tel" value={autoNumber} onChange={(e) => setAutoNumber(e.target.value)} placeholder="024 123 4567" />
           </label>
-          <Button className="mt-6" variant={f.autopay ? "outlined" : "filled"} onClick={() => setAutoResult(setAutopay(!f.autopay, autoNumber))}>
+          <Button className="mt-6" variant={f.autopay ? "outlined" : "filled"} onClick={() => setAutopay(!f.autopay, autoNumber).then(setAutoResult)}>
             {f.autopay ? "Turn off" : "Turn on"}
           </Button>
           <ActionResult result={autoResult} />

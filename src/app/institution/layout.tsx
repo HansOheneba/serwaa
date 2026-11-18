@@ -8,7 +8,7 @@ export default function InstitutionLayout({ children }: LayoutProps<"/institutio
     <AppShell
       audience="institution"
       portal="Corporate"
-      user={{ name: "Gyata Capital Partners", detail: "Akosua Frimpong · Administrator" }}
+      user={{ name: "Your organisation", detail: "Corporate investor" }}
       nav={[
         { href: "/institution", label: "Overview", icon: "overview" },
         { href: "/institution/pipeline", label: "Pipeline", icon: "discover" },

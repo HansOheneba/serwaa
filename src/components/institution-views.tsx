@@ -2,15 +2,14 @@
 
 import { Download, Trash2, UserPlus } from "lucide-react";
 import { useState } from "react";
-import { DashboardBand } from "./dashboard-band";
+import { DashboardBand, hello } from "./dashboard-band";
 import { InvestPanel } from "./invest-panel";
 import { ActionResult } from "./notifications";
 import { Button, ButtonLink, Card, FilterChip, FundingBar, Label, StatusPill } from "./ui";
 import { cedis, percent } from "@/lib/format";
 import {
-  INSTITUTION,
   inviteMember,
-  isLive,
+  isOpen,
   removeMember,
   requestAllocation,
   setMemberRole,
@@ -23,7 +22,7 @@ import {
 } from "@/lib/store";
 
 const field = "mt-1.5 w-full rounded-xl bg-white px-3.5 py-3 text-sm ring-1 ring-ink-200 focus:ring-2 focus:ring-aubergine-500 focus:outline-none";
-const fits = (c: Campaign, ws: State) => isLive(c) && ws.institution.mandate.sectors.includes(c.sector) && c.tenorMonths <= ws.institution.mandate.maxTenor;
+const fits = (c: Campaign, ws: State) => isOpen(c) && ws.institution.mandate.sectors.includes(c.sector) && c.tenorMonths <= ws.institution.mandate.maxTenor;
 const mine = (ws: State) => ws.investments.filter((i) => i.investor === "institution");
 
 function csv(name: string, rows: (string | number)[][]) {
@@ -43,8 +42,8 @@ export function InstitutionOverview() {
   return (
     <div className="space-y-10">
       <DashboardBand
-        eyebrow={`${INSTITUTION} · corporate account`}
-        greeting="Good morning, Akosua"
+        eyebrow={`${ws.institution.name} · corporate account`}
+        greeting={hello(ws.me?.name)}
         figureLabel="Deployed through Serwaa"
         figure={cedis(deployed)}
         figureState="cleared"
@@ -150,7 +149,7 @@ function DealRow({ c }: { c: Campaign }) {
                       placeholder={ws.institution.mandate.minTicket.toLocaleString()}
                     />
                   </label>
-                  <Button variant="accent" className="mt-4 w-full" onClick={() => setResult(requestAllocation(c.id, Number(amount.replace(/[^\d.]/g, ""))))}>
+                  <Button variant="accent" className="mt-4 w-full" onClick={() => requestAllocation(c.id, Number(amount.replace(/[^\d.]/g, ""))).then(setResult)}>
                     Request allocation
                   </Button>
                   {result && <p className="mt-3 text-sm font-semibold text-saffron-200">{result.message}</p>}
@@ -174,7 +173,7 @@ function DealRow({ c }: { c: Campaign }) {
 export function InstitutionPipeline() {
   const ws = useWorkspace();
   const deals = ws.campaigns.filter((c) => fits(c, ws));
-  const others = ws.campaigns.filter((c) => isLive(c) && !fits(c, ws)).length;
+  const others = ws.campaigns.filter((c) => isOpen(c) && !fits(c, ws)).length;
   return (
     <div className="space-y-8">
       {deals.length === 0 && <p className="rounded-2xl bg-ink-50 p-12 text-center text-ink-600">No live deals fit your mandate right now. We&apos;ll notify you when one does.</p>}
@@ -295,7 +294,7 @@ export function InstitutionTeam() {
                   <option key={r}>{r}</option>
                 ))}
               </select>
-              <button type="button" aria-label={`Remove ${t.name}`} onClick={() => setResult(removeMember(t.email))} className="state-layer flex size-10 items-center justify-center rounded-full text-ink-400 hover:text-danger-600">
+              <button type="button" aria-label={`Remove ${t.name}`} onClick={() => removeMember(t.email).then(setResult)} className="state-layer flex size-10 items-center justify-center rounded-full text-ink-400 hover:text-danger-600">
                 <Trash2 className="size-4" aria-hidden="true" />
               </button>
             </li>
@@ -322,8 +321,8 @@ export function InstitutionTeam() {
             </select>
           </label>
           <Button
-            onClick={() => {
-              const r = inviteMember(m);
+            onClick={async () => {
+              const r = await inviteMember(m);
               setResult(r);
               if (r.ok) setM({ name: "", email: "", role: "Analyst (view only)" });
             }}
@@ -377,7 +376,7 @@ export function MandateEditor() {
           ))}
         </div>
       </fieldset>
-      <Button className="mt-8" onClick={() => setResult(updateMandate(m))}>
+      <Button className="mt-8" onClick={() => updateMandate(m).then(setResult)}>
         Save mandate
       </Button>
       <ActionResult result={result} />

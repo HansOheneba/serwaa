@@ -4,15 +4,18 @@ import { Bookmark, BookmarkCheck, Columns3, Download, X } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { DashboardBand } from "./dashboard-band";
+import { DashboardBand, hello } from "./dashboard-band";
 import { ActionResult } from "./notifications";
 import { InvestPanel } from "./invest-panel";
 import { OpportunityCard } from "./opportunity-card";
 import { Button, ButtonLink, Card, FilterChip, FundingBar, Label, MoneyBadge, StatusPill } from "./ui";
-import { portfolio as seedPortfolio, type Opportunity } from "@/lib/data";
+import { portfolio as samplePortfolio, type Opportunity } from "@/lib/data";
+
+/** Only real money counts: holdings come from the investor's own investments. */
+const seedPortfolio = { ...samplePortfolio, invested: 0, outstandingPrincipal: 0, expectedFutureReturns: 0, holdings: [] as typeof samplePortfolio.holdings };
 import { cedis, percent } from "@/lib/format";
 import {
-  isLive,
+  isOpen,
   matchFor,
   setAlerts,
   setPayout,
@@ -53,7 +56,7 @@ export function DiscoverView() {
   const q = (useSearchParams().get("q") ?? "").toLowerCase();
   const [active, setActive] = useState<string[]>([]);
   const [compare, setCompare] = useState<string[]>([]);
-  const all = ws.campaigns.filter(isLive).map((c) => asOpportunity(c, ws.prefs));
+  const all = ws.campaigns.filter(isOpen).map((c) => asOpportunity(c, ws.prefs));
   const shown = all
     .filter((o) => !q || [o.business, o.sector, o.product, o.purpose].some((t) => t.toLowerCase().includes(q)))
     .filter((o) => active.every((id) => filters.find((f) => f.id === id)!.test(o, ws.watchlist)))
@@ -284,7 +287,7 @@ const invTone = { Cleared: "good", Confirmed: "brand", Pending: "warn", "Awaitin
 
 export function PortfolioView() {
   const ws = useWorkspace();
-  const p = seedPortfolio;
+  const p = { ...seedPortfolio, asOf: new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) };
   const justInvested = useSearchParams().get("invested");
   const mine = ws.investments.filter((i) => i.investor === "individual");
   const newInvested = mine.reduce((t, i) => t + i.amount, 0);
@@ -294,7 +297,14 @@ export function PortfolioView() {
   const [cashResult, setCashResult] = useState<Result | null>(null);
   const [riCampaign, setRiCampaign] = useState("");
   const [riAmount, setRiAmount] = useState("");
-  const live = ws.campaigns.filter(isLive);
+  const live = ws.campaigns.filter(isOpen);
+  // What the investor's money should earn over each deal's term, at the deal's expected rate.
+  const expectedReturns = Math.round(
+    mine.reduce((t, i) => {
+      const c = ws.campaigns.find((x) => x.id === i.campaignId);
+      return t + (c ? (i.amount * c.expectedReturn * c.tenorMonths) / 1200 : 0);
+    }, 0),
+  );
   const upcoming = p.holdings.filter((h) => h.nextAmount > 0);
 
   // Allocation by sector across old holdings and new investments, against the investor's own limit.
@@ -320,17 +330,17 @@ export function PortfolioView() {
       )}
       <DashboardBand
         eyebrow={`Portfolio · as of ${p.asOf}`}
-        greeting="Good morning, Ama"
+        greeting={hello(ws.me?.name)}
         figureLabel="Invested and outstanding"
         figure={cedis(p.outstandingPrincipal + newInvested)}
         figureState="cleared"
-        series={[0, 5000, 5000, 12500, 12500, 17500, 22500, 21250, 20000, 19375, 18750 + newInvested]}
+        series={[0, ...mine.slice().reverse().map((_, i, a) => a.slice(0, i + 1).reduce((t, x) => t + x.amount, 0))]}
         action={<ButtonLink href="/invest/discover" variant="accent">Find opportunities</ButtonLink>}
         stats={[
           { label: "Available to use", value: cedis(ws.cash.available, true), hint: "Held by the custodian" },
           { label: "Paid out to you", value: cedis(ws.cash.paidOut, true), state: "received" },
           { label: "Reinvested", value: cedis(ws.cash.reinvested, true) },
-          { label: "Expected returns", value: cedis(p.expectedFutureReturns), state: "expected", hint: "Not guaranteed" },
+          { label: "Expected returns", value: cedis(expectedReturns), state: "expected", hint: "Not guaranteed" },
         ]}
       />
 
@@ -429,7 +439,7 @@ export function PortfolioView() {
               Withdraw to {ws.payout.method}
               <input className={`${field} font-mono`} inputMode="numeric" value={wAmount} onChange={(e) => setWAmount(e.target.value)} placeholder={ws.cash.available.toFixed(2)} />
             </label>
-            <Button onClick={() => (setCashResult(withdrawCash(Number(wAmount.replace(/[^\d.]/g, "")))), setWAmount(""))}>Withdraw</Button>
+            <Button onClick={() => (withdrawCash(Number(wAmount.replace(/[^\d.]/g, ""))).then(setCashResult), setWAmount(""))}>Withdraw</Button>
           </div>
           <div className="mt-5 grid gap-4 border-t border-ink-100 pt-5 sm:grid-cols-[1fr_8rem_auto] sm:items-end">
             <label className="block text-sm font-semibold text-ink-800">
@@ -447,7 +457,7 @@ export function PortfolioView() {
               Amount
               <input className={`${field} font-mono`} inputMode="numeric" value={riAmount} onChange={(e) => setRiAmount(e.target.value)} placeholder="1,000" />
             </label>
-            <Button variant="tonal" onClick={() => (setCashResult(reinvestCash(riCampaign, Number(riAmount.replace(/[^\d.]/g, "")))), setRiAmount(""))}>
+            <Button variant="tonal" onClick={() => (reinvestCash(riCampaign, Number(riAmount.replace(/[^\d.]/g, ""))).then(setCashResult), setRiAmount(""))}>
               Reinvest
             </Button>
           </div>
@@ -529,7 +539,7 @@ export function PortfolioView() {
               Keep repayments to reinvest instead of paying them out
             </label>
             <div className="sm:col-span-2">
-              <Button onClick={() => setResult(setPayout(payout))}>Save</Button>
+              <Button onClick={() => setPayout(payout).then(setResult)}>Save</Button>
               <ActionResult result={result} />
             </div>
           </div>

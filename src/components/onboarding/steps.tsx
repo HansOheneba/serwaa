@@ -1,5 +1,6 @@
 "use client";
 
+import { createAccount } from "@/lib/actions";
 import { Briefcase, Building2, ChevronRight, Landmark, Plus, Trash2, TrendingUp, UserRound } from "lucide-react";
 import { useState } from "react";
 import {
@@ -353,6 +354,8 @@ function ReviewRow({ icon, title, summary, onEdit }: { icon: React.ReactNode; ti
 export function ReviewStep({ s, set, next, back, goTo }: StepProps & { goTo: (step: StepId) => void }) {
   const a = s.account;
   const profile = investorProfile(s.investor);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
   const rows: { icon: React.ReactNode; title: string; summary: string; step: StepId }[] = [
     { icon: <UserRound className="size-4" />, title: `${a.firstName} ${a.lastName}`, summary: `${a.email} · +233 ${a.phone}`, step: "account" },
   ];
@@ -411,7 +414,26 @@ export function ReviewStep({ s, set, next, back, goTo }: StepProps & { goTo: (st
         </span>
       </label>
 
-      <StepNav onBack={back} onNext={next} canNext={s.consent} nextLabel={copy.review.submit[s.mode]} missingHint="Tick the box above to continue." />
+      {error && (
+        <p className="rounded-xl bg-danger-50 p-4 text-sm font-semibold text-danger-600" role="alert">
+          {error}
+        </p>
+      )}
+
+      <StepNav
+        onBack={back}
+        onNext={async () => {
+          setBusy(true);
+          setError("");
+          const r = await createAccount(s);
+          setBusy(false);
+          if (r.ok) next();
+          else setError(r.message);
+        }}
+        canNext={s.consent && !busy}
+        nextLabel={busy ? "Creating your account…" : copy.review.submit[s.mode]}
+        missingHint="Tick the box above to continue."
+      />
     </div>
   );
 }

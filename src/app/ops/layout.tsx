@@ -8,11 +8,11 @@ export default function OpsLayout({ children }: LayoutProps<"/ops">) {
     <AppShell
       audience="ops"
       portal="Operations"
-      user={{ name: "A. Mensah", detail: "Credit analyst" }}
+      user={{ name: "Serwaa team", detail: "Staff" }}
       nav={[
-        { href: "/ops", label: "Application queue", icon: "queue", count: 5 },
-        { href: "/ops/campaigns", label: "Campaigns", icon: "campaigns", count: 3 },
-        { href: "/ops/reconciliation", label: "Reconciliation", icon: "reconcile", count: 3 },
+        { href: "/ops", label: "Application queue", icon: "queue" },
+        { href: "/ops/campaigns", label: "Campaigns", icon: "campaigns" },
+        { href: "/ops/reconciliation", label: "Reconciliation", icon: "reconcile" },
         { href: "/ops/accounts", label: "Accounts", icon: "accounts" },
         { href: "/ops/ledger", label: "Ledger", icon: "ledger" },
         { href: "/ops/team", label: "Team and roles", icon: "team" },

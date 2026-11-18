@@ -59,15 +59,20 @@ export function InvestPanel({ c, investor = "individual", afterHref }: { c: Camp
     return () => clearTimeout(t);
   }, [stage, pending, router, afterHref]);
 
-  function submit() {
+  const [busy, setBusy] = useState(false);
+
+  async function submit() {
     setError("");
+    setBusy(true);
+    const done = (message: string) => (setBusy(false), setError(message));
     if (useBalance) {
-      const r = reinvestCash(c.id, value);
-      if (!r.ok) return setError(r.message);
+      const r = await reinvestCash(c.id, value);
+      if (!r.ok) return done(r.message);
       return router.push(afterHref);
     }
-    const r = invest(c.id, value, method, number, investor);
-    if (!r.ok || !r.id) return setError(r.message);
+    const r = await invest(c.id, value, method, number);
+    setBusy(false);
+    if (!r.ok || !r.id) return done(r.message);
     setPending({ id: r.id, payRef: r.payRef!, total: value + fee });
     setStage(method === "Bank transfer" ? "bank" : "momo");
   }
@@ -161,7 +166,7 @@ export function InvestPanel({ c, investor = "individual", afterHref }: { c: Camp
         </dl>
       )}
       {error && <p className="mt-4 rounded-lg bg-white/10 px-3 py-2 text-sm font-semibold text-saffron-200">{error}</p>}
-      <Button variant="accent" className="mt-6 w-full" onClick={submit}>
+      <Button variant="accent" className="mt-6 w-full" onClick={submit} disabled={busy}>
         {useBalance ? "Reinvest" : "Invest"} {value ? cedis(value + fee) : ""}
       </Button>
       <p className="mt-3 text-center text-xs text-aubergine-200">Your money goes to a licensed custodian, never to Serwaa.</p>

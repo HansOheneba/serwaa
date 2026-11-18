@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo, Mark } from "./brand";
+import { MobileMenu } from "./mobile-menu";
 import { ButtonLink } from "./ui";
 import { Weave } from "./weave";
 
@@ -18,7 +19,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-20 border-b border-ink-100 bg-white/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 sm:px-8">
         <Logo />
-        <nav aria-label="Main" className="hidden md:block">
+        <nav aria-label="Main" className="hidden lg:block">
           <ul className="flex gap-1">
             {links.map((l) => (
               <li key={l.href}>
@@ -34,19 +35,9 @@ export function SiteHeader() {
             Sign in
           </ButtonLink>
           <ButtonLink href="/onboarding">Get started</ButtonLink>
+          <MobileMenu links={links} />
         </div>
       </div>
-      <nav aria-label="Main, small screens" className="border-t border-ink-100 md:hidden">
-        <ul className="flex gap-1 overflow-x-auto px-4 py-2">
-          {links.map((l) => (
-            <li key={l.href}>
-              <Link href={l.href} className="block whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-semibold text-ink-700 hover:bg-aubergine-50">
-                {l.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
     </header>
   );
 }

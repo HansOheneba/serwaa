@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ButtonLink, FilterChip, FundingBar, Label, MoneyBadge, StatusPill } from "./ui";
 import { cedis, percent } from "@/lib/format";
-import { isLive, useWorkspace, type Campaign } from "@/lib/store";
+import { isOpen, useWorkspace, type Campaign } from "@/lib/store";
 
 /** What the public may see: the name only if the business chose to show it. */
 export const publicName = (c: Campaign) => (c.disclosure === "public" ? c.business : `${c.sector} business`);
@@ -60,7 +60,7 @@ function DealCard({ c }: { c: Campaign }) {
 
 export function MarketplaceList() {
   const ws = useWorkspace();
-  const live = ws.campaigns.filter(isLive);
+  const live = ws.campaigns.filter(isOpen);
   const sectors = Array.from(new Set(live.map((c) => c.sector)));
   const [sector, setSector] = useState<string | null>(null);
   const shown = live.filter((c) => !sector || c.sector === sector);
@@ -101,7 +101,7 @@ export function MarketplaceList() {
 
 export function MarketplaceDetail({ id }: { id: string }) {
   const ws = useWorkspace();
-  const c = ws.campaigns.find((x) => x.id === id && isLive(x));
+  const c = ws.campaigns.find((x) => x.id === id && isOpen(x));
   if (!c) return <p className="text-ink-600">This deal isn&apos;t open right now.</p>;
   const terms: [string, string][] = [
     ["Financing", c.product],

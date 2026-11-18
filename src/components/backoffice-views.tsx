@@ -68,7 +68,7 @@ export function TeamView() {
               {editing === s.name && (
                 <div className="rise-in mt-5 rounded-xl bg-ink-50 p-5">
                   <RolePicker value={draft} onChange={setDraft} />
-                  <Button className="mt-5" onClick={() => setResults((r) => ({ ...r, [s.name]: setStaffRoles(s.name, draft) }))}>
+                  <Button className="mt-5" onClick={() => setStaffRoles(s.name, draft).then((res) => setResults((r) => ({ ...r, [s.name]: res })))}>
                     Save roles
                   </Button>
                   <ActionResult result={results[s.name] ?? null} />
@@ -96,8 +96,8 @@ export function TeamView() {
         </div>
         <Button
           className="mt-6"
-          onClick={() => {
-            const r = addStaff(m);
+          onClick={async () => {
+            const r = await addStaff(m);
             setAddResult(r);
             if (r.ok) setM({ name: "", email: "", roles: [] });
           }}
@@ -152,7 +152,7 @@ export function FeesView() {
             Reason for the change
             <textarea rows={2} className={field} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="New MTN MoMo collection rate from 1 December" />
           </label>
-          <Button className="mt-6" onClick={() => setResult(updateFees(f, reason))}>
+          <Button className="mt-6" onClick={() => updateFees(f, reason).then(setResult)}>
             Save fees
           </Button>
           <ActionResult result={result} />
@@ -208,8 +208,7 @@ export function AccountsView() {
       const apps = ws.applications.filter((a) => a.business === name);
       return `${apps.length} application${apps.length === 1 ? "" : "s"} · ${cedis(apps.reduce((t, a) => t + a.amount, 0))} requested`;
     }
-    const inv = ws.investments.filter((i) => (kind === "Institution" ? i.investor === "institution" : i.investor === "individual" && name === "Ama Owusu"));
-    return `${inv.length} new investment${inv.length === 1 ? "" : "s"} · ${cedis(inv.reduce((t, i) => t + i.amount, 0))}`;
+    return kind === "Institution" ? "Corporate investor" : "Individual investor";
   };
   const rows = ws.accounts.filter((a) => !type || a.type === type);
   return (
@@ -256,7 +255,7 @@ export function AccountsView() {
                         placeholder={restricted ? "Why reopen?" : "Why restrict?"}
                         className="min-w-0 flex-1 rounded-lg bg-white px-3 py-2 text-xs ring-1 ring-ink-200 focus:ring-2 focus:ring-aubergine-500 focus:outline-none"
                       />
-                      <Button variant={restricted ? "tonal" : "outlined"} onClick={() => setResults((r) => ({ ...r, [a.name]: setRestricted(a.name, !restricted, reasons[a.name] ?? "") }))}>
+                      <Button variant={restricted ? "tonal" : "outlined"} onClick={() => setRestricted(a.name, !restricted, reasons[a.name] ?? "").then((res) => setResults((r) => ({ ...r, [a.name]: res })))}>
                         {restricted ? "Reopen" : "Restrict"}
                       </Button>
                     </div>

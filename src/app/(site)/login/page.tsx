@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { Suspense } from "react";
 import { Mark } from "@/components/brand";
 import { photos } from "@/lib/photos";
 import { SignInForm } from "@/components/forms";
@@ -31,7 +32,9 @@ export default function LoginPage() {
         <div className="rounded-2xl bg-white p-6 ring-1 ring-ink-200 sm:p-8">
           <h2 className="text-2xl font-bold text-aubergine-800 lg:sr-only">Sign in</h2>
           <div className="mt-6 lg:mt-0">
-            <SignInForm />
+            <Suspense>
+              <SignInForm />
+            </Suspense>
           </div>
           <p className="mt-6 text-center text-sm text-ink-600">
             New to Serwaa?{" "}

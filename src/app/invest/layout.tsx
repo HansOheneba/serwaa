@@ -8,10 +8,10 @@ export default function InvestLayout({ children }: LayoutProps<"/invest">) {
     <AppShell
       audience="investor"
       portal="Investor"
-      user={{ name: "Ama Owusu", detail: "Income focused profile" }}
+      user={{ name: "Your account", detail: "Investor" }}
       nav={[
         { href: "/invest", label: "Portfolio", icon: "portfolio" },
-        { href: "/invest/discover", label: "Discover", icon: "discover", count: 3 },
+        { href: "/invest/discover", label: "Discover", icon: "discover" },
         { href: "/invest/profile", label: "My profile", icon: "profile" },
       ]}
       action={{ href: "/invest/discover", label: "Find opportunities", icon: "discover" }}
