@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { AudiencePage } from "@/components/audience-page";
 import { ContentSection, InfoCard } from "@/components/content";
 import { ButtonLink } from "@/components/ui";
@@ -43,6 +44,13 @@ export default function BusinessesPage() {
           <InfoCard title="Your finances" body="Recent accounts and bank statements." />
           <InfoCard title="Your deal" body="The invoice, order or contract you need funded." />
         </div>
+        <p className="mt-8 max-w-3xl leading-7 text-ink-700">
+          Once you pass, you get a verified profile you can share with banks, suppliers and tender boards, so you stop handing over the same
+          documents again and again.{" "}
+          <Link href="/verify" className="font-semibold text-aubergine-500 hover:underline">
+            About Serwaa Verify
+          </Link>
+        </p>
       </ContentSection>
       <ContentSection
         eyebrow="Not sure where to start?"

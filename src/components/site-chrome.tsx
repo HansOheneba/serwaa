@@ -10,6 +10,7 @@ const links = [
   { href: "/investors", label: "Investors" },
   { href: "/institutions", label: "Institutions" },
   { href: "/products", label: "Products" },
+  { href: "/verify", label: "Verify" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/protection", label: "Protection" },
 ];
@@ -19,11 +20,11 @@ export function SiteHeader() {
     <header className="sticky top-0 z-20 border-b border-ink-100 bg-white/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 sm:px-8">
         <Logo />
-        <nav aria-label="Main" className="hidden lg:block">
+        <nav aria-label="Main" className="hidden xl:block">
           <ul className="flex gap-1">
             {links.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="rounded-lg px-3 py-2 text-sm font-semibold text-ink-700 hover:bg-aubergine-50 hover:text-aubergine-800">
+                <Link href={l.href} className="rounded-lg px-3 py-2 text-sm font-semibold whitespace-nowrap text-ink-700 hover:bg-aubergine-50 hover:text-aubergine-800">
                   {l.label}
                 </Link>
               </li>
@@ -31,7 +32,7 @@ export function SiteHeader() {
           </ul>
         </nav>
         <div className="flex items-center gap-2">
-          <ButtonLink href="/login" variant="ghost" className="hidden sm:inline-flex">
+          <ButtonLink href="/login" variant="ghost" className="max-sm:hidden">
             Sign in
           </ButtonLink>
           <ButtonLink href="/onboarding">Get started</ButtonLink>

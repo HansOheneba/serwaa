@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ContentHero, ContentSection, InfoCard } from "@/components/content";
 import { CustodyIllustration, VerifyIllustration } from "@/components/illustrations";
 import { ButtonLink, MoneyBadge } from "@/components/ui";
@@ -102,6 +103,13 @@ export default function ProtectionPage() {
                 </div>
               </li>
             ))}
+            <li className="text-sm leading-6 text-ink-600">
+              These are the same checks we now offer to lenders and companies through{" "}
+              <Link href="/verify" className="font-semibold text-aubergine-500 hover:underline">
+                Serwaa Verify
+              </Link>
+              .
+            </li>
           </ol>
           <div data-reveal className="flex justify-center rounded-3xl bg-ink-50 p-8 lg:sticky lg:top-28">
             <VerifyIllustration className="h-48 w-auto" />

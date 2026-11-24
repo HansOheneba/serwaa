@@ -140,7 +140,24 @@ export default function HomePage() {
       </section>
 
       <section className="bg-white">
-        <div className="mx-auto max-w-7xl px-4 pt-8 pb-28 sm:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-8">
+          <Link
+            href="/verify"
+            data-reveal
+            className="group flex flex-col gap-4 rounded-2xl bg-aubergine-800 p-6 text-white transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aubergine-500 sm:flex-row sm:items-center sm:justify-between sm:p-8"
+          >
+            <div>
+              <p className="text-xs font-semibold tracking-[0.08em] text-saffron-300 uppercase">New · Serwaa Verify</p>
+              <p className="mt-2 text-xl font-bold sm:text-2xl">The checks we run on every business, now available to yours.</p>
+              <p className="mt-1 text-aubergine-100">Identity and business verification for lenders, fintechs and corporates.</p>
+            </div>
+            <span className="shrink-0 text-sm font-semibold text-saffron-300 group-hover:underline">Request early access →</span>
+          </Link>
+        </div>
+      </section>
+
+      <section className="bg-white">
+        <div className="mx-auto max-w-7xl px-4 pt-24 pb-28 sm:px-8">
           <div data-reveal className="max-w-3xl">
             <Label>The gap we close</Label>
             <h2 className="mt-3 text-4xl leading-[1.05] font-extrabold tracking-[-0.03em] text-aubergine-800 text-balance">
